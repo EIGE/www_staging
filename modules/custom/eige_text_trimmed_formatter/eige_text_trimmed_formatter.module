@@ -1,0 +1,89 @@
+<?php
+
+function eige_text_trimmed_formatter_field_formatter_info() {
+  return array(
+    'eige_text_trimmed_formatter' => array(
+      'label' => t('EIGE Summary or trimmed plain'),
+      'field types' => array('text', 'text_long', 'text_with_summary'),
+      'settings' => array(
+        'trim_length' => 400,
+        'wrap_in_paragraph' => TRUE,
+        'add_ellipsis' => FALSE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function eige_text_trimmed_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $settings = $instance['display'][$view_mode]['settings'];
+  $element = array();
+  $element['trim_length'] = array(
+    '#title' => t('Trim length'),
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#default_value' => $settings['trim_length'],
+    '#element_validate' => array('element_validate_integer_positive'),
+    '#required' => TRUE,
+  );
+  $element['wrap_in_paragraph'] = array(
+  '#title' => t('Wrap in paragraph'),
+  '#type' => 'checkbox',
+  '#default_value' => $settings['wrap_in_paragraph'],
+  );
+  $element['add_ellipsis'] = array(
+  '#title' => t('Add an ellipsis (...) at the end'),
+  '#type' => 'checkbox',
+  '#default_value' => $settings['add_ellipsis'],
+  );
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function eige_text_trimmed_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = '';
+  $summary .= '<strong>' . t('Trim length') . ':</strong> ' . check_plain($settings['trim_length']) . '<br/>';
+  $summary .= '<strong>' . t('Paragraph wrapper') . ':</strong> ' . ((!isset($settings['wrap_in_paragraph']) || $settings['wrap_in_paragraph']) ? t('Yes') : t('No')) . '<br/>';
+  $summary .= '<strong>' . t('Add ellipsis') . ':</strong> ' . ((isset($settings['add_ellipsis']) && $settings['add_ellipsis']) ? t('Yes') : t('No')) . '<br/>';
+  return $summary;
+}
+                 
+function eige_text_trimmed_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  foreach ($items as $delta => $item) {
+    $output = _to_plain_text($instance, $langcode, $item, !empty($item['summary'])? 'summary' : 'value');
+    $original_plain_value = $output;
+    $output = text_summary($output, 'plain_text', $display['settings']['trim_length']);
+    if (isset($display['settings']['add_ellipsis']) && $display['settings']['add_ellipsis'] && $output != $original_plain_value) {
+      $output .= '...';
+    }
+    if (!isset($display['settings']['wrap_in_paragraph']) || $display['settings']['wrap_in_paragraph']) {
+      $output = '<p>'.$output.'</p>';
+    }
+    // wrap result of plain text in a paragraph to ensure best UI (margins, paddings etc)
+    $element[$delta] = array('#markup' => $output);
+  }
+  return $element;
+}
+
+function _to_plain_text($instance, $langcode, $item, $column) {
+  $text = $item[$column];
+  $result = $text;
+  // before stripping tags, we should check for valid markup (in case of full_html), 
+  // otherwise http://php.net/strip_tags will not function properly
+  if ($instance['settings']['text_processing']) {
+    $result = check_markup($text, $item['format'], $langcode);
+  }
+  $result = strip_tags($result, '<br><br/>');
+  return check_plain($result);
+}
+
+
+
+

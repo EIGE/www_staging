@@ -1,0 +1,4 @@
+name = EIGE default text formats
+description = Enforces the text format for rich text field to 'Full HTML', while hiding unnecessary text format selection from respective forms. Code taken from http://drupal.org/project/better_formats
+core = 7.x
+package=EIGE custom modules

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>bpfa tests</title>
+  <link rel="stylesheet" href="qunit-1.18.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="../lib/jquery-2.1.4.min.js"></script>
+  <script src="../lib/underscore-1.8.3.min.js"></script>
+  <script src="../lib/backbone-1.2.1.min.js"></script>
+  <script>
+  var app = {
+    views: {},
+	models: {},
+	collections: {}
+  };
+  </script>
+  <script src="../models/area.js"></script>
+  <script src="../models/indicator.js"></script>
+  <script src="../models/report.js"></script>
+  <script src="../models/country.js"></script>
+  <script src="../models/data-header.js"></script>
+  <script src="../collections/areas.js"></script>
+  <script src="../collections/indicators.js"></script>
+  <script src="../collections/reports.js"></script>
+  <script src="../collections/countries.js"></script>
+  <script src="qunit-1.18.0.js"></script>
+  <script src="test-models.js"></script>
+</body>
+</html>

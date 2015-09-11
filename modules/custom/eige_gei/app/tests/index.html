@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>gei tests</title>
+  <link rel="stylesheet" href="qunit-1.18.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="../lib/jquery-2.1.4.min.js"></script>
+  <script src="../lib/underscore-1.8.3.min.js"></script>
+  <script src="../lib/backbone-1.2.1.min.js"></script>
+  <script>
+    app = {
+      views: {},
+	  models: {},
+	  collections: {}
+    };
+  </script>
+  <script src="../routers/Router.js"></script>
+  <script>
+    app.router = new app.Router();
+  </script>
+  <script src="../app.utils.js"></script>
+  <script src="../models/Country.js"></script>
+  <script src="../models/YearNavigator.js"></script>
+  <script src="../models/CountryTabsMenu.js"></script>
+  <script src="../models/CountryTrendsGraphFilter.js"></script>
+  <script src="../models/MultipleSelect.js"></script>
+  <script src="../models/SingleSelect.js"></script>
+  <script src="../data/countries.js"></script>
+  <script src="../collections/Countries.js"></script>
+  <script src="qunit-1.18.0.js"></script>
+  <script src="test-utils.js"></script>
+  <script src="test-models.js"></script>
+</body>
+</html>

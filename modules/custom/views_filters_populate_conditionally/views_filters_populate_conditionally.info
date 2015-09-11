@@ -1,0 +1,13 @@
+name = Views filters populate conditionally
+description = "Allows one filter to group other filters with default values (not expecting any input) and execute them conditionally depending on whether this filter is populated or not."
+dependencies[] = views
+package = Views
+core = 7.x
+
+files[] = views_filters_populate_conditionally.module
+
+; Views handlers
+files[] = views/views_filters_populate_conditionally_handler_filter.inc
+
+
+

@@ -1,0 +1,60 @@
+/* targeting IE10 ONLY via media query */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+/* PNG export not supported yet on IE */
+#gei .GraphExporterButton {
+    display: none;
+}
+
+div.largeCyclicGraph {
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding: 0 0 100% 0;
+}
+
+div.largeCyclicGraph svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+#gei section.extra .lineTrendGraph {
+    height:350px;
+}
+
+#gei section.extra .countriesBarGraph{
+    height:330px;
+}
+
+div.mapGraph {
+    position: relative;
+    height: 0;
+    width: 100%;
+    padding: 0 0 100% 0;
+}
+
+div.mapGraph svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+div.countryTrendsGraph svg{
+    height:450px;
+}
+div.yearNavigatorGraph svg{
+    width:340px;
+}
+
+
+div.smallCyclicGraph svg {
+    height:100px;
+}
+
+
+}

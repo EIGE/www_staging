@@ -1,0 +1,4 @@
+name = EIGE i18n
+description = Provides custom i18n functionality for EIGE website (see EIGEDR-16 for details)
+core = 7.x
+package = EIGE custom modules

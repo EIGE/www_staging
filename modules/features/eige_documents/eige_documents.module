@@ -1,0 +1,94 @@
+<?php
+/**
+ * @file
+ * Code for the Documents feature.
+ */
+
+include_once 'eige_documents.features.inc';
+
+/**
+ * EIGEDR-497 pdf preview image conversion arguments changes
+ */
+function eige_documents_imagemagick_arguments_alter(&$args, $context = array()) {
+  $args['alpha'] = '-alpha remove';
+}
+
+
+function _get_translated_term_name($label) {
+  $terms =  taxonomy_get_term_by_name($label, "document_type_categories");
+  $term_loaded_id = current($terms)->tid;
+  $term_original = taxonomy_term_load($term_loaded_id);
+  if (module_exists('i18n_taxonomy')) { 
+    $translated_term = i18n_taxonomy_localize_terms($term_original);
+    $translasted_label_category = $translated_term->name;
+    return $translasted_label_category;
+  } else {
+    return $term_loaded->name;
+  }
+}
+
+/**
+ * Implements hook_form_alter(&$form, &$form_state, $form_id).
+ */
+function eige_documents_form_alter(&$form, &$form_state, $form_id) {
+  _set_fields_default_values($form, $form_state, $form_id);
+  _set_fields_disabled($form, $form_state, $form_id);
+
+    // filter Document Registry view's Document Type filters by Document Type Category
+  if ($form['#id'] == 'views-exposed-form-documents-registry-page') {
+   
+    $translated_label = _get_translated_term_name($form['#info']['filter-field_document_type_tid_1']['label']);
+    $form['#info']['filter-field_document_type_tid_1']['label'] = $translated_label;
+    _retain_dt_category_filter_options($form, 'ct1', 'field_document_type_tid_1');
+    
+    $translated_label = _get_translated_term_name($form['#info']['filter-field_document_type_tid_2']['label']);
+    $form['#info']['filter-field_document_type_tid_2']['label'] = $translated_label;
+    _retain_dt_category_filter_options($form, 'ct2', 'field_document_type_tid_2');
+    
+    $translated_label = _get_translated_term_name($form['#info']['filter-field_document_type_tid_3']['label']);
+    $form['#info']['filter-field_document_type_tid_3']['label'] = $translated_label;
+    _retain_dt_category_filter_options($form, 'ct3', 'field_document_type_tid_3');
+    
+    $translated_label = _get_translated_term_name($form['#info']['filter-field_document_type_tid_4']['label']);
+    $form['#info']['filter-field_document_type_tid_4']['label'] = $translated_label;
+    _retain_dt_category_filter_options($form, 'ct4', 'field_document_type_tid_4');
+
+  }
+}
+
+
+function _set_fields_default_values(&$form, &$form_state, $form_id) {
+  // if new node form (create)
+  if (isset($form['#node']) && (!isset($form['#node']->nid) || isset($form['#node']->is_new))) {
+    switch($form_id) {
+      case 'publication_node_form':
+      _set_field_default_value_from_term($form, 'field_document_type', 'document_types', 'Publications');
+      break;
+      case 'procurement_node_form':
+      _set_field_default_value_from_term($form, 'field_document_type', 'document_types', 'Procurement procedures');
+      break;
+      case 'career_opportunity_node_form':
+      _set_field_default_value_from_term($form, 'field_document_type', 'document_types', 'Vacancy notices');
+      break;
+    }
+  }
+}
+
+function _set_fields_disabled(&$form, &$form_state, $form_id) {
+  // if node form (create or edit)
+  if (isset($form['#node'])) {
+    switch($form_id) {
+      case 'publication_node_form':
+      $form['field_document_type']['#disabled'] = TRUE;
+      break;
+      case 'procurement_node_form':
+      $form['field_document_type']['#disabled'] = TRUE;
+      break;
+      case 'career_opportunity_node_form':
+      $form['field_document_type']['#disabled'] = TRUE;
+      break;
+    }
+  }
+}
+
+

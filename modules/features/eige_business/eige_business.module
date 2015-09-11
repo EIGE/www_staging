@@ -1,0 +1,57 @@
+<?php
+/**
+ * @file
+ * Code for the Business feature.
+ */
+
+include_once 'eige_business.features.inc';
+
+/**
+ * Implements hook_preprocess_node(&$vars).
+ */
+function eige_business_preprocess_node(&$vars) {
+  $node = $vars['node'];
+  if (isset($node->preprocess_fields) && count($node->preprocess_fields)) {
+    
+    if (in_array('field_procurement_status', array_values($node->preprocess_fields))) {
+      $closingDateStr = $vars['field_closing_date'][0]['value'];
+      //eg. 2016-07-27 05:45:15
+      $closingDate = DateTime::createFromFormat('Y-m-d H:i:s', $closingDateStr, new DateTimeZone("UTC"))->getTimestamp();
+      $state = ($closingDate >= time()) ? t('Open') : t('Closed');
+      $stateClass = ($closingDate >= time()) ? 'open' : 'closed';
+
+      //see https://www.drupal.org/node/1342878#comment-9503507
+      $vars['content']['field_procurement_status'][0] = array(
+        '#markup' => '<div class="field field-name-field-status field-name-field-procurement-status field-type-ds field-label-hidden field-wrapper">' . 
+          '<span class="' . $stateClass . '">' . $state . '</span></div>',
+      );
+    }
+
+    if (in_array('field_career_opportunity_status', array_values($node->preprocess_fields))) {
+      $closingDateStr = $vars['field_closing_date'][0]['value'];
+      //eg. 2016-07-27 05:45:15
+      $closingDate = DateTime::createFromFormat('Y-m-d H:i:s', $closingDateStr)->getTimestamp();
+      // EIGEDR-605
+      // Let's assume that the current datetime in Vilnius is 25/08/2015, 17:00 and there is a carreer opportunity that closes at 25/08/2015, 17:30. 
+      // php's time() function, returns the current datetime in UTC which means, that the timestamp returned from this
+      // function, actually corresponds to 3 hours ago (25/08/2015, 14:00) since Vilnius timezone is UTC+3 during summertime.
+      // On the other hand, $closingDateStr is already stored as UTC, which means that the raw value stored in db for closing date is 25/08/2015, 14:30 (3 hours ago)
+      // When using DateTime::createFromFormat with no timezone param set, the default timezone is used for conversion (string to milliseconds) which is
+      // Europe/Vilnius in our case. So string '25/08/2015, 14:30' is converted to the timestamp that corresponds to Vilnius timezone, 
+      // resulting in a timestamp that represents 25/08/2015, 17:30
+      // So, when comparing the $closingDate with time(), we actually compare a timestamp in Europe/Vilnius timezone, with a UTC timestamp and the deviation of 3 hours 
+      // causes carreer opportunities that are actually open, to be displayed as closed during this 3-hour window.
+      // Solution: since $closingDateStr is already in UTC, all we need is to convert it to timestamp using UTC timezone, so we end up with a UTC/UTC comparison
+      $closingDate = DateTime::createFromFormat('Y-m-d H:i:s', $closingDateStr, new DateTimeZone("UTC"))->getTimestamp();
+      $state = ($closingDate >= time()) ? t('Open') : t('Closed');
+      $stateClass = ($closingDate >= time()) ? 'open' : 'closed';
+
+      //see https://www.drupal.org/node/1342878#comment-9503507
+      $vars['content']['field_career_opportunity_status'][0] = array(
+        '#markup' => '<div class="field field-name-field-status field-name-field-career-opportunity-status field-type-ds field-label-hidden field-wrapper">' . 
+          '<span class="' . $stateClass . '">' . $state . '</span></div>',
+      );
+    }
+
+  }
+}

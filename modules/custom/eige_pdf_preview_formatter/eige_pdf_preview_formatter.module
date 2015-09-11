@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function eige_pdf_preview_formatter_field_formatter_info() {
+  return array(
+    'eige_pdf_preview_formatter.' => array(
+      'label' => t('EIGE PDF preview formatter'),
+      'field types' => array('field_collection'),
+      'settings' => array('image_style' => '', 'image_link' => '', 'show_description' => PDFPREVIEW_DEFAULT_SHOW_DESCRIPTION, 'tag' => PDFPREVIEW_DEFAULT_TAG),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function eige_pdf_preview_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  //We want our user feel familiar with our settings, and reuse code.
+  $form = pdfpreview_field_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
+  return $form;
+}
+
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function eige_pdf_preview_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+  //again, act like pdfpreview module
+  $summary = pdfpreview_field_formatter_settings_summary($field, $instance, $view_mode);
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function eige_pdf_preview_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+  
+  if (count($entity->field_downloads)==0) {
+    return null;
+  }
+  
+  $ids = array();
+  foreach($entity->field_downloads[$langcode] as $fci) {
+    if (isset($fci['entity'])) return; // hack to avoid error in case of content preview
+    $ids[] = $fci['value'];
+  }
+  
+  $field_downloads = entity_load('field_collection_item', $ids);
+  
+  foreach($field_downloads as $field_collection_item) {
+    $item = $field_collection_item->field_file[$langcode][0];
+    if ($item['display']==0) {
+      continue;
+    }
+
+    if (!isset($field_collection_item->field_file_language[$langcode])) { // although language is mandatory, some migrated files don't have a language
+      continue;
+    }
+
+    if ($item['filemime'] == 'application/pdf') {
+      $item['preview'] = _pdfpreview_create_preview($item);
+      // uses theme_pdfpreview_formatter($variables) function of pdfpreview module
+      $element[0] = array(
+        '#preview' => $item['preview'],
+        '#markup' => theme('pdfpreview', array('item' => $item, 'instance' => $instance, 'settings' => $settings, 'entity_type' => $entity_type, 'entity' => $entity)),
+      );
+      return $element;
+    }
+  }
+  
+  return null;
+}
+

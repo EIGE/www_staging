@@ -1,0 +1,4 @@
+name = EIGE Menu
+description = Menu and menu links related functionality
+core = 7.x
+package = EIGE custom modules

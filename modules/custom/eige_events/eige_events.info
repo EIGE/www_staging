@@ -1,0 +1,13 @@
+name = EIGE Events
+description = Provides integration with EuroGender platform to synchronously fetch events. Custom Views and Page Manager (CTools) plugins and handlers are provided for integration with the external datasource (EuroGender website)
+core = 7.x
+package = EIGE custom modules
+
+dependencies[] = ctools
+dependencies[] = views
+
+files[] = eige_events.api.inc
+files[] = eige_events_views_plugin_query.inc
+files[] = handlers/eige_events_views_handler_field.inc
+files[] = handlers/eige_events_views_handler_field_image.inc
+

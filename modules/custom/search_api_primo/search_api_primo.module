@@ -1,0 +1,708 @@
+<?php
+
+  global $institution_codes_to_names;
+  $institution_codes_to_names = array(
+    "EIGE" => t("EIGE (Lithuania)"),
+    "DOC" => t("EIGE (Lithuania)"),
+    "AMZ_NET" => t("Amazone (Belgium)"),
+    "AMZ" => t("Amazone (Belgium)"),
+    "ARI_ALE" => t("Ariadne (Austria)"),
+    "ARI_ALE ARIADNE" => t("Ariadne (Austria)"),
+    "IAV_ADL" => t("Atria (Netherlands)"),
+    "IAV" => t("Atria (Netherlands)"),
+    "DEL_SEB" => t("Biblioteca Delle Donne (Italy)"),
+    "CID_ALE" => t("Cid-femmes (Luxembourg)"),
+    "CIG_NYR" => t("CIG (Portugal)"),
+    "ETUI_ALE" => t("ETUI (Belgium)"),
+    "EOF_ZEN" => t("Eurofound (Ireland)"),
+    "EUC_ALE" => t("European Commission (Belgium)"),
+    "GIB_VUF" => t("Genderbibliothek (Germany)"),
+    "GSGE" => t("GSGE (Greece)"),
+    "KVI_ALE" => t("Kvinfo (Denmark)"),
+    "KVI_VOY" => t("KvinnSam (Sweden)"),
+    "LSE_ALM" => t("LSE (United Kingdom)"),
+  );
+  
+  global $institution_url_domains_to_names;
+  $institution_url_domains_to_names = array(
+    "alephp.eurogender.europa.eu" => t("EIGE (Lithuania)"),
+    "db.amazone.be" => t("Amazone (Belgium)"),
+    "data.onb.ac.at" => t("Ariadne (Austria)"),
+    "atria.nl" => t("Atria (Netherlands)"),
+    "sol.unibo.it" => t("Biblioteca Delle Donne (Italy)"),
+    "a-z.lu" => t("Cid-femmes (Luxembourg)"),
+    "cid.cig.gov.pt" => t("CIG (Portugal)"),
+    "labourline.org" => t("ETUI (Belgium)"),
+    "zenodo.org" => t("Eurofound (Ireland)"),
+    "ec-europa-finder.hosted.exlibrisgroup.com" => t("European Commission (Belgium)"),
+    "genderbibcat.linuxd.org" => t("Genderbibliothek (Germany)"),
+    "62.103.24.240" => t("GSGE (Greece)"),
+    "minibib.hosted.exlibrisgroup.com" => t("Kvinfo (Denmark)"),
+    "libris.kb.se" => t("KvinnSam (Sweden)"),
+    "librarysearch.lse.ac.uk" => t("LSE (United Kingdom)"),
+  );
+  
+  global $languages_mapping;
+  $languages_mapping = array(
+    "eng" => t("English"),
+    "swe" => t("Swedish"),
+    "ger" => t("German"),
+    "und" => t("Undetermined"),
+    "fre" => t("French"),
+    "dan" => t("Danish"),
+    "gre" => t("Greek"),
+    "spa" => t("Spanish"),
+    "nor" => t("Norwegian"),
+    "dut" => t("Dutch"),
+    "ita" => t("Italian"),
+    "mul" => t("Multiple languages"),
+    "fin" => t("Finnish"),
+    "por" => t("Portuguese"),
+    "rom" => t("Romanian"),
+    "swa" => t("Swahili"),
+    "lit" => t("Lithuanian"),
+    "pol" => t("Polish"),
+    "hun" => t("Hungarian"),
+    "rus" => t("Russian"),
+    "cze" => t("Czech"),
+    "slo" => t("Slovak"),
+    "ice" => t("Icelandic"),
+    "ara" => t("Arabic"),
+    "tur" => t("Turkish"),
+    "ser" => t("Serbo-Croatian"),
+    "bas" => t("Basque"),
+    "mac" => t("Macedonian"),
+    "mao" => t("Maori"),
+    "alb" => t("Albanian"),
+    "per" => t("Persian"),
+    "jap" => t("Japanese"),
+  );
+
+/**
+ * Implements hook_search_api_service_info().
+ * 
+ * Defines the Ex-libris Primo service.
+ */
+function search_api_primo_search_api_service_info() {
+  $variables = array(
+    '@readme_url' => url(drupal_get_path('module', 'search_api_primo') . '/README.txt'),
+  );
+  $services['search_api_primo_service'] = array(
+    'name' => t('Primo service'),
+    'description' => t('<p>Connects to Ex-libris Primo service to perform searches.</p>
+      <ul>
+        <li>See the <a href="@readme_url">README.txt</a> file provided with this module for details.</li>
+      </ul>', $variables),
+    'class' => 'SearchApiPrimoService',
+  );
+  return $services;
+}
+
+/**
+ * Implements hook_search_api_service_info().
+ *
+ * Defines the Primo item type (which needs its own Datasource controller so we can override loadItems method)
+ */
+function search_api_primo_search_api_item_type_info() {
+  return array('primo_item' => array(
+    'name' => 'Primo search result',
+    'datasource controller' => 'SearchApiPrimoDataSourceController',
+  ));
+}
+
+
+// this function implies that module 'facetapi_bonus' is enabled and for all 
+// facets for which a label alteration must take place, filter 'Rewrite facet items via callback function' is enabled
+// TODO AKZ can this be done in facet generation instead of a callback?
+// TODO AKZ is the extra module needed?
+// TODO AKZ i18n
+function search_api_primo_facet_items_alter(&$build, &$settings) {
+  global $languages_mapping;
+  if ($settings->facet == "rtype") {
+    foreach($build as $key => $item) {
+      $build[$key]["#markup"] = str_replace("_", " ", ucwords($item["#markup"]));
+    }
+  }
+  if ($settings->facet == "availability") {
+    $replacements = array(
+      "available" => t("Available in the Library"),
+      "online_resources" => t("Full Text Online")
+    );
+    foreach($build as $key => $item) {
+      $build[$key]["#markup"] = $replacements[$item["#markup"]];
+    }
+  }
+  if ($settings->facet == "lang") {
+    foreach($build as $key => $item) {
+      $build[$key]["#markup"] = isset($languages_mapping[$item["#markup"]]) ? $languages_mapping[$item["#markup"]] : $item["#markup"];
+    }
+  }
+  // AKZ: invalid usage of hook for items re-ordering. In order for this to take effect
+  // all sorting options have been removed from the facet. The requirement cannot be treated in 
+  // a non hardcoded way, thus it is not worth introducing another module/hook for this
+  if ($settings->facet == "library") {
+    $eige_library = null;
+    $rest_libraries = array();
+    foreach($build as $key => $item) {
+      if ($item["#markup"] == "EIGE (Lithuania)") {
+        $eige_library = $item;
+        unset($build[$key]);
+      }
+    }
+    if ($eige_library != null) {
+      $reordered_build = array();
+      $reordered_build[$eige_library["#markup"]] = $eige_library;
+      foreach($build as $key => $item) {
+        $reordered_build[$key] = $item;
+      }
+      $build = $reordered_build;
+    }
+  }
+}
+
+/**
+ * Performs an http request to the given primo url, and if 
+ * request succeeds, json response data are parsed and the ['SEGMENTS']['JAGROOT']['RESULT'] array is returned. 
+ * In case of errors during the process, errors are recorded via watchdog and the function returns null
+ */
+function _get_remote_primo_data($primo_url) {
+  $error_message = "Error while connecting to Primo (%url)";
+  $response = drupal_http_request($primo_url);
+  //print_r($primo_url);
+  //kprint_r($response);
+
+  // case of request error
+  if (isset($response->error)) {
+    $error_message .= " - '" . $response->error . "' ('" . $response->code . "')";
+    watchdog("search_api", $error_message, array("%url" => $primo_url), WATCHDOG_ALERT);
+    return null;
+  }
+  // case of response error
+  if (!isset($response->code) || $response->code!=200) {
+    if (isset($response->status_message)) {
+      $error_message .= " - '" . $response->status_message . "'";
+    }
+    watchdog("search_api", $error_message, array("%url" => $primo_url), WATCHDOG_ALERT);
+    return null;
+  }
+  // case of no data set in response
+  if (!isset($response->data)) {
+    $error_message .= " - 'Response data is not set'";
+    watchdog("search_api", $error_message, array("%url" => $primo_url), WATCHDOG_ALERT);
+    return null;
+  }
+
+  // https://developers.exlibrisgroup.com/primo/apis/webservices/xservices/search/briefsearch
+  $data = drupal_json_decode($response->data);
+
+  $json_result = null;
+  if (isset($data['SEGMENTS']) && isset($data['SEGMENTS']['JAGROOT']) && isset($data['SEGMENTS']['JAGROOT']['RESULT'])) {
+    $json_result = $data['SEGMENTS']['JAGROOT']['RESULT'];
+  }
+  
+  if ($json_result == null) {
+    $error_message .= " - Invalid data structure; missing ['SEGMENTS']['JAGROOT']['RESULT']";
+    watchdog("search_api", $error_message, array("%url" => $primo_url), WATCHDOG_ALERT);
+    return null;
+  }
+
+  // case of response with error message
+  if (isset($json_result['ERROR'])) {
+    $error_message .= " - Code: " . $json_result['ERROR']['@CODE'];
+    $error_message .= " - Message: " . $json_result['ERROR']['@MESSAGE'];
+    watchdog("search_api", $error_message, array("%url" => $primo_url), WATCHDOG_ALERT);
+    return null;
+  }
+  
+  return $json_result;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function search_api_primo_menu() {
+  $items = array();
+  $items['rdc/library/resource/%menu_tail'] = array(
+    'title' => 'Primo resource page',
+    'load arguments' => array('%map', '%index'), // http://drupal.stackexchange.com/a/35442/9565
+    'page callback' => 'primo_resource_load',
+    'page arguments' => array(3),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+// TODO AKZ doc
+function _process_entity_fields($doc, &$entity, &$fields = array()) {
+  $record = $doc['PrimoNMBib']['record']['display'];
+  $datasource = new SearchApiPrimoDataSourceController("primo_item");
+  $primo_item_wrapper = $datasource->getMetadataWrapper();
+  foreach ($primo_item_wrapper->getPropertyInfo() as $field_name => $info) {
+    $display_field_name = isset($info['field_display_alias']) ? $info['field_display_alias'] : $field_name;
+    // id, path and rank are already set
+    // the are included within getPropertyInfo(), but do not exist in the $record array, thus, will not be overrided
+    if (isset($info['pnx_record_section'])) {
+      $value = isset($doc['PrimoNMBib']['record'][$info['pnx_record_section']][$display_field_name]) ? $doc['PrimoNMBib']['record'][$info['pnx_record_section']][$display_field_name] : '';
+    } else {
+      $value = isset($record[$display_field_name]) ? $record[$display_field_name] : '';
+      if ($display_field_name == "type") {
+        $value = ucfirst($value);
+      }
+    }
+    if ((is_string($value) && strlen($value)) || (is_array($value) && count($value))) {
+      if (isset($info['process_subfield_delimiters']) && $info['process_subfield_delimiters']) {
+        $value = _process_pnx_subfield_delimiters($value);
+      }
+      $entity->{$field_name} = $value;
+      $fields[$field_name] = $value;
+    }
+  }
+}
+
+function _process_resource_links(&$entity, &$fields = array()) {
+  $links_array = array();
+  if (isset($entity->linktorsrc)) {
+    $links = array();
+    if (is_string($entity->linktorsrc) && strlen($entity->linktorsrc)) {
+      $links[] = $entity->linktorsrc;
+    } elseif (is_array($entity->linktorsrc) && count($entity->linktorsrc)) {
+      $links = $entity->linktorsrc;
+    }
+    $resource_links = '';
+    foreach ($links as $key => $link) {
+      $link = trim($link);
+      // default link title
+      $link_title = t('Link to resource');
+      // case where link has no metadata concerning its human readable title
+      if (strpos($link, "$$") === FALSE) {
+        if (strpos($link, "http") === FALSE) {
+          continue; // no point to process further
+        }
+        $resource_links .= '<a href="' . $link . '" target="_blank">' . $link_title . '</a>';
+        $links_array[$link] = array("url" => $link, "title" => $link_title);
+      } else {
+        // case where link does have metadata concerning its human readable title
+        $pieces = explode("$$", $link);
+        $link_url = '';
+        foreach ($pieces as $piece) {
+          $first_char = substr($piece, 0, 1);
+          if ($first_char=='U') { // U - URL
+            $link_url = trim(substr($piece, 1));
+          }
+          if ($first_char=='D') { // D - display title
+            $tmp = substr($piece, 1);
+            if (strlen($tmp)) {
+              $link_title = trim($tmp);
+            }
+          }
+        }
+        if (!strlen($link_url)) {
+          continue; // no point to process further
+        }
+        if (strpos($link_url, "http") === FALSE) {
+          continue; // no point to process further
+        }
+        if (strlen($resource_links)) {
+          $resource_links .= ', ';
+        }
+        $resource_links .= '<a href="' . $link_url . '" target="_blank">' . $link_title . '</a>';
+        $links_array[$link_url] = array("url" => $link_url, "title" => $link_title);
+      }
+    }
+    $entity->linktorsrc = $resource_links;
+    $fields['linktorsrc'] = $resource_links;
+  }
+  return $links_array;
+}
+
+// TODO AKZ hardcoded resolution of links and libraries/institutions
+function _process_libraries_and_links($doc, &$entity, &$fields = array()) {
+  global $institution_codes_to_names;
+  global $institution_url_domains_to_names;
+  
+  $all_links = array();
+  
+  // for business rules see here: http://jira.eworx.gr/browse/EIGEDR-278?focusedCommentId=60364&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#action_60364
+  
+  // resolve the direct resource links
+  $resource_links = _process_resource_links($entity, $fields);
+  
+  // resolve the backlinks
+  $backlinks = array();
+  if (isset($doc['LINKS']) && isset($doc['LINKS']['backlink'])) {
+    $tmp = array();
+    if (is_string($doc['LINKS']['backlink'])) {
+      $tmp[] = $doc['LINKS']['backlink'];
+    } else {
+      $tmp = $doc['LINKS']['backlink'];
+    }
+    foreach ($tmp as $key => $value) {
+      $url = trim($value);
+      if (strpos($url, "http") === FALSE) {
+        $url = '';
+      }
+      if (strlen($url)) {
+        $url_array = array();
+        $url_array['url'] = $url;
+        // try to resolve the institution library, via the domain of the url
+        foreach ($institution_url_domains_to_names as $domain => $institution_name) {
+          if (strpos($url, $domain) !== FALSE) {
+            $url_array['library'] = $institution_name;
+          }
+        }
+        $backlinks[$url] = $url_array;
+      }
+    }
+  }
+  
+  // resolve the libraries (if any) along with their respective links (if any)
+  // example of item with no libraries: http://eige.europa.eu/rdc/library/resource/CIG_NYRlibrary/95199
+  $normalized_libraries = array();
+  if (isset($doc['LIBRARIES'])&& count($doc['LIBRARIES'])) {
+    $libraries = array();
+    // one or many <sear:LIBRARIES> elements
+    foreach ($doc['LIBRARIES'] as $key => $value) {
+      
+      // now, thanks to xml/json coversion, $value can be
+      // - case#1: an exploded lirary meta array within $value 
+      //    http://primop.eige.europa.eu:1701/PrimoWebServices/xservice/search/full?institution=EIGE&getDelivery=true&docId=dedupmrg9700118
+      //    http://eige.europa.eu/rdc/library/resource/dedupmrg9700118
+      // - case#2: an exploded lirary meta array within $value['LIBRARY']
+      //    http://primop.eige.europa.eu:1701/PrimoWebServices/xservice/search/full?institution=EIGE&getDelivery=true&docId=dedupmrg6001544
+      //    http://eige.europa.eu/rdc/library/resource/dedupmrg6001544
+      // - case#3: multiple library meta arrays within $value['LIBRARY'] ($value['LIBRARY'][0], $value['LIBRARY'][1] etc)
+      //    http://primop.eige.europa.eu:1701/PrimoWebServices/xservice/search/full?institution=EIGE&getDelivery=true&docId=dedupmrg9890657
+      //    http://eige.europa.eu/rdc/library/resource/dedupmrg9890657
+      
+      if (!isset($value['LIBRARY'])) {
+        $libraries[] = $value; // case#1
+      } else {
+        // case#3
+        if (isset($value['LIBRARY'][0])) {
+          foreach ($value['LIBRARY'] as $lib) {
+            $libraries[] = $lib;
+          }
+        } else {
+          // case#2
+          $libraries[] = $value['LIBRARY'];
+        }
+      }
+    }
+    
+    foreach ($libraries as $key => $library) {
+      $institution = null;
+      // is it possible to have multiple institutions within a LIBRARY?
+      if (isset($library['institution']) && strlen(trim($library['institution']))) {
+        $institution = trim($library['institution']);
+      }
+      if ($institution == null) {
+        continue; // there is no point to proceed further
+      }
+      $normalized_library = array();
+      $normalized_library['key'] = $institution;
+      $institution_name = isset($institution_codes_to_names[$institution]) ? $institution_codes_to_names[$institution] : $institution;
+      $normalized_library['name'] = $institution_name;
+      
+      // is it possible to have multiple call numbers within a LIBRARY?
+      if (isset($library['callNumber']) && strlen(trim($library['callNumber']))) {
+        $normalized_library['call_number'] = trim($library['callNumber']);
+      }
+      // is it possible to have multiple urls within a LIBRARY?
+      if (isset($library['url']) && strlen(trim($library['url']))) {
+        $url = trim($library['url']);
+        if (strpos($url, "http") === FALSE) {
+          $url = '';
+        }
+        if (strlen($url)) {
+          $normalized_library['url'] = $url;
+        }
+      }
+      $normalized_libraries[] = $normalized_library;
+    }
+  }
+  
+  /*
+   * At this point we may have at hand the following cases
+   * - a non empty $backlinks array that may
+   *   -- contain urls that are duplicated within the libraries array
+   *   -- contain urls that do correspond in an entry in the $libraries array for which the url is missing (case of EIGE library - see issue documentation)
+   *   -- contain urls that do NOT correspond to any entry in the $libraries array, but for which the library name can be resolved via $institution_url_domains_to_names
+   * - a non empty $normalized_libraries that may
+   *   -- contain library references for which the urls are known (and possibly duplicated in the $backlinks array
+   *   -- contain library references for which the urls are NOT known but can be possibly found in the $backlinks array
+   *   -- contain library references for which the urls are NOT known and canNOT be found in the $backlinks array, thus should be omitted
+   */
+
+  // first get rid of the duplicate urls in both backlinks and resource links (if there are any libraries)
+  foreach ($normalized_libraries as $key => $library) {
+    if (isset($library['url'])) {
+      $url = $library['url'];
+      if (isset($backlinks[$url])) {
+        unset($backlinks[$url]);
+      }
+      if (isset($resource_links[$url])) {
+        unset($resource_links[$url]);
+      }
+    }
+  }
+  
+  // then, try to find out any missing library links within the $backlinks array
+  foreach ($normalized_libraries as $key => $library) {
+    if (!isset($library['url'])) {
+      foreach ($backlinks as $url => $backlink) {
+        if (isset($backlink['library']) && ($backlink['library'] == $library['name'])) {
+          $normalized_libraries[$key]['url'] = $url;
+          unset($backlinks[$url]);
+        }
+      }
+    }
+  }
+  
+  // now, remove any libraries that still don't have a url, and sort the rest (EIGE goes first)
+  $sorted_libraries = array();
+  foreach ($normalized_libraries as $key => $library) {
+    if (!isset($library['url'])) {
+      unset($normalized_libraries[$key]);
+    } else {
+      if ($library['key'] == 'EIGE') {
+        array_unshift($sorted_libraries, $library);
+      } else {
+        $sorted_libraries[] = $library;
+      }
+    }
+  }
+  
+  // finally, let's organise all link information into one array and in parallel 
+  // resolve the institution information to be displayed upon search results
+  
+  $institutions = ''; // comma separated list of institutions/libraries/locations
+  foreach ($resource_links as $key => $link) {
+    $all_links[] = array("url" => $link["url"], "title" => $link["title"]);
+  }
+  foreach ($sorted_libraries as $key => $library) {
+    $title = t("Link to '");
+    $title .= $library['name'];
+    $title .= t("' library catalogue");
+    $info = '';
+    if (isset($library['call_number'])) {
+      $info = $library['call_number'];
+    }
+    $all_links[] = array("url" => $library['url'], "title" => $title, "info" => $info);
+    if (strlen($institutions)) {
+      $institutions .= ", ";
+    }
+    $institutions .= $library['name'];
+  }
+  foreach ($backlinks as $key => $backlink) {
+    $title = t("Link to library catalogue");
+    if (isset($backlink['library'])) {
+      $title = t("Link to '");
+      $title .= $backlink['library'];
+      $title .= t("' library catalogue");
+    }
+    $all_links[] = array("url" => $backlink["url"], "title" => $title);
+    if (strlen($institutions)) {
+      $institutions .= ", ";
+    }
+    $institutions .= $backlink['library'];
+  }
+  
+  $entity->institution = $institutions;
+  $fields['institution'] = $institutions;
+  
+  return $all_links;
+}
+
+/**
+  * Helper function that checks for known Primo PNX record subfield delimiters
+  * and handles them appropriately (see Primo Technical Guide, section 'Subfields in the PNX')
+  * 
+  * @param type $value
+  */
+ function _process_pnx_subfield_delimiters($value, $delimiter = '; ') {
+   $serialized_value = '';
+   if (is_array($value)) {
+     $serialized_value = implode($delimiter, $value);
+   } else {
+     $serialized_value = $value;
+   }
+   if (strpos($serialized_value, "$$")===FALSE) {
+     return $serialized_value;
+   }
+   $result = '';
+   $pieces = explode("$$", $serialized_value);
+   foreach ($pieces as $piece) {
+     $first_char = substr($piece, 0, 1);
+     if ($first_char=='C') { // C - constant (used as i18n label in Display section
+       $result .= substr($piece, 1) . ': ';
+     }
+     if ($first_char=='V') { // V - value
+       $result .= substr($piece, 1);
+     }
+   }
+   return $result;
+ }
+
+function primo_resource_load($id) {
+  global $languages_mapping, $institution_codes_to_names;
+  $json_result = _get_remote_primo_data("http://primop.eige.europa.eu:1701/PrimoWebServices/xservice/search/full?json=true&institution=EIGE&getDelivery=true&docId=" . $id);
+  if ($json_result == null) {
+    return drupal_not_found();
+  }
+  $docset = null;
+  if (isset($json_result['DOCSET'])) {
+    $docset = $json_result['DOCSET'];
+  }
+  if ($docset == null) {
+    $error_message = "Error while connecting to Primo (%url) - Invalid data structure; missing ['SEGMENTS']['JAGROOT']['RESULT']['DOCSET']";
+    watchdog("search_api", $error_message, array("%url" => $primo_url), WATCHDOG_ALERT);
+    return drupal_not_found();
+  }
+  
+  $doc = $docset['DOC'];
+  
+  $entity = new stdClass();
+  $entity->id = $doc['PrimoNMBib']['record']['control']['recordid'];
+  $entity->path = 'rdc/library/resource/' . $entity->id;
+  
+  $fields = array();
+  _process_entity_fields($doc, $entity, $fields);
+  $links = _process_libraries_and_links($doc, $entity, $fields);
+  
+  drupal_set_title(check_plain($entity->title));
+  
+  $resource_type = t('Resource');
+  if (!empty($entity->rtype)) {
+    $resource_type = ucfirst($entity->rtype);
+  }
+  
+  // TODO AKZ - totally hardcoded html
+  $output = '<div class="zf-2col-stacked node node-method-tool view-mode-full row">';
+    $output .= '<div class="row"></div>';
+    $output .= '<div class="row">';
+      $output .= '<div class="group-left large-9 small-12">';
+        $output .= '<h1 id="page-title" class="title">'.$entity->title.'</h1>';
+        $output .= '<div class="group-metadata field-group-div">';
+          $output .= '<div class="field field-name-content-type field-type-ds field-label-hidden field-wrapper"><p>'.$resource_type.'</p></div>';
+          if (!empty($entity->sub)) {
+            $keywords = $entity->sub;
+            if (is_array($keywords)) {
+              $keywords = implode(", ", $keywords);
+            }
+          $output .= '<div class="group-keywords field-group-div">';
+            $output .= '<div class="field field-name-field-keywords field-type-taxonomy-term-reference field-label-hidden field-wrapper clearfix">';
+              $output .= $keywords;
+            $output .= '</div>';
+          $output .= '</div>';
+          }
+        $output .= '</div>';
+        if (!empty($entity->desc)) {
+        $output .= '<div class="body field">';
+        $description = $entity->desc;
+        if (strpos($description, "<p>") !== 0) {
+          $description = '<p>' . $description . '</p>';
+        }
+        $output .= $description;
+        $output .= '</div>';
+        }
+        if (!empty($links)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+        $output .= '<h2 class="label-abovec">'.t('Weblink(s)').'</h2>';
+          $output .= '<div class="field-items">';
+            $output .= '<ul>';
+            foreach ($links as $key => $link) {
+              $output .= '<li><a href="' . $link['url'] . '" class="external" target="_blank">' . $link['title'] . '</a>';
+              if (isset($link['info']) && strlen($link['info'])) {
+              $output .= '<span class="location"> - ' . $link['info'] . '</span>';
+              }
+              $output .= '</li>';
+            }
+            $output .= '</ul>';
+          $output .= '</div>';
+        $output .= '</div>';
+        }
+      $output .= '</div>';
+      $output .= '<div class="group-right large-3 small-12">';
+        $output .= '<div class="group-additional-info field-group-div">';
+        $output .= '<h2><span>'.t('Additional info').'</span></h2>';
+        
+        if (!empty($entity->cdate)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Date').'</div>';
+          $output .= $entity->cdate;
+        $output .= '</div>';
+        }
+        if (!empty($entity->creator)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Creator').'</div>';
+          $output .= $entity->creator;
+        $output .= '</div>';
+        }
+        if (!empty($entity->contributor)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Contributor').'</div>';
+          $output .= $entity->contributor;
+        $output .= '</div>';
+        }
+        if (!empty($entity->publisher)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Publisher').'</div>';
+          $output .= $entity->publisher;
+        $output .= '</div>';
+        }
+        if (!empty($entity->edition)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Edition').'</div>';
+          $output .= $entity->edition;
+        $output .= '</div>';
+        }
+        if (!empty($entity->fmt)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Format').'</div>';
+          $output .= $entity->fmt;
+        $output .= '</div>';
+        }
+        if (!empty($entity->identifier)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('ISBN').'</div>';
+          $output .= $entity->identifier;
+        $output .= '</div>';
+        }
+        if (!empty($entity->lang)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Language').'</div>';
+          $output .= isset($languages_mapping[$entity->lang]) ? $languages_mapping[$entity->lang] : $entity->lang;
+        $output .= '</div>';
+        }
+        if (!empty($entity->coverage)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Coverage').'</div>';
+          $output .= $entity->coverage;
+        $output .= '</div>';
+        }
+        if (!empty($entity->relation)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Relation').'</div>';
+          $output .= $entity->relation;
+        $output .= '</div>';
+        }
+        if (!empty($entity->ispartof)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Is part of').'</div>';
+          $output .= $entity->ispartof;
+        $output .= '</div>';
+        }
+        if (!empty($entity->rights)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Rights').'</div>';
+          $output .= $entity->rights;
+        $output .= '</div>';
+        }
+        $output .= '</div>';
+      $output .= '</div>';
+    $output .= '</div>';
+  $output .= '</div>';
+  
+  return $output;
+}

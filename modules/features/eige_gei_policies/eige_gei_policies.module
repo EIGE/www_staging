@@ -1,0 +1,31 @@
+<?php
+/**
+ * @file
+ * Code for the Gender Equality Policies feature.
+ */
+include_once 'eige_gei_policies.features.inc';
+
+function eige_gei_policies_form_views_exposed_form_alter(&$form, &$form_state) {
+  $viewName = isset($form_state['view']) ? $form_state['view']->name : "";
+  if (($viewName == "policy_initiatives_search") || ($viewName == 'policy_initiatives')) {
+    // hide the To date field and add a custom validate handler
+    $form['lv']['#theme'] = 'select_as_checkboxes';
+    $form['dt']['#access'] = FALSE;
+    array_unshift($form['#validate'], 'eige_gei_policies_form_views_exposed_form_validate');
+  }
+}
+
+function eige_gei_policies_form_views_exposed_form_validate($form, &$form_state) {
+  $form_state['input']['dt'] = $form_state['input']['df'];
+  $form_state['values']['dt'] = $form_state['values']['df'];
+}
+
+function eige_gei_policies_node_view_alter(&$build) {
+  if (($build['#view_mode'] == 'teaser') && ($build['#bundle'] == 'gender_equality_policy')) {
+    if (isset($build['field_domain'][0]['#markup'])) {
+      $domainClass = _title_to_css_class($build['field_domain'][0]['#markup'],' domain_');
+      $build['#groups']['group_metadata']->format_settings['instance_settings']['classes'] = 'group-metadata field-group-div' . $domainClass;
+    }
+  }
+}
+

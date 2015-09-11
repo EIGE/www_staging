@@ -1,0 +1,18 @@
+{
+  "id": 63,
+  "concept": "\u003cp class\u003d\"Tavaline\"\u003eThe indicator is divided into two parts. The indicator investigates the proportion of female and male graduates at ISCED 5a level from academic institutions analysed by field of study, which includes tertiary educational programmes with an academic orientation. The ISCED 5a graduates are qualified to enter a profession with high skills requirements or an advanced research programme.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eThe indicator also denotes the proportion of female and male graduates at PhD/doctorate or equivalent level (ISCED 6) of all graduates at PhD/doctorate or equivalent level from academic institutions analysed by field of study. Investigating broad fields of study at ISCED 5a level and PhD/doctorate or equivalent level sheds light on the gender balance among highly qualified graduates as they reach the point of both admission to the advanced research programmes and entry into employment. Similarly, it indicates female and male achievement rates across the different fields of study at the academic and advanced research level.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eThe following fields of study have been used for analysing the situation in the report:\u003c/p\u003e \u003cul\u003e\u003cli\u003eall fields of study\u003c/li\u003e\u003cli\u003eteacher training and education science;\u003c/li\u003e\u003cli\u003ehumanities and arts;\u003c/li\u003e\u003cli\u003esocial sciences, business and law;\u003c/li\u003e\u003cli\u003escience, mathematics and computing;\u003c/li\u003e\u003cli\u003eengineering, manufacturing and construction;\u003c/li\u003e\u003cli\u003eagriculture and veterinary;\u003c/li\u003e\u003cli\u003ehealth and Welfare.\u003c/li\u003e\u003c/ul\u003e",
+  "source": "\u003cp class\u003d\"Tavaline\"\u003eCalculation of the indicator is based on \u003ca href\u003d\"http://epp.eurostat.ec.europa.eu/cache/ITY_SDDS/EN/educ_esms.htm\"\u003eeducation and training statistics\u003c/a\u003e coordinated by Eurostat.\u003c/p\u003e",
+  "published": "\u003cp class\u003d\"Tavaline\"\u003eData are available in the Eurostat online database (\u003ca href\u003d\"http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset\u003deduc_grad5\u0026amp;lang\u003den\"\u003eeduc_grad5: ‘Graduates in ISCED 3 to 6 by field of education and sex’\u003c/a\u003e).\u003c/p\u003e",
+  "notes": "\u003cp class\u003d\"Tavaline\"\u003eIn principle, it covers all EU Member States and data are usually available from 1998 although there are some breaks in the availability of data for specific years or specific fields in certain countries. The data are updated annually. Some changes in the data collection could influence comparisons over time and some breaks in the availability of data for specific years or specific fields are in certain countries.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eEducation systems differ between countries and although the ISCED classification makes the comparison of levels of educations between countries possible, the differences may, nevertheless, affect certain figures. Furthermore, the degree structures differ between countries and the indicators on tertiary graduates by fields of study are, therefore, affected by differences in countries’ degree structures.\u003c/p\u003e",
+  "no_data": "Data are not available on EU27 level",
+  "reports": [
+    {
+      "id": 631,
+      "title": "Name of Report 1",
+      "date": "09-Dec-2014",
+      "source": "Eurostat, Education statistics (educ_grad5)",
+      "notes": ": data are not available",
+      "file": "http://eige.europa.eu/internal/bpfa/results/download/22/63/631"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+<?php
+
+  /**
+   * Implements hook_form_alter()
+   */
+  function eige_i18n_form_alter(&$form, $form_state, $form_id) {
+    // EIGEDR-16
+    if (isset($form['#node'])) { // node edit/create form
+      $node = $form['#node'];
+      // node translation update/create - path (either custom or via pathauto) should not be editable
+      if (isset($node->nid) && isset($form_state['entity_translation']) && $form_state['entity_translation']['is_translation']) {
+        unset($form['path']);
+      } else {
+        // new node: set language to be the English one by default
+        if (isset($form['language'])) {
+          $languages = $form['language']['#options'];
+          $default_language = variable_get('language_default');
+          $form['language']['#options'] = array_intersect_key($languages, array($default_language->language=>$default_language->name));
+        }
+      }
+    }
+  }
+  
+  function eige_i18n_preprocess_page(&$vars) {
+    // EIGEDR-16
+    drupal_add_js(drupal_get_path('module', 'eige_i18n') .'/js/eige_i18n.js');
+    // add enabled language codes as js variable for admin menu links fix usage
+    $enabled_language_codes = array();
+    foreach (language_list() as $language_code => $language) {
+      $enabled_language_codes[] = $language_code;
+    }
+    drupal_add_js(array('enabled_language_codes' => $enabled_language_codes), 'setting');
+  }

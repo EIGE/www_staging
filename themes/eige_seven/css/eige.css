@@ -1,0 +1,18 @@
+.view-eige-administration-nodes .views-exposed-form .description, 
+.view-eige-administration-comments .views-exposed-form .description,
+.view-eige-administration-users .views-exposed-form .description{
+		display: block;
+    width: auto;
+		color: #999!important;
+		margin-bottom: 15px!important;
+}
+
+.view-eige-administration-nodes .views-exposed-form .form-text, 
+.view-eige-administration-comments .views-exposed-form .form-text,
+.view-eige-administration-users .views-exposed-form .form-text {
+    width: 40em;
+}
+
+.form-item  {
+	padding: 9px 0px 0px 0px;
+}

@@ -1,0 +1,12 @@
+; code based on this sandbox project http://cgit.drupalcode.org/construct/tree/modules/structsearchapi?id=e9b7f0b327d1124df665dce5e2a5312f9f551544
+name = "Ex-libris Primo search"
+description = "Provides a Search API backend that interfaces with Ex-libris Primo"
+dependencies[] = "search_api"
+core = 7.x
+package = EIGE custom modules
+;package = Search
+
+files[] = service.inc
+files[] = datasource.inc
+
+project = "search_api_primo"

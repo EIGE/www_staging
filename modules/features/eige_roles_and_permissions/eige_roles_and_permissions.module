@@ -1,0 +1,6 @@
+<?php
+
+  function _user_has_role($role) {
+    global $user;
+    return $user->uid && in_array($role, array_values($user->roles));
+  }

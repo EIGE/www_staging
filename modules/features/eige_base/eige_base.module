@@ -1,0 +1,678 @@
+<?php
+/**
+ * @file
+ * Code for the EIGE base feature.
+ */
+include_once 'eige_base.features.inc';
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * Add site information variables for site social links.
+ */
+function eige_base_form_system_site_information_settings_alter (&$form, &$form_state) {
+	$form['social_links'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Social media links'),
+	);
+	$form['social_links']['eige_enge_website_link'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Eurogender Website link'),
+		'#default_value' => variable_get('eige_enge_website_link', ''),
+		'#size' => 120,
+	);
+	$form['social_links']['eige_facebook_link'] = array(
+		'#type' => 'textfield',
+		'#title' => t('EIGE Facebook link'),
+		'#default_value' => variable_get('eige_facebook_link', ''),
+		'#size' => 120,
+	);
+	$form['social_links']['eige_twitter_link'] = array(
+		'#type' => 'textfield',
+		'#title' => t('EIGE Twitter link'),
+		'#default_value' => variable_get('eige_twitter_link', ''),
+		'#size' => 120,
+	);
+	$form['social_links']['eige_youtube_link'] = array(
+		'#type' => 'textfield',
+		'#title' => t('EIGE Youtube channel link'),
+		'#default_value' => variable_get('eige_youtube_link', ''),
+		'#size' => 120,
+	);
+}
+
+function eige_base_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['#node']) && isset($form['#node_edit_form']) && ($form['type']['#value'] == 'advanced_page')) {
+    $theme_path = drupal_get_path('theme', 'eigefoundationtheme');
+    drupal_add_js($theme_path.'/js/advancednodeform.js', 'file');
+  } 
+  if (isset($form['#node']) && (isset($form['#node_edit_form']))) {
+    // EIGEDR-139 applicable to majority of CTs
+    if(isset($form['field_legacy_id'])) {
+      $form['field_legacy_id']['#disabled'] = TRUE;
+    }
+    if (isset($form['field_migration_notes'])) {
+      $form['field_migration_notes']['#disabled'] = TRUE;
+    }
+  }
+  // nodequeue edit content form (e.g. nodequeue_arrange_subqueue_form_1)
+  if (strpos($form_id, "nodequeue_arrange_subqueue_form") !== FALSE) {
+    $form['add']['nid']['#attributes']['size'] = 130;
+    $node_keys = element_children($form['nodes']);
+    foreach ($node_keys as $nid) {
+      $node = $form['nodes'][$nid]['#node'];
+      if ($node['status']) {
+        $form['nodes'][$nid]['status'] = array('#markup' => '<span>'.t('Published').'</span>');
+      } else {
+        $form['nodes'][$nid]['status'] = array('#markup' => '<span class="node-unpublished">'.t('Not published').'</span>');
+      }
+      if (isset($node['field_image']) && count($node['field_image'])) {
+        // we shift the first element, as field_image is translatable and key 'LANGUAGE_NONE' is not applicable (keys are 'en', 'fr' etc.)
+        $tmp = array_shift($node['field_image']); 
+        // we shift one more to fetch the first image for the specified language (we could use key '0' as we know this is not a multi field)
+        $image = array_shift($tmp);
+        $form['nodes'][$nid]['image'] = array('#markup' => 
+          theme_image_style(array(
+            'style_name' => 'thumbnail',
+            'path' => $image['uri'],
+            'alt' => $image['alt'],
+            'width' => $image['width'],
+            'height' => $image['height'],
+            ))
+        );
+      } else {
+        if ($node['type'] == 'video') {
+          $form['nodes'][$nid]['image'] = array('#markup' => '<span>'.t('N/A').'</span>');
+        } else {
+          $form['nodes'][$nid]['image'] = array('#markup' => '<strong>'.t('- MISSING -').'</strong>');
+        }
+      }
+    }
+  }
+  // EIGEDR-597 accessibility enhancement
+  if ($form_id == 'lang_dropdown_form') {
+    if (isset($form['lang_dropdown_select'])) {
+      $form['lang_dropdown_select']['#title'] = t('Select your preferred language');
+    }
+  }
+}
+
+function eige_base_form_views_exposed_form_alter(&$form, $form_state, $form_id) {
+  // scrollbars for filters
+  $theme_path = drupal_get_path('theme', 'eigefoundationtheme');
+  drupal_add_library('system', 'effects.highlight');
+  drupal_add_js($theme_path.'/js/CustomScrollbar/jquery.mCustomScrollbar.min.js','file');
+  drupal_add_css($theme_path.'/js/CustomScrollbar/jquery.mCustomScrollbar.css');
+  
+  // EIGEDR-540 countries ordering
+  $ordered_country_options = array();
+  if (isset($form['c']) && isset($form['c']['#options']) && count($form['c']['#options'])) {
+    $country_options = $form['c']['#options'];
+    // http://publications.europa.eu/code/en/en-370100.htm
+    // the proper implementation would be to load the respective country entities and then sort 
+    // by their native names; php's ksort function does not produce the desired result 
+    // (accented chars are positioned last), thus I need to hardcode the ordering
+    // placeholder countries 'European Union' and 'International' are positioned in the end
+    $country_codes_ordered = array(
+      "BE", "BG", "CZ", "DK", "DE", "EE", "IE", "GR", "ES", "FR", "HR", 
+      "IT", "CY", "LV", "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", 
+      "RO", "SI", "SK", "FI", "SE", "GB", "EU", "ZZ"
+    );
+    foreach ($country_codes_ordered as $iso2) {
+      $ordered_country_options[$iso2] = $country_options[$iso2];
+    }
+    $form['c']['#options'] = $ordered_country_options;
+  }
+}
+
+/**
+ * Implements hook_node_view($node, $view_mode, $langcode).
+ */
+
+function eige_base_node_view($node, $view_mode, $langcode) {
+  if ($view_mode == 'full') {
+    global $base_url;
+    // Verify that the node is not a result of a click on a menu link but the result of a click inside the view results.
+    $mlid = db_select('menu_links', 'ml')
+      ->condition('ml.link_path', 'node/' . $node->nid)
+      ->fields('ml', array('mlid'))
+      ->execute()
+      ->fetchField();
+    if (!$mlid) {
+      $countries = country_get_list();
+      $referer =  $_SERVER['HTTP_REFERER'];
+      $should_display_back_link = 0;
+      $referer_bare_url = trim(str_replace($base_url, "", $referer));
+      if (strpos($referer_bare_url, "?") !=0) {
+        $referer_bare_url = substr($referer_bare_url, 0, strpos($referer_bare_url, "?"));
+      }
+      // Check if the node is a result of a click inside a panel
+      if (isset($node->field_country) && isset($node->field_country[LANGUAGE_NONE][0]['iso2'])) {
+        $country_value = $countries[$node->field_country[LANGUAGE_NONE][0]['iso2']];
+        $sanitized_country_value = strtolower($country_value);
+        $sanitized_country_value = str_replace(' ', '-', $sanitized_country_value);
+        if (strpos($referer_bare_url, "/gender-mainstreaming/countries") !== FALSE) {
+          $should_display_back_link = 1;
+        }
+      }
+      // Check if the node is a result of a click inside a view
+      if (!$should_display_back_link) {
+        $views = views_get_all_views();
+        foreach ($views as $name => $view) {
+          if (!empty($view->disabled) && $view->disabled) {
+            continue; // exclude disabled views
+          }
+          if (!empty($view->display)) {
+            foreach ($view->display as $key => $display) {
+              if (isset($display->display_options['path']) && ('/'. $display->display_options['path']) == $referer_bare_url) {
+                $should_display_back_link = 1;
+              }
+            }
+          }
+        }
+      }
+      // Pass the variables to Javascript
+      if ($should_display_back_link) {
+        $back_link_attributes = array(
+          "label" => t('Back to search results'),
+          "link" => $referer
+        );
+        drupal_add_js(array('back_link_attributes' => $back_link_attributes), 'setting');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_node(&$vars).
+ */
+function eige_base_preprocess_node(&$vars) {
+  _preprocess_toc($vars);
+  $view = $vars['elements']['#view_mode'];
+  $node = $vars['node'];
+  if (($node->type=='page') && ($view == 'full')) {
+    _preprocess_timeline($vars);
+  }
+  if (($node->type=='advanced_page') && ($view == 'full')) {
+    _preprocess_timeline($vars);
+    _preprocess_policy_cycle($vars);
+  }
+  if (($node->type=='advanced_page') && ($view == 'related_content')) {
+    $vars['content']['content_type'][0]['#markup'] = "<p>" . t('Web Page') . "</p>";
+  }
+}
+
+function eige_base_preprocess_page(&$vars) {
+  $path = $_GET["q"];
+  if ($path == 'contact') {
+    $vars['title'] = t('Contact us');
+    drupal_set_title('Contact us');
+  }
+  
+  // add i18n literals required for js
+  // AKZ: by adding them here, it means they will be available for all pages and 
+  // not only for the one they are required, thus adding a small overhead to the page
+  // On the other hand, when dealing with views, Drupal does not offer a proper way
+  // for identifying in hook_preprocess_page if a view is being displayed, thus we are 
+  // required to hardcode the view urls. e.g. see eige_administrative_data_preprocess_page
+  // So, I am choosind the small overhead
+  $i18n_literals = array(
+    "monitoring_bpfa_no_area" => t("No specific area"),
+  );
+  drupal_add_js(array('i18n_literals' => $i18n_literals), 'setting');
+  
+}
+
+function _preprocess_timeline(&$vars) {
+  $theme_path = drupal_get_path('theme', 'eigefoundationtheme');
+  drupal_add_js($theme_path.'/js/timeline/js/storyjs-embed.js', 'file');
+  drupal_add_js($theme_path.'/js/timeline/js/eige-timeline.js', 'file');
+  drupal_add_css($theme_path.'/js/timeline/css/timeline.css');
+}
+
+function _preprocess_policy_cycle(&$vars) {
+  $node = $vars['node'];
+  $theme_path = drupal_get_path('theme', 'eigefoundationtheme');
+  if (isset($node->preprocess_fields) && count($node->preprocess_fields) && in_array('sectoral_area_policy_cycle', array_values($node->preprocess_fields))) {
+    if (!empty($node->field_policy_cycle_title) || !empty($node->field_sa_design) || !empty($node->field_sa_planning) 
+        || !empty($node->field_sa_implementation) || !empty($node->field_sa_monitoring) || !empty($node->field_sa_policy_cycle_summary)) {
+      
+      drupal_add_css($theme_path.'/js/owl-carousel/owl.carousel.css');
+      drupal_add_css($theme_path.'/js/owl-carousel/owl.theme.css');
+      drupal_add_js($theme_path.'/js/owl-carousel/owl.carousel.js', 'file');
+      
+      $current_language = $vars['elements']['#language'];
+      $default_language = language_default()->language;
+      
+      $policy_cycle_title = t('Policy cycle');
+      if(isset($node->field_policy_cycle_title[$current_language][0]['value'])) {
+        $policy_cycle_title = $node->field_policy_cycle_title[$current_language][0]['value'];
+      } else if (isset($node->field_policy_cycle_title[$default_language][0]['value'])) {
+        $policy_cycle_title = $node->field_policy_cycle_title[$default_language][0]['value'];
+      }
+    
+      $policy_cycle_summary = '';
+      if(isset($node->field_sa_policy_cycle_summary[$current_language][0]['value'])) {
+        $policy_cycle_summary = $node->field_sa_policy_cycle_summary[$current_language][0]['value'];
+      } else if (isset($node->field_sa_policy_cycle_summary[$default_language][0]['value'])) {
+        $policy_cycle_summary = $node->field_sa_policy_cycle_summary[$default_language][0]['value'];
+      }
+      
+      $is_simple_policy_cycle = FALSE;
+      if (!isset($node->field_simple_policy_cycle) || !isset($node->field_simple_policy_cycle[LANGUAGE_NONE]) || // case of Sectoral area where field does not exist
+          $node->field_simple_policy_cycle[LANGUAGE_NONE][0]['value']==1) { // case of Advanced web page where field exists and is checked
+        $is_simple_policy_cycle = TRUE;
+      }
+      
+      
+      $policy_cycle_html = '<div class="policy-cycle-phase" id="phase-policy-cycle">';
+      if (strlen($policy_cycle_summary)>0) {
+        $policy_cycle_html .= '<div class="field field-name-field-sa-policy-cycle-summary field-type-text-long field-wrapper">'.$policy_cycle_summary.'</div>';
+      }
+      
+      if ($is_simple_policy_cycle) {
+        $policy_cycle_html .= '<div class="cycle-simple">';
+      } else {
+        $policy_cycle_html .= '<div class="cycle">';
+      }
+      
+      $policy_cycle_html .= '<div id ="policy-cycle-tl"><h2>'.t('Define').'</h2>' 
+          . (!$is_simple_policy_cycle ? _get_policy_cycle_phase_extras($node, 'field_define_tools', 'field_define_elements', $current_language) : '') 
+          . '</div>';
+      $policy_cycle_html .= '<div id ="policy-cycle-tr"><h2>'.t('Plan').'</h2>' 
+          . (!$is_simple_policy_cycle ? _get_policy_cycle_phase_extras($node, 'field_plan_tools', 'field_plan_elements', $current_language) : '') 
+          . '</div>';
+      $policy_cycle_html .= '<div id = "policy-cycle-bl"><h2>'.t('Check').'</h2>' 
+          . (!$is_simple_policy_cycle ? _get_policy_cycle_phase_extras($node, 'field_check_tools', 'field_check_elements', $current_language) : '') 
+          . '</div>';
+      $policy_cycle_html .= '<div id = "policy-cycle-br"><h2>'.t('Act').'</h2>' 
+          . (!$is_simple_policy_cycle ? _get_policy_cycle_phase_extras($node, 'field_act_tools', 'field_act_elements', $current_language) : '') 
+          . '</div>';
+      
+      $policy_cycle_html .= '</div>'; // closing <div class="cycle(-simple)">
+      $policy_cycle_html .= '</div>'; // closing <div class="policy-cycle-phase" id="phase-policy-cycle">
+      
+      $policy_cycle_html .= _get_policy_cycle_phase_markup($node, 'field_sa_design', $current_language, 1);
+      $policy_cycle_html .= _get_policy_cycle_phase_markup($node, 'field_sa_planning', $current_language, 2);
+      $policy_cycle_html .= _get_policy_cycle_phase_markup($node, 'field_sa_implementation', $current_language, 3);
+      $policy_cycle_html .= _get_policy_cycle_phase_markup($node, 'field_sa_monitoring', $current_language, 4);
+      
+      $markup = '<h2>' . $policy_cycle_title . '</h2>';
+      $markup .= '<div class="owl-carousel">'.$policy_cycle_html.'</div>';
+      $vars['content']['sectoral_area_policy_cycle'][0] = 
+        array('#markup' => $markup);
+    }
+  }
+}
+
+function _get_policy_cycle_carousel_markup($index, $text) {
+  $cycle_steps = array('0'=>t('Policy cycle'), '1'=>t('Define'), '2'=>t('Plan'), '3'=>t('Act'), '4'=>t('Check'));
+  $previous_step = $cycle_steps[$index-1];
+  $current_step = $cycle_steps[$index];
+  $step_class = _get_phase_css_class($current_step);
+  $next_thumb = "";
+  if ($index<4) {
+    $next_step = $cycle_steps[$index+1];
+    $next_thumb = '<a class="step next" href="#step-'.($index+1).'"><span class="icon-wrap"></span><div><h4><span>'.t('Next').'</span>'.$next_step.'</h4></div></a>';
+  }
+  $previous_thumb = '<a class="step prev" href="#step-'.($index-1).'"><span class="icon-wrap"></span><div><h4><span>'.t('Previous').'</span>'.$previous_step.'</h4></div></a>';
+  $cycle_steps_listing = '';
+  foreach ($cycle_steps as $key => $value) {
+    if ($key>0) {
+      $css_class = _get_phase_css_class($value);
+      if ($value==$current_step) {
+        $css_class .= ' active';
+      }
+      $cycle_steps_listing .= '<li class="'.$css_class.'"><a href="#step-'.$key.'">'.$value.'</a></li>';
+    }
+  }
+  $html = 
+      '<div class="policy-cycle-phase" id="phase-'.$step_class.'">' .
+        '<div class="header-policy-cycle">'.
+            '<a class="back" href="#step-0">'.t('Back to Policy Cycle').'</a>' .
+            '<nav class="nav-slide">'.$previous_thumb.$next_thumb.'</nav>' .
+            '<ul>' .$cycle_steps_listing. '</ul>' .
+        '</div>'.
+        '<div class="phase-content">'.
+          '<h3>' .$current_step. '</h3>' .
+          '<p>'.$text.'</p>' .
+        '</div>'.
+      '</div>';
+  return $html;
+}
+
+function _get_phase_css_class($text) {
+  $step_class = str_replace(" ", "_", $text);
+  return strtolower($step_class);
+}
+
+function _get_policy_cycle_phase_extras($node, $tools_field, $elements_field, $current_language) {
+  $default_language = language_default()->language;
+  $tools_markup = '';
+  if(isset($node->{$tools_field}[$current_language][0]['value'])) {
+    $tools = $node->{$tools_field}[$current_language][0]['value'];
+  } else if (isset($node->{$tools_field}[$default_language][0]['value'])) {
+    $tools = $node->{$tools_field}[$default_language][0]['value'];
+  }
+  if (strlen($tools)) {
+    $tools_markup = '<div class="policy-cycle-tools"><h3>' . t('Tools') . '</h3>' . $tools . '</div>';
+  }
+  $elements_markup = '';
+  if (isset($node->{$elements_field}[$current_language][0]['value'])) {
+    $elements = $node->{$elements_field}[$current_language][0]['value'];
+  } else if (isset($node->{$elements_field}[$default_language][0]['value'])) {
+    $elements = $node->{$elements_field}[$default_language][0]['value'];
+  }
+  if (strlen($elements)) {
+    $elements_markup = '<div class="policy-cycle-elements"><h3>' . t('Elements') . '</h3>' . $elements . '</div>';
+  }
+  return $tools_markup . $elements_markup;
+}
+
+function _get_policy_cycle_phase_markup($node, $field, $current_language, $index) {
+  $phase_value = '';
+  $default_language = language_default()->language;
+  if(isset($node->{$field}[$current_language][0]['value'])) {
+    $phase_value = $node->{$field}[$current_language][0]['value'];
+  } else if (isset($node->{$field}[$default_language][0]['value'])) {
+    $phase_value = $node->{$field}[$default_language][0]['value'];
+  }
+  if (strlen($phase_value)) {
+    return _get_policy_cycle_carousel_markup($index, $phase_value);
+  }
+  return '';
+}
+
+function _preprocess_toc(&$vars) {
+  $node = $vars['node'];
+  $current_language = $vars['elements']['#language'];
+  $default_language = language_default()->language;
+  
+  // EIGEDR-45 'Table of Contents' functionality
+  // field_toc is already defined and positioned via DS, so now we are just populating it with markup
+  // no need to check for $vars['view_mode']=='full', since ToC has been configured for 'full' view, thus its presence alone is an indicator
+  if (isset($node->preprocess_fields) && count($node->preprocess_fields) && in_array('field_toc', array_values($node->preprocess_fields))) {
+    $has_toc_content = false;
+
+    $toc_items = array();
+    $toc_header_counter = 0;
+
+    // Introduction (mandatory field for Advanced page and Sectoral area)
+    $introduction_html = '';
+    if (isset($vars['content']['field_introduction']) && count($vars['content']['field_introduction']) 
+        && count($vars['content']['field_introduction']['#items'])) {
+      $introduction = $vars['content']['field_introduction']['#items'][0]['value'];
+      if (strlen($introduction)) {
+        $introduction_html = _parse_toc_items($introduction, $toc_items, $toc_header_counter);
+      }
+    }
+
+    // Policy cycle (Advanced page and Sectoral area CTs)
+    if((isset($vars['field_sa_policy_cycle_summary']) && count($vars['field_sa_policy_cycle_summary'])) ||
+        (isset($vars['field_policy_cycle_title']) && count($vars['field_policy_cycle_title'])) ||
+        (isset($vars['field_sa_design']) && count($vars['field_sa_design'])) ||
+        (isset($vars['field_sa_planning']) && count($vars['field_sa_planning'])) ||
+        (isset($vars['field_sa_implementation']) && count($vars['field_sa_implementation'])) ||
+        (isset($vars['field_sa_monitoring']) && count($vars['field_sa_monitoring']))) {
+      
+      $toc_header_counter++;
+      $policy_cycle_title = t('Policy cycle');
+      if(isset($node->field_policy_cycle_title[$current_language][0]['value'])) {
+        $policy_cycle_title = $node->field_policy_cycle_title[$current_language][0]['value'];
+      } else if (isset($node->field_policy_cycle_title[$default_language][0]['value'])) {
+        $policy_cycle_title = $node->field_policy_cycle_title[$default_language][0]['value'];
+      }
+      $group_settings = $vars['elements']['#groups']['group_policy_cycle']->format_settings;
+      $toc_items[] = array('index' => $toc_header_counter, 'title' => $policy_cycle_title, 'anchor' => $group_settings['instance_settings']['id'], 'subheaders' => array());
+    }
+    
+    $downloads_placed = false;
+    // Downloads field for Procurement and Career Opportunity CTs is above body field
+    if (($vars['type']=='career_opportunity') || ($vars['type']=='procurement')) {
+      if(isset($vars['field_downloads']) && count($vars['field_downloads'])) {
+        $downloads_placed = true;
+        $toc_header_counter++;
+        $toc_items[] = array('index'=>$toc_header_counter, 'title'=>t('Downloads'), 'anchor'=>"downloads-wrapper", 'subheaders'=>array());              
+      }
+    }
+    
+    $body_html = '';
+    if (isset($vars['content']['body']) && count($vars['content']['body']) && count($vars['content']['body']['#items'])) {
+      $body = $vars['content']['body']['#items'][0]['value'];
+      if (strlen($body)) {
+        $body_html = _parse_toc_items($body, $toc_items, $toc_header_counter);
+      }
+    }
+    
+    // Timeline specific fields that participates in ToC
+    if((isset($vars['field_timeline_events']) && count($vars['field_timeline_events'])) ||
+        (isset($vars['field_timeline_title']) && count($vars['field_timeline_title'])) ||
+        (isset($vars['field_timeline_footer']) && count($vars['field_timeline_footer'])) ||
+        (isset($vars['field_timeline_summary']) && count($vars['field_timeline_summary']))) {
+      $toc_header_counter++;
+      $timeline_title = t('Timeline');
+      if(isset($node->field_timeline_title[$current_language][0]['value'])) {
+        $timeline_title = $node->field_timeline_title[$current_language][0]['value'];
+      } else if (isset($node->field_timeline_title[$default_language][0]['value'])) {
+        $timeline_title = $node->field_timeline_title[$default_language][0]['value'];
+      }
+      $group_settings = $vars['elements']['#groups']['group_timeline']->format_settings;
+      $toc_items[] = array('index' => $toc_header_counter, 'title' => $timeline_title, 'anchor' => $group_settings['instance_settings']['id'], 'subheaders' => array());
+    }
+    
+    $additional_information_html = '';
+    if (isset($vars['content']['field_additional_information']) && count($vars['content']['field_additional_information']) 
+        && count($vars['content']['field_additional_information']['#items'])) {
+      $additional_information = $vars['content']['field_additional_information']['#items'][0]['value'];
+      if (strlen($additional_information)) {
+        $additional_information_html = _parse_toc_items($additional_information, $toc_items, $toc_header_counter);
+      }
+    }
+
+    // Good practice specific fields that participate in ToC
+    if ((isset($vars['field_gp_contacts']) && count($vars['field_gp_contacts'])) ||
+        (isset($vars['field_gp_further_info']) && count($vars['field_gp_further_info'])) ||
+        (isset($vars['field_gp_image_copyright']) && count($vars['field_gp_image_copyright']))) {
+      $toc_header_counter++;
+      $group_settings = $vars['elements']['#groups']['group_contacts_information']->format_settings;
+      $toc_items[] = array('index' => $toc_header_counter, 'title' => t($group_settings['label']), 'anchor' => $group_settings['instance_settings']['id'], 'subheaders' => array());
+    }
+
+    $sources_html = '';
+    if (isset($vars['field_gp_sources']) && count($vars['field_gp_sources'])) {
+      $sources = $vars['content']['field_gp_sources']['#items'][0]['value'];
+      if(strlen($sources)) {
+        $sources_html = _parse_toc_items($sources, $toc_items, $toc_header_counter);
+      }
+    }
+
+    if(isset($vars['field_external_references']) && count($vars['field_external_references'])) {
+      $toc_header_counter++;
+      $group_settings = $vars['elements']['#groups']['group_external_references']->format_settings;
+      $toc_items[] = array('index' => $toc_header_counter, 'title' => t($group_settings['label']), 'anchor' => $group_settings['instance_settings']['id'], 'subheaders' => array());
+    }
+
+    // Downloads field for the rest of the CTs is placed below body and below any custom CT fields
+    if (!$downloads_placed) {
+      if(isset($vars['field_downloads']) && count($vars['field_downloads'])) {
+        $toc_header_counter++;
+        $toc_items[] = array('index' => $toc_header_counter, 'title' => t('Downloads'), 'anchor' => "downloads-wrapper", 'subheaders' => array());              
+      }
+    }
+    
+    // common CT fields that participate in ToC
+    if ((isset($vars['field_related_content']) && count($vars['field_related_content']))) {
+      $toc_header_counter++;
+      $group_settings = $vars['elements']['#groups']['group_related_content']->format_settings;
+      $toc_items[] = array('index' => $toc_header_counter, 'title' => t($group_settings['label']), 'anchor' => $group_settings['instance_settings']['id'], 'subheaders' => array());
+    }
+
+    if (count($toc_items)) {
+      $toc_html = '<div class="field field-name-field-toc expanded hide-for-medium hide-for-small">';
+      $toc_html .= '<h2 title="' . t('ToC') . '">' . t('Table of contents') . '</h2>';
+      $toc_html .= '<div id="toc-elements">';
+      $toc_elements = '';
+      $has_subheaders = false;
+      foreach ($toc_items as $toc_item) {
+        $subheaders = $toc_item['subheaders'];
+        $class = 'header';
+        if ($toc_item['index']==1) {
+          $class .= ' active';
+        }
+        $toc_elements .= '<li class="' . $class . '">';
+        $toc_elements .= '<a href="#' . $toc_item['anchor'] . '" title="' . $toc_item['title'] . '">';
+        $toc_elements .= '<span class="index">' . $toc_item['index'] . '</span>';
+        $toc_elements .= '<span class="title">' . $toc_item['title'] . '</span>';
+        $toc_elements .= '</a>';
+        if (count($subheaders)) {
+          $has_subheaders = true;
+          $toc_elements .= '<ul class="subheaders">';
+          foreach ($subheaders as $subheader) {
+            $toc_elements .= '<li class="subheader">';
+            $toc_elements .= '<a href="#' . $subheader['anchor'] . '" title="' . $subheader['title'] . '">';
+            $toc_elements .= '<span class="index">' . $subheader['index'] . '</span>';
+            $toc_elements .= '<span class="title">' . $subheader['title'] . '</span>';
+            $toc_elements .= '</a></li>';
+          }
+          $toc_elements .= '</ul>';
+        }
+        $toc_elements .= '</li>';
+      }
+      $toc_html .= '<ul' . ($has_subheaders? ' class="with-subheaders" ' : '') . '>';
+      $toc_html .= $toc_elements;
+      $toc_html .= '</ul></div></div>';
+      $vars['field_toc'] = $toc_html;
+      $has_toc_content = true;
+
+      // update html so that headers and subheaders get the generated id attributes to be used as anchors
+      if (strlen($introduction_html)) {
+        $vars['content']['field_introduction'][0]['#markup'] = $introduction_html;
+      }
+      if (strlen($body_html)) {
+        $vars['content']['body'][0]['#markup'] = $body_html;
+      }
+      if (strlen($additional_information_html)) {
+        $vars['content']['field_additional_information'][0]['#markup'] = $additional_information_html;
+      }
+      if(strlen($sources_html)) {
+        $vars['content']['field_gp_sources'][0]['#markup'] = $sources_html;
+      }
+    }
+    if ($has_toc_content) {
+      $theme_path = drupal_get_path('theme', 'eigefoundationtheme');
+      drupal_add_library('system', 'effects.highlight');
+      drupal_add_js($theme_path.'/js/CustomScrollbar/jquery.mCustomScrollbar.min.js','file');
+      drupal_add_css($theme_path.'/js/CustomScrollbar/jquery.mCustomScrollbar.css');
+    }
+  }
+}
+
+/**
+ * Helper function that parses the specified text and constructs ToC items
+ */
+function _parse_toc_items($text, &$toc_items, &$toc_header_counter) {
+  // http://simplehtmldom.sourceforge.net/manual.htm
+  $html = str_get_html($text);
+  $toc_headers = $html->find('h2.toc-header');
+  if (count($toc_headers)) {
+    foreach ($toc_headers as $header) {
+      $toc_header_counter++;
+      $toc_subheader_counter = 0; // reset subheaders counter
+      $subheaders = array();
+      $header_title = $header->plaintext;
+      $header_id = _text_to_html_id_atribute($header_title, "header-$toc_header_counter");
+      $header->id = $header_id;
+      $sibling = $header->next_sibling();
+      while (isset($sibling)) {
+        if ($sibling->tag=='h2' && isset($sibling->attr['class']) && $sibling->attr['class']=='toc-header') {
+          $sibling = null;
+          break;
+        }
+        if ($sibling->tag=='h3' && isset($sibling->attr['class']) && $sibling->attr['class']=='toc-subheader') {
+          $toc_subheader_counter++;
+          $subheader_title = $sibling->plaintext;
+          $subheader_id = _text_to_html_id_atribute($subheader_title, "subheader-$toc_subheader_counter");
+          $sibling->id = $subheader_id;
+          $subheaders[] = array('index'=>"$toc_header_counter.$toc_subheader_counter" , 'title'=>$subheader_title, 'anchor'=>$subheader_id);
+        }
+        $sibling = $sibling->next_sibling();
+      }
+      $toc_items[] = array('index'=>$toc_header_counter, 'title'=>$header_title, 'anchor'=>$header_id, 'subheaders'=>$subheaders);
+    }
+  }
+  return $html;
+}
+
+/**
+ * Helper function that returns a sanitized version of the input text:
+ * - text is converted to lowecase
+ * - native chars are transliterated (replaced with their ASCII equivalents
+ * - all non alphanumerical chars are removed
+ * The result might be an empty string in case input text consists only of native chars
+ * and 'transliteration' module is not installed/enabled. In this case, the $default value is returned
+ */
+function _text_to_html_id_atribute($text, $default) {
+  $result = strtolower($text);
+  // convert native chars to ASCII equivalent ones
+  if (module_exists('transliteration')) {
+    $result = transliteration_get($result);
+  }
+  $result = preg_replace('/[^a-z0-9]/', '', $result);
+  // id attribute values cannot begin with a number
+  $result = preg_replace('/^([0-9])/', 'h-$1', $result);
+  return (strlen($result)>0) ? $result : $default;
+}
+
+function _set_field_default_value_from_term(&$form, $field_name, $vocabulary, $term_name) {
+  $terms = taxonomy_get_term_by_name($term_name, $vocabulary);
+  if (!empty($terms)) {
+    $term = array_shift($terms);
+    $form[$field_name][LANGUAGE_NONE]['#default_value'] = $term->tid;
+  }
+}
+
+function _retain_topic_category_filter_options(&$form, $filter_name, $current_cat_name) {
+  if (isset($form[$filter_name])) {
+    $topics = $form[$filter_name]['#options'];
+    foreach ($topics as $t_id => $t_name) {
+      $t_term = taxonomy_term_load($t_id);
+      $topic_categories = $t_term->field_topic_category['und'];
+      $has_tc = false;
+      foreach ($topic_categories as $topic_category) {
+        $tc_id = $topic_category['tid'];
+        $tc_term = taxonomy_term_load($tc_id);
+        $tc_name = $tc_term->name;
+        if ($tc_name == $current_cat_name) {
+          $has_tc = true;
+        }
+      }
+      if (!$has_tc) {
+        unset($form[$filter_name]['#options'][$t_id]);
+      }
+    }
+  }
+}
+
+function _retain_dt_category_filter_options(&$form, $filter_name, $filter_machine_name) {
+  if (isset($form[$filter_name])) {
+    $current_dtc_name = $form['#info']['filter-' . $filter_machine_name]['label'];
+    $document_types = $form[$filter_name]['#options'];
+    foreach ($document_types as $dt_id => $dt_name) {
+      $dt_term = taxonomy_term_load($dt_id);
+      $dtc_id = $dt_term->field_document_type_category['und'][0]['tid'];
+      $dtc_term = taxonomy_term_load($dtc_id);
+      $dtc_name = $dtc_term->name;
+      if ($dtc_name != $current_dtc_name) {
+        unset($form[$filter_name]['#options'][$dt_id]);
+      }
+    }
+  }
+}
+
+function _title_to_css_class($title, $prefix='') {
+  $sanitized_title = trim(strtolower($title));
+  $sanitized_title = str_replace('&', '', $sanitized_title);
+  $sanitized_title = str_replace('/', '_', $sanitized_title);
+  $sanitized_title = preg_replace("[\s]", "_", $sanitized_title);
+  $sanitized_title = preg_replace('/[^a-z0-9\-]+/i', '_', $sanitized_title);
+  return $prefix . $sanitized_title;
+}

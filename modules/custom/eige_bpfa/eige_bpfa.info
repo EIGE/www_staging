@@ -1,0 +1,10 @@
+; EIGEDR-18
+
+name = "EIGE BPfA"
+description = "Women and men in the EU - facts and figures › EU indicators for the Beijing Platform for Action"
+package=EIGE custom modules
+
+files[] = eige_bpfa.module
+
+version = "7.x-1.0"
+core = "7.x"

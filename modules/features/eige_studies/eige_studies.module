@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ * Code for the EIGE studies feature.
+ */
+
+include_once 'eige_studies.features.inc';
+
+function eige_studies_preprocess_field(&$vars) {
+  if ($vars['element']['#field_name'] == 'field_quote' && $vars['element']['#view_mode'] == 'related_content') {
+    if ($vars['element']['#bundle'] == 'good_practice') {
+      $topic_category = token_replace('[node:field-topic:field-topic-category:0]', array('node' => $vars['element']['#object']));
+      $css_class = str_replace(" ", "-", strtolower("section-$topic_category"));
+    } else {
+      $css_class = 'section-gender-mainstreaming';
+    }
+    $vars['classes_array'][] = $css_class;
+  }
+}
+
+function eige_studies_preprocess_node(&$vars) {
+  $node = $vars['node'];
+  if ($node->type == 'method_tool' || $node->type == 'resource') {
+
+    $field_official_title = 'field_english_title';
+    $field_unofficial_title = 'field_unofficial_english_title';
+
+    // if official title exists
+    if (isset($vars['content'][$field_official_title]) && isset($vars['content'][$field_official_title]['#items']) && isset($vars['content'][$field_official_title]['#items'][0]) 
+      && strlen($vars['content'][$field_official_title]['#items'][0]['value']) > 0) {
+
+        $english_title = trim($vars['content'][$field_official_title]['#items'][0]['value']);
+        $localized_title = trim($vars['content']['title_field']['#items'][0]['value']);
+        //truncate titles to 100 chars in not full display modes
+        if ($vars['view_mode'] != 'full') {
+          $english_title = text_summary($english_title, 'plain_text', 100);
+          $localized_title = text_summary($localized_title, 'plain_text', 100);
+        }
+
+        //swap title with official title
+        $vars['content']['title_field']['#items'][0]['value'] = $english_title;
+        $vars['content']['title_field']['#items'][0]['safe_value'] = check_plain($english_title);
+        $vars['content']['title_field'][0]['#markup'] = check_plain($english_title);
+        if ($english_title == $localized_title) {
+          $localized_title = '';
+        }
+        $vars['content'][$field_official_title]['#items'][0]['value'] = $localized_title;
+        $vars['content'][$field_official_title]['#items'][0]['safe_value'] = check_plain($localized_title);
+        $vars['content'][$field_official_title][0]['#markup'] = check_plain($localized_title);
+
+        //do not display unofficial title if official title exists in not full display modes
+        if ($vars['view_mode'] != 'full') {
+          unset($vars['content'][$field_unofficial_title]);
+          unset($vars['elements'][$field_unofficial_title]);
+        }
+    }
+    //else do nothing, aka show normally title and then unofficial title as subtitle
+  }
+}

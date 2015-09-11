@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the CER presets feature.
+ */
+
+include_once 'eige_cer_presets.features.inc';

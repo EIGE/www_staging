@@ -1,0 +1,18 @@
+:: NGEI-3 gei
+:: delete any nodes and menu items related to the old embeded GEI: gender-statistics/gender-equality-index
+
+drush pm-enable eige_gei -y
+
+:: add menu items for new gei at gender-statistics/gender-equality-index
+
+
+:: admin/structure/block/manage/menu_block/2/configure (edit Main Menu block)
+ :: Pages > Show block on specific pages > All pages except those listed: gender-statistics/gender-equality-index*
+
+
+
+
+
+
+
+

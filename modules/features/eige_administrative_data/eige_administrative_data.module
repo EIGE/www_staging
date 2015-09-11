@@ -1,0 +1,202 @@
+<?php
+/**
+ * @file
+ * Code for the Administrative data feature.
+ */
+
+include_once 'eige_administrative_data.features.inc';
+
+function eige_administrative_data_preprocess_page(&$variables) {
+  $variables['page_classes'] = '';
+
+  if (isset($variables['node'])) {
+    $node = $variables['node'];
+    $type = $node->type;
+
+    $types_with_alternate_titles = array('administrative_data_source', 'statistical_product', 'statistics_on_sexual_violence');
+    $application_simple_page_paths = array('gender-based-violence/administrative-data-sources/european-union', 'gender-based-violence/administrative-data-sources/about');
+    
+    $node_path = drupal_get_path_alias();
+
+    // EIGE-166 - the reason why we are changing the page title here via $variables manipulation and NOT
+    // within eige_preprocess_node via drupal_set_title is because we want the breadcrumb to remain unchanged
+    // the concept is that these content types will all be presented as part of a tabbed application with a common title
+    if (in_array($type, $types_with_alternate_titles) || in_array($node_path, $application_simple_page_paths)) {
+      $custom_title = t("Administrative data sources on GBV in the EU");
+      drupal_set_title($custom_title);
+      $variables['page_classes'] .= ' administrative-data-sources-db ';
+    }
+  }
+  
+  $page_path = drupal_get_path_alias();
+  if ($page_path == 'gender-based-violence/administrative-data-sources/search') {
+    $minified_filter_labels = array(
+      "select_label" => t("Data available on"),
+      "dv" => t("Victim"),
+      "dp" => t("Perpetrator"),
+      "dw" => t("Witness"),
+      "di" => t("Incident"),
+      "dpp" => t("Prosecution process"),
+      "do" => t("Outcomes")
+    );
+    $max_options_message = t("You may only select max 3 options for this filter");
+    drupal_add_js(array('ads_minified_filter_labels' => $minified_filter_labels), 'setting');
+    drupal_add_js(array('ads_max_options_message' => $max_options_message), 'setting');
+  }
+}
+
+function eige_administrative_data_sanitize_literal($name) {
+  return str_replace(" ", "_", strtolower($name));
+}
+
+// type 'Female Genital Mutilation' will be visible only within 'Legal Defintion' nodes and view:
+// - for excluding is from view filters we will be using the views_selective_filter module
+// - no cm restriction in edit forms; if items other than Legal Definitions are tagged with this type it is a cm error
+// - this function is used only for the cases where the field is manually rendered e.g. 'node--eige-administrative-data-source.tpl.php'
+function eige_administrative_data_visible_violence_types($types_vocabulary) {
+  $types_tree = taxonomy_get_tree($types_vocabulary->vid);
+  $visible_types_tree = array();
+  foreach ($types_tree as $key => $term) {
+    if (eige_administrative_data_sanitize_literal($term->name) != "female_genital_mutilation") {
+      $visible_types_tree[] = $term;
+    }
+  }
+  return $visible_types_tree;
+}
+
+function eige_administrative_data_no_field_data_markup() {
+  return '<p class="no-data">'.t('No information available').'</p>';
+}
+
+function eige_administrative_data_no_sub_section_data_markup($sub_section_literal) {
+  return '<p class="no-data">'.t('No information collected on ').$sub_section_literal.'</p>';
+}
+
+function eige_administrative_data_no_section_data_markup($node_type_literal, $section_literal) {
+  return '<p class="no-data">'.t('This ').$node_type_literal.t(' does not collect information on ').$section_literal.'</p>';
+}
+
+/* See here for the list of boolean fields and their configurations:
+ * http://jira.eworx.gr:8090/browse/EIGE-166?focusedCommentId=44923&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#action_44923
+ * http://jira.eworx.gr:8090/browse/EIGE-167?focusedCommentId=44924&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#action_44924
+ * http://jira.eworx.gr:8090/browse/EIGE-168?focusedCommentId=44925&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#action_44925
+ * Some boolean fields may contain value '-1' (No information available). This value is normally displayed in the UI, however is it considered an empty
+ * value when we calculate the visibility of the field group/section. This method takes into account this exception to calculate whether the field value (if any)
+ * is business-wise empty. An additional value that may be considered business-wise empty may be defined (used mostly for 'Outcomes' section)
+ */
+function eige_administrative_data_boolean_field_has_business_value($field_array, $extra_empty_value = null) {
+  if (count($field_array['#items'])==0) { // value is not set
+    return false;
+  }
+  $item = $field_array['#items'][0]; // this is not a multiple values field, thus the delta is always '0'
+  if (!isset($item['value'])) { // value is not set
+    return false;
+  }
+  $value = $item['value'];
+  if (isset($extra_empty_value)) {
+    return $value!=null && $value>=0 && $value!=$extra_empty_value;
+  }
+  return $value!=null && $value>=0;
+}
+
+/*
+ * see node--eige-administrative-data-source.tpl.php
+ * This function is invoked when we have already established that the section is visible,
+ * but some boolean fields may have null values, due to import process, new fields that have been added after import
+ * or modifications in field allowed values. This means that drupal_render() will not print out anything for these fields.
+ * We could implement an if check whether the value is null in order to print the default value, but this implies that we have
+ * to re-write the field markup manually. Instead, if a boolean field value is null, we inject the field default value
+ * and let drupal_render() print the respective markup The default value is also inserted if field value isn't null but it is not found
+ * within the list of field allowed values; this additional rule is enforced for the sake of field 'Average time case through criminal justice system'
+ * which used to have an available option 'No information available' (and it was migrated as such), but now this value is no longer applicable
+ */
+function eige_administrative_data_boolean_field_set_default_value(&$field_array) {
+  $is_empty = false;
+  $has_invalid_value = false;
+  if (count($field_array['#items'])==0) { // value is not set
+    $is_empty = true;
+  }
+  $item = $field_array['#items'][0]; // this is not a multiple values field, thus the delta is always '0'
+  if (!isset($item['value'])) { // value is not set
+    $is_empty = true;
+  }
+  $field = field_info_field($field_array['#field_name']);
+  if (!$is_empty) {
+    $has_invalid_value = true;
+    $existing_value = $item['value'];
+    $allowed_values = list_allowed_values($field);
+    if (array_key_exists($existing_value, $allowed_values)) {
+      $has_invalid_value = false;
+    }
+  }
+  if ($is_empty || $has_invalid_value) {
+    if (isset($field['widget']['default_value'])) {
+      $default_value = $field['widget']['default_value'][0]['value'];
+    }
+    if (isset($default_value)) {
+      $field_array['#items'][0]['value'] = $default_value;
+    }
+  }
+}
+
+
+function eige_administrative_data_get_all_field_values($field_array) {
+  $existing_values = array();
+  if (isset($field_array['#items'])) {
+    $items = $field_array['#items'];
+    foreach ($items as $key => $item) {
+      // the field array is after drupal_render has been invoked and contains
+      // several other properties that need to be excluded
+      if (is_array($item)) {
+        $existing_values[] = $item['value'];
+      }
+    }
+  }
+  return $existing_values;
+}
+
+function eige_administrative_data_get_options_list_markup($allowed_values, $selected_values, $all = true) {
+  $output = '<ul class="field-items">';
+  foreach ($allowed_values as $value) {
+    $css_class = "not-selected";
+    if (in_array($value, $selected_values)) {
+      $css_class = "selected";
+    } else if (!$all) {
+      continue;
+    }
+    $output .= '<li class="field-item '.$css_class.'">'.$value.'</li>';
+  }
+  $output .= '</ul>';
+  return $output;
+}
+
+/**
+ * @param $group
+ * A field group object as returned by 'field_group_info_groups'
+ * 
+ * Returns an array that contains the group html markup divided into '#prefix' and '#suffix' sections
+ * This method is used because for ADS nodes we need to render the group markup regardless of the existence
+ * of underlying content, and if there is no content within a group, Drupal eliminates the group element
+ * from the renderable array, thus we have no element to render. So we are oblidged to create the markup manually.
+ * Since this function is used for a very limited scope, we only take into account basic group settings in 
+ * the generated markup. Also see: 
+ * http://jira.eworx.gr/browse/EIGEDR-428?focusedCommentId=60673&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#action_60673
+ * 
+ */
+function eige_administrative_data_get_group_markup($group) {
+  $prefix = '<' . $group->format_type;
+  if (strlen($group->classes)) {
+    $prefix .= ' class="' . $group->classes . '"';
+  }
+  $prefix .= '>';
+  if ($group->format_settings['instance_settings']['show_label']) {
+    $prefix .= '<' . $group->format_settings['instance_settings']['label_element'] . '>';
+    $prefix .= '<span' . (($group->collapsible) ? ' class="field-group-format-toggler"' : '') . '>';
+    $prefix .= $group->label;
+    $prefix .= '</span>';
+    $prefix .= '</' . $group->format_settings['instance_settings']['label_element'] . '>';
+  }
+  $prefix .= '<div class="field-group-format-wrapper">';
+  $suffix = '</div></' . $group->format_type . '>';
+  return array("#prefix" => $prefix, "#suffix" => $suffix);
+}

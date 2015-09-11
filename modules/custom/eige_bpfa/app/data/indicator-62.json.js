@@ -1,0 +1,18 @@
+{
+  "id": 62,
+  "concept": "\u003cp class\u003d\"Tavaline\"\u003eMeasuring gender-disaggregated employment rates by educational attainment offers an insight into the level of knowledge and skills available in the labour market and helps to assess the extent to which the labour market offers appropriate workplaces to women and men. The indicator depicts the employment rate of females and males aged between 25 and 39 years as well as aged between 40 and 64 years by the highest level of education attained.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eThe ISCED classification is used to define the levels of educational attainment, which are divided into three categories:\u003c/p\u003e \u003cul\u003e\u003cli\u003epre-primary, primary and lower secondary education (ISCED 0–2);\u003c/li\u003e\u003cli\u003eupper secondary and post-secondary non-tertiary education (ISCED 3–4);\u003c/li\u003e\u003cli\u003etertiary education (ISCED 5–6).\u003c/li\u003e\u003c/ul\u003e \u003cp class\u003d\"Tavaline\"\u003eThe categories depict the differences between knowledge, skills and qualifications obtained at these different educational levels. In addition, they indicate divergent job opportunities and destinations in the labour market associated with each category.\u003c/p\u003e",
+  "source": "\u003cp\u003eThe calculation of the indicator is based on \u003ca href\u003d\"http://epp.eurostat.ec.europa.eu/cache/ITY_SDDS/EN/lfsa_esms.htm\"\u003ethe Labour Force Survey (EU-LFS)\u003c/a\u003e.\u003c/p\u003e",
+  "published": "\u003cp\u003eData are available in the Eurostat online database (\u003ca href\u003d\"http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset\u003dlfsa_ergaed\u0026amp;lang\u003den\"\u003elfsa_ergaed: ‘Employment rates by sex, age groups and highest level of education attained (%)’\u003c/a\u003e).\u003c/p\u003e",
+  "notes": "\u003cp class\u003d\"Tavaline\"\u003eThe data cover all EU Member States and the oldest data are available from 1983 (but not for all Member States). The period can be broken into three levels of coverage: 1983–97: sparse; 1998–2006: majority of countries are covered; 2006–09: very few exceptions.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eThe data were updated annually until 2000: since then, data have been updated quarterly. The comparability of the data over time and across countries is assessed as high, although improvements over time have meant some breaks in some time series, \u0026nbsp;and three countries (Germany, Spain and Sweden) made major changes to improve their survey in 2005.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eThe age groups proposed in development of this indicator were 25–39 and 40–64. One of them, 25–39, is not available in the published tables.\u003c/p\u003e",
+  "no_data": "Data are not available on EU27 level",
+  "reports": [
+    {
+      "id": 630,
+      "title": "Name of Report 1",
+      "date": "09-Dec-2014",
+      "source": "Eurostat, LFS (lfsa_ergaed)",
+      "notes": ": data are not available; required age groups (between 25 and 39, between 40 and 64) are not available; employment rate represents employed persons as a percentage of same age total population. Employed persons are persons aged 15 and over who performed work, even for just one hour per week, for pay, profit or family gain during the reference week or were not at work but had a job or business from which they were temporarily absent because of, for instance, illness, holidays, industrial dispute, and education or training.",
+      "file": "http://eige.europa.eu/internal/bpfa/results/download/22/62/630"
+    }
+  ]
+}

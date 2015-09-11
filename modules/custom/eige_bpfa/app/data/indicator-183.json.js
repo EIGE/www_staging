@@ -1,0 +1,18 @@
+{
+  "id": 183,
+  "concept": "\u003cp class\u003d\"Tavaline\"\u003eThis indicator provides information on women’s and men\u0027s participation in decision-making bodies working on international climate policies. It presents the percentage of women participating in the United Nations Framework Convention on Climate Change (UNFCCC) as part of national delegations and the EU delegation to the Conference of the Parties (COPs) and to the Subsidiary Bodies (SBs). The COP delegations to the UNFCCC represent the political negotiating and decision-making body on international climate change policies, and are supported by the Subsidiary Body for Scientific and Technological Advice (SBSTA) and the Supplementary Body for Implementation (SBI).\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eBaseline monitoring data for this indicator should include the percentage of women in Member States’ delegations and in the EU delegation to the COP, the SBSTA and the SBI for the last five years for which data are available. The indicator includes:\u003c/p\u003e \u003cul\u003e\u003cli\u003ethe average percentage of women and men in Member States’ delegations and in the EU delegation to the COP over the last five years;\u003c/li\u003e\u003cli\u003ethe average percentage of women and men in Member States’ delegations and in the EU delegation to the SBSTA and the SBI over the last five years;\u003c/li\u003e\u003cli\u003ethe average percentage of women and men among heads of delegations to the SBSTA and the SBI over the last five years.\u003c/li\u003e\u003c/ul\u003e",
+  "source": "\u003cp\u003eThe data on the names of the delegates are available from lists of participants, which can be found on the \u003ca href\u003d\"http://unfccc.int/2860.php\"\u003eUNFCCC website\u003c/a\u003e. The data were collected in August 2011.\u003c/p\u003e",
+  "published": "\u003cp\u003eData are available in the \u003ca href\u003d\"http://www.eige.europa.eu/sites/default/files/Gender-Equality-and-Climate-Change-Report.pdf\"\u003eEIGE report \"Women and the Environment: Gender Equality and Climate Change\"\u003c/a\u003e prepared during the Danish Presidency 2012 (the table ‘Table 5.5: Women’s participation in climate change decision-making at the international level’, p. 69).\u003c/p\u003e",
+  "notes": "\u003cp class\u003d\"Tavaline\"\u003eThe data are available on the \u003ca href\u003d\"http://unfccc.int/2860.php\"\u003eUNFCCC website\u003c/a\u003e and the lists of participants for the COPs and SBs are updated after each meeting. This allows the indicator to be easily verified and updated.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eIt is noted that the size of the national delegations to the UNFCCC varies between Member States, a factor which should therefore be taken into account when looking at averages of women’s participation for small countries with a small delegation.\u003c/p\u003e",
+  "no_data": "",
+  "reports": [
+    {
+      "id": 325,
+      "title": "Report 1",
+      "date": "27-Nov-2013",
+      "source": "UNFCCC website: http://unfccc.int",
+      "notes": "5 years average available on that year: for COP delegations: 2009 is average of years 2004-2008; 2010 is average of years 2005-2009; 2011 is average of years 2006-2010 etc. and for SB delegations 2009 is average of years 2005-2009; 2010 is average of years 2006-2010; 2011 is average of years 2007-2011 etc. \u003cbr/\u003eEuropean Union (27 countries) is the average of the Member States\u0027 and EU delegations.",
+      "file": "http://eige.europa.eu/internal/bpfa/results/download/124/183/325"
+    }
+  ]
+}

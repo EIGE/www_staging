@@ -1,0 +1,18 @@
+{
+  "id": 77,
+  "concept": "\u003cp class\u003d\"Tavaline\"\u003eThe participation of women in the decision-making process is an important factor when discussing the position of women in a particular country and/or in the European Union. The field of political decision-making is particularly important since politics is a very important aspect of the everyday life of every citizen — it affects all areas of our daily life. The importance of gender balance in positions of power is connected to the belief that decisions made by balanced gender groups are more likely to be sensitive to the needs of both sexes.\u003c/p\u003e\u003cp\u003eThis indicator measures women’s representation in fields of political decision-making: the proportion of women in the single/lower houses of the national/federal parliaments of the EU Member States and in the European Parliament.\u003c/p\u003e",
+  "source": "\u003cp\u003eCalculation of the indicator is based on data from official websites collected quarterly for the \u003ca href\u003d\"http://ec.europa.eu/justice/gender-equality/gender-decision-making/database/index_en.htm\"\u003eEuropean Commission’s Database: women \u0026amp; men in decision-making\u003c/a\u003e.\u003c/p\u003e",
+  "published": "\u003cp\u003eData are available in the \u003ca href\u003d\"http://ec.europa.eu/justice/gender-equality/gender-decision-making/database/politics/national-parliaments/index_en.htm\"\u003eEuropean Commission Database: women \u0026amp; men in decision-making (the area ‘Politics — National parliaments’\u003c/a\u003e in the table ‘National parliaments (single/lower houses)’ and under the area \u003ca href\u003d\"http://ec.europa.eu/justice/gender-equality/gender-decision-making/database/politics/eu-parliament/index_en.htm\"\u003e‘Politics — European parliament’\u003c/a\u003e in the table ‘European Parliament’).\u003c/p\u003e",
+  "notes": "\u003cp class\u003d\"Tavaline\"\u003eThe indicator covers all EU Member States, as well as the European Parliament. The oldest data are available from 1999, and since 2004 for new Member States.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eThe data are collected directly from the national parliaments’ and European Parliament’s websites where they are regularly updated. The comparability over time and across countries is good. It is, however, necessary to bear in mind that the political and institutional systems are different from one country to another (some countries have a unicameral system while others have two chambers, electoral systems vary across Europe, etc.). In a unicameral system, the single chamber may undertake the functions which would be separated between upper and lower house in bicameral systems.\u003c/p\u003e \u003cp class\u003d\"Tavaline\"\u003eData are collected quarterly and published on the \u003ca href\u003d\"http://ec.europa.eu/justice/gender-equality/gender-decision-making/database/index_en.htm\"\u003eEuropean Commission Database: women \u0026amp; men in decision-making website\u003c/a\u003e. An annual report has also been published every year since 2007.\u003c/p\u003e\u003cp\u003eFollowing elections, data are updated and published on the website of the \u003ca href\u003d\"http://www.ipu.org/wmn-e/classif.htm\"\u003eInter-Parliamentary Union’s database\u003c/a\u003e (once a month).\u003c/p\u003e",
+  "no_data": "Data are not available on EU27 level",
+  "reports": [
+    {
+      "id": 605,
+      "title": "Name of Report 1",
+      "date": "08-Dec-2014",
+      "source": "European Commission Database: women \u0026 men in decision-making",
+      "notes": ": data are not available; proportion of women (%).",
+      "file": "http://eige.europa.eu/internal/bpfa/results/download/84/77/605"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+; NGEI-3
+
+name = "EIGE GEI"
+description = "Gender Equality Index"
+package=EIGE custom modules
+
+files[] = eige_gei.module
+; dependencies[] = eige_base
+; dependencies[] = eige_gender_mainstreaming
+
+version = "7.x-1.0"
+core = "7.x"

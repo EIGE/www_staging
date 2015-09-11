@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * @file eige_events.module
+ * Views and Page Manager (CTools) integration with EuroGender datasource.
+ */
+
+define('EUROGENDER_EVENTS_DEFAULT_API_URL', 'http://enge.stag/api/events');
+define('EUROGENDER_PAST_EVENTS_API_URL', 'http://enge.stag/api/events/past');
+define('EUROGENDER_SINGLE_EVENT_API_URL', 'http://enge.stag/api/event');
+define('EUROGENDER_EVENTS_DEFAULT_DEBUG_MODE', 1);
+
+/**
+ * Implements hook_menu().
+ */
+function eige_events_menu() {
+  $items = array();
+  $items['admin/config/services/eurogender'] = array(
+    'title' => 'EuroGender API settings',
+    'description' => t('Settings for EuroGender API, eg. endpoint URL etc.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('eige_events_admin_form'),
+    'access arguments' => array('administer eige events'),
+    'file' => 'eige_events.admin.inc',
+  );
+  $items['admin/config/services/eurogender/api-test'] = array(
+    'title' => 'EuroGender API Test',
+    'page callback' => 'eige_events_api_test_page',
+    'access arguments' => array('administer eige events'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['news-and-events/events-calendar/event/%'] = array(
+    'title' => 'EuroGender event page',
+    'page callback' => 'eige_events_eurogender_event_load',
+    'page arguments' => array(3),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function eige_events_permission() {
+  return array(
+    'administer eige events' => array(
+      'title' => t('Administer EuroGender events integration'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function eige_events_views_api() {
+  return array(
+    'api' => 3.0,
+  );
+}
+
+/**
+ * Page callback; API test page.
+ */
+function eige_events_api_test_page() {
+  $output_method = (module_exists('devel')) ? 'dpm' : 'var_dump';
+
+  // Test the request, when we want to get a set of items.
+  $request = new EuroGenderEventsAPIRequest();
+  $result = $request->execute();
+  $output_method($result);
+  
+  // Test the paginator
+  $request = new EuroGenderEventsAPIRequest();
+  $result = $request->addArgument('page', 1)->execute();
+  $output_method($result);
+  
+  // Test the results count
+  $request = new EuroGenderEventsAPIRequest();
+  $result = $request->executeCount();
+  $output_method($result);
+  
+  // Test fetching past events
+  $request = new EuroGenderEventsAPIRequest();
+  $result = $request->getPastEvents()->execute();
+  $output_method($result);
+  
+  // Test the past events results count
+  $request = new EuroGenderEventsAPIRequest();
+  $result = $request->getPastEvents()->executeCount();
+  $output_method($result);
+  
+  // Test the request when we want to get a certain item.
+  $request = new EuroGenderEventsAPIRequest();
+  $result = $request->getItem(5267)->execute();
+  $output_method($result);
+
+  return t('Testing...');
+}
+
+
+/**
+ * Loads the EuroGender event with the specifiied nid. If nid does not validate
+ * or loading fails, a 404 error is raised
+ */
+// TODO AKZ caching
+function _get_eurogender_event($nid) {
+  if (!is_numeric($nid)) {
+    return drupal_not_found();
+  }
+  
+  $request = new EuroGenderEventsAPIRequest();
+  $event = $request->getItem($nid)->execute();
+  if (!$event) {
+    return drupal_not_found();
+  }
+  return $event;
+}
+
+function eige_events_eurogender_event_load($nid) {
+  $event = _get_eurogender_event($nid);
+  drupal_set_title(check_plain($event->title));
+  
+  // TODO AKZ - totally hardcoded html (desperate solution)
+  $output = '<div class="zf-2col-stacked node node-method-tool view-mode-full row">';
+    $output .= '<div class="row"></div>';
+    $output .= '<div class="row">';
+      $output .= '<div class="group-left large-9 small-12">';
+        $output .= '<h1 id="page-title" class="title">'.$event->title.'</h1>';
+        $output .= '<div class="group-metadata field-group-div">';
+          $output .= '<div class="field field-name-content-type field-type-ds field-label-hidden field-wrapper"><p>'.t('Event').'</p></div>';
+          if (!empty($event->field_enge_node_tags)) {
+          $output .= '<div class="group-keywords field-group-div">';
+            $output .= '<div class="field field-name-field-keywords field-type-taxonomy-term-reference field-label-hidden field-wrapper clearfix">';
+              $output .= $event->field_enge_node_tags;
+            $output .= '</div>';
+          $output .= '</div>';
+          }
+        $output .= '</div>';
+        if (!empty($event->field_enge_event_image)) {
+        $output .= '<div class="group-image-quote field-group-div">';
+          $output .= '<div class="image">';
+            $output .= '<img width="300" height="200" alt="'.$event->field_enge_event_image->alt.'" src="'.$event->field_enge_event_image->src.'" />';
+          $output .= '</div>';
+        $output .= '</div>';
+        }
+        if (!empty($event->body)) {
+        $output .= '<div class="body field">';
+        $output .= $event->body;
+        $output .= '</div>';
+        }
+      $output .= '</div>';
+      $output .= '<div class="group-right large-3 small-12">';
+        $output .= '<div class="group-additional-info field-group-div">';
+        $output .= '<h2><span>'.t('Additional info').'</span></h2>';
+        
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Start date').'</div>';
+          $output .= $event->field_enge_event_begins;
+        $output .= '</div>';
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('End date').'</div>';
+          $output .= $event->field_enge_event_ends;
+        $output .= '</div>';
+        if (!empty($event->field_enge_venue)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Venue').'</div>';
+          $output .= $event->field_enge_venue;
+        $output .= '</div>';
+        }
+        if (!empty($event->field_enge_event_address)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Address').'</div>';
+          $output .= $event->field_enge_event_address;
+        $output .= '</div>';
+        }
+        if (!empty($event->field_enge_external_url)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('URL').'</div>';
+          $output .= '<a href="' . $event->field_enge_external_url . '" class="external">'.truncate_utf8($event->field_enge_external_url, 30, false, true).'</a>';
+        $output .= '</div>';
+        }
+        if (!empty($event->field_enge_file_upload)) {
+        $output .= '<div class="field field-type-text field-label-abovec field-wrapper">';
+          $output .= '<div class="field-label">'.t('Related file').'</div>';
+          $output .= '<a href="' . $event->field_enge_file_upload . '" class="external">'.truncate_utf8($event->field_enge_file_upload, 30, false, true).'</a>';
+        $output .= '</div>';
+        }
+        $output .= '</div>';
+      $output .= '</div>';
+    $output .= '</div>';
+  $output .= '</div>';
+  
+  return $output;
+}
+

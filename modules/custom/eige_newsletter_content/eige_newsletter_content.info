@@ -1,0 +1,4 @@
+name = "EIGE Newsletter Content"
+description = Generates the Newsletter node content / Email content.
+package=EIGE custom modules
+core = "7.x"

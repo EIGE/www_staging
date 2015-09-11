@@ -1,0 +1,6 @@
+; some code provided by: http://www.metaltoad.com/blog/drupal-7-tutorial-creating-custom-formatters
+; EIGEDR-63, FRWBII-20
+
+name = "EIGE File Downloads formatter"
+package=EIGE custom modules
+core = "7.x"

@@ -1,0 +1,6 @@
+; some code provided by: http://www.metaltoad.com/blog/drupal-7-tutorial-creating-custom-formatters and Drupal core text module
+; EIGEDR-63, FRWBII-20, EIGEDR-240
+
+name = "EIGE Summary or trimmed plain"
+package=EIGE custom modules
+core = "7.x"

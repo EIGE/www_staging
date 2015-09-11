@@ -1,0 +1,34 @@
+<?php
+
+/**
+* Implements hook_element_info_alter().
+*
+* Sets the text format processor to a custom callback function.
+* This code is taken from the Better Formats module. (http://drupal.org/project/better_formats)
+*/
+function eige_default_text_formats_element_info_alter(&$type) {
+  if (isset($type['text_format']['#process'])) {
+    foreach ($type['text_format']['#process'] as &$callback) {
+      if ($callback === 'filter_process_format') {
+        $callback = 'eige_default_text_formats_process_format';
+      }
+    }
+  }
+}
+
+function eige_default_text_formats_process_format($element) {
+  // only for node entities, hardcode the format to 'full_html' and then call 'filter_process_format'
+  // administrator users will not be able to change the format either, as they may choose a format (e.g. PHP filter)
+  // that is not accessible by plain CMs, thus content will break if a CM tries to edit the node in question
+  if (isset($element['#entity_type']) && $element['#entity_type']=='node') {
+    $element['#format'] = 'full_html';
+    $element = filter_process_format($element);
+    $element['format']['guidelines'] = null;
+    $element['format']['help'] = null;
+    $element['format']['#attributes']['style'] = 'display:none';
+  } else {
+    // otherwise, process the format that is specifically set for this element
+    $element = filter_process_format($element);
+  }
+  return $element;
+}

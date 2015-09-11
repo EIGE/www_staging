@@ -1,0 +1,157 @@
+<?php
+
+function eige_file_downloads_formatter_field_formatter_info() {
+  return array(
+    'eige_file_downloads_formatter.' => array(
+      'label' => t('EIGE file downloads formatter'),
+      'field types' => array('field_collection'),
+      'settings' => array('show_file_titles' => 1, 'show_first_file_only' => 0, 'show_more_files_available' => 0),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function eige_file_downloads_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $settings = $instance['display'][$view_mode]['settings'];
+  $form = array();
+  $form['show_file_titles'] = array(
+          '#type' => 'radios',
+          '#title' => t('Show file titles'),
+          '#description' => t('Show file titles beside file download links'),
+          '#options' => array(0 => t('No'), 1 => t('Yes')),
+          '#default_value' => $settings['show_file_titles'],
+      );
+  $form['show_first_file_only'] = array(
+          '#type' => 'radios',
+          '#title' => t('Show first file only'),
+          '#description' => t('Show first file of the collection only'),
+          '#options' => array(0 => t('No'), 1 => t('Yes')),
+          '#default_value' => $settings['show_first_file_only'],
+      );
+  $form['show_more_files_available'] = array(
+          '#type' => 'radios',
+          '#title' => t('Show more files available'),
+          '#description' => t('Show more files available text if more files exist in the collection'),
+          '#options' => array(0 => t('No'), 1 => t('Yes')),
+          '#default_value' => $settings['show_more_files_available'],
+      );
+  return $form;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function eige_file_downloads_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $settings = $instance['display'][$view_mode]['settings'];
+  $summary = array();
+  $summary[] = t('Show file titles: %setting', array('%setting' => $settings['show_file_titles'] ? t('yes') : t('no')));
+  $summary[] = t('Show first file only: %setting', array('%setting' => $settings['show_first_file_only'] ? t('yes') : t('no')));
+  $summary[] = t('Show more files available: %setting', array('%setting' => $settings['show_more_files_available'] ? t('yes') : t('no')));
+  return implode('<br />', $summary);
+}
+                 
+function eige_file_downloads_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  global $language;
+  $settings = $display['settings'];
+
+  if (empty($entity->field_downloads) || count($entity->field_downloads)==0) {
+    return null;
+  }
+  
+  $ids = array();
+  foreach($entity->field_downloads[$langcode] as $fci) {
+    if (isset($fci['entity'])) return; // hack to avoid error in case of content preview
+    $ids[] = $fci['value'];
+  }
+  
+  $field_downloads = entity_load('field_collection_item', $ids);
+
+  $markup = "";
+  $counter_visible = 0;
+
+  foreach($field_downloads as $field_collection_item) {
+    if (!isset($field_collection_item->field_file[$langcode])) {
+      continue;
+    }
+    
+    if ($field_collection_item->field_file[$langcode][0]['display']==0) {
+      continue;
+    }
+
+    if (!isset($field_collection_item->field_file_language[$langcode])) { // although language is mandatory, some migrated files don't have a language
+      continue;
+    }
+
+    $counter_visible++;
+
+    if ($settings['show_first_file_only'] && $counter_visible > 1) {
+      if ($settings['show_more_files_available'] && $counter_visible == 2) {
+        $entity_path = drupal_get_path_alias('node/' . $entity->vid);
+        $markup .= '<a class="more-files-available" href="/' . $entity_path . '#downloads-wrapper' . '">' . t('More files are available.') . '</a>';
+      }
+      break;
+    }
+    
+    // collect url
+    $url = file_create_url($field_collection_item->field_file[$langcode][0]['uri']);
+    
+    // collect size
+    $size = $field_collection_item->field_file[$langcode][0]['filesize'];
+    
+    // resolve language
+    $field_collection_item_language = taxonomy_term_load($field_collection_item->field_file_language[$langcode][0]['tid']);
+
+    // collect extension
+    $pathinfo = pathinfo($url);
+    $extension = $pathinfo['extension'];
+    
+    // resolve title
+    $field_collection_item_title = _eige_file_downloads_formatter_get_title($field_collection_item->field_file[$langcode][0]);
+    
+    $anchor_title = t('Download');
+    $anchor_title .= ' \'' . $field_collection_item_title . '\' (' . t($field_collection_item_language->name) . ')';
+
+    // construct markup
+    $markup .= '<a class="entity-field-collection-item field-collection-item-field-downloads file-download file-type-' . strtolower($extension) . '" href="' . $url . '" title="'.$anchor_title . ' (' . strtolower($extension) . ')">';
+    if ($settings['show_file_titles']) {
+      $markup .= '<div class="file-title">' . $field_collection_item_title . '</div>';
+    }
+    $markup .= '<div class="file-meta">';
+    $markup .= '<span class="file-language">' . _eige_file_downloads_formatter_get_language_code($field_collection_item_language->name) . '</span>';
+    $markup .= '<span class="file-size">(' . format_size($size) . ')</span>';
+    $markup .= '</div></a>';
+  }
+  
+  if (empty($markup)) {
+    return null;
+  }
+  
+  return array(array('#markup' => $markup));
+}
+
+function _eige_file_downloads_formatter_get_title($object) {
+  if (isset($object['description']) && strlen(trim($object['description']))) {
+    return check_plain(trim($object['description']));
+  }
+  if (isset($object['filename']) && strlen(trim($object['filename']))) {
+    $pathinfo = pathinfo($object['filename']);
+    return $pathinfo['filename'];
+  }
+  // should never happen
+  return 'n/a';
+}
+
+
+function _eige_file_downloads_formatter_get_language_code($language_name, $uppercase=TRUE) {
+  $languages_list = language_list('enabled');
+  $languages = $languages_list[1];
+  foreach ($languages as $key => $language) {
+    if ($language->name==trim($language_name)) {
+      return $uppercase ? strtoupper($key) : $key;
+    }
+  }
+  return '-';
+}
+

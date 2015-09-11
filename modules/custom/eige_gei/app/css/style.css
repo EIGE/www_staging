@@ -1,0 +1,4700 @@
+@charset "UTF-8";
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+
+#gei a {
+  border-bottom: none;
+  margin-right: 0;
+  font-weight: normal;
+}
+
+
+body.page-gender-statistics-gender-equality-index #page-title {
+  display: none;
+}
+
+body.page-gender-statistics-gender-equality-index .l-main {
+  max-width: none;
+}
+
+body.page-gender-statistics-gender-equality-index .page {
+  background: #F2F5F7 !important;
+}
+
+body.page-gender-statistics-gender-equality-index #page-title {
+  display: none;
+}
+
+body.page-gender-statistics-gender-equality-index aside.sidebar {
+  display: none !important;
+}
+
+body.page-gender-statistics-gender-equality-index .columns,
+body.page-gender-statistics-gender-equality-index .column {
+  padding: 0;
+}
+
+body.page-gender-statistics-gender-equality-index .eige-main {
+  background: transparent !important;
+}
+
+body.page-gender-statistics-gender-equality-index div.eige-top-bar.fixed {
+  position: relative;
+}
+
+
+.not-front .l-main > .columns {
+  margin-bottom: 0px;
+  padding: 0;
+}
+
+
+#gei .eige-main h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+.not-front.section-gender-statistics .eige-main {
+  margin-top: -50px;
+}
+
+
+
+a.eige_menu_link_gender_statistics.active-trail {
+  background: #4d2d9e;
+}
+
+
+.not-front.no-sidebars.page-gender-statistics .eige-main {
+  margin-left: 0 !important;
+  max-width: 100% !important;
+  padding: 0;
+}
+
+
+#gei {
+  position: relative;
+  background: #F2F5F7;
+  margin-top: 50px;
+}
+
+#gei > h2 {
+  font-size: 3.375rem;
+  line-height: 3.375rem;
+  padding: 30px 0 0 0;
+  background: #fff;
+  width: 100%;
+  font-weight: 100;
+}
+
+#gei :focus {
+  opacity: 0.9 !important;
+}
+
+
+#gei a {
+  color: #000;
+  transition-duration: 0s !important;
+  /* differentiate external links */
+}
+
+#gei a.external:after {
+  content: '\21B7';
+  margin-left: 5px;
+  background: #666;
+  color: white;
+}
+
+#gei a:hover {
+  background: white;
+}
+
+#gei a .selected {
+  background: blue;
+}
+
+
+#gei header.main {
+  background: #823F8D;
+  display: block;
+  float: left;
+  width: 100%;
+}
+
+#gei header.main div.wrapper {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: 0 15px;
+}
+
+#gei header.main h2 {
+  margin: 0 !important;
+  padding: 15px;
+  display: block;
+  float: left;
+  border-bottom: none;
+  font-size: 2em !important;
+  line-height: 1em;
+}
+
+#gei header.main h2 a {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.5625rem !important;
+  font-weight: 300;
+}
+
+#gei header.main h2 a:hover, #gei header.main h2 a:focus {
+  background: transparent !important;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei header.main h2 a {
+    display: none;
+  }
+}
+
+#gei header.main h2:before {
+  color: #FFF;
+  font-family: 'eige-font';
+  content: "\e643";
+  font-size: 70px;
+  text-decoration: none !important;
+  display: block;
+  float: left;
+  font-weight: 300;
+}
+
+#gei header.main a {
+  font-size: 0.875rem;
+  color: #fff !important;
+  font-weight: 300;
+  border-bottom: none;
+}
+@media screen and (max-width: 680px) {
+
+  #gei header.main a {
+    font-size: 0.8125rem;
+  }
+}
+
+
+#gei .BlockingMessage {
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+}
+
+#gei .BlockingMessage .content {
+  color: white;
+  width: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  padding: 1em;
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+
+#gei .Tooltip {
+  background: white;
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 750;
+  -webkit-box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.15);
+  -ms-box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.15);
+}
+
+#gei .Tooltip .content {
+  overflow: hidden;
+  padding: 12px;
+}
+
+#gei .Tooltip .arrow {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  position: absolute;
+  top: 15px;
+  left: 0;
+}
+
+#gei .Tooltip .arrow.left {
+  border-right: 10px solid white;
+  left: -10px;
+}
+
+#gei .Tooltip .arrow.right {
+  border-left: 10px solid white;
+  left: 200px;
+}
+
+
+#gei .Tooltip .content p.TooltipSimple {
+  line-height: 1em;
+  font-weight: bold;
+  color: #444;
+}
+
+#gei .Tooltip .content p.TooltipSimple span.year {
+  float: right;
+  color: #666;
+}
+
+#gei .Tooltip .content p {
+  margin: 0;
+}
+
+
+#gei .GraphExporterButton {
+  position: absolute;
+  top: 0px;
+  right: 2px;
+  z-index: 100;
+}
+
+#gei .GraphExporterButton a {
+  color: transparent;
+  padding: 5px;
+}
+
+#gei .GraphExporterButton a:hover {
+  background: none;
+}
+
+#gei .GraphExporterButton a:after {
+  font-family: 'eige-font';
+  content: "\e668";
+  font-size: 15px;
+  color: #333;
+  opacity: 0.3;
+  transition: all 0.5s ease;
+}
+
+#gei .GraphExporterButton a:hover:after {
+  color: #8b489b;
+  opacity: 1;
+}
+
+#gei .GraphExporterButton a:hover:before {
+  content: attr(data-caption);
+  color: #fff;
+  font-size: 13px;
+  background: rgba(0, 0, 0, 0.9);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  border-radius: 2px;
+  padding: 4px;
+  position: absolute;
+  top: -2px;
+  left: 0;
+}
+
+
+#gei .SingleSelectDefault label {
+  display: none;
+}
+
+
+#gei .SingleSelectEmulated,
+#gei .MultipleSelectEmulated {
+  position: absolute;
+  z-index: 500;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#gei .SingleSelectEmulated label.main,
+#gei .MultipleSelectEmulated label.main {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: white;
+  white-space: nowrap;
+  display: inline-block;
+  padding: 5px 5px 5px 10px;
+}
+
+#gei .SingleSelectEmulated label.main.expanded,
+#gei .MultipleSelectEmulated label.main.expanded {
+  background: #565656;
+}
+
+#gei .SingleSelectEmulated label.main.collapsed:after, #gei .SingleSelectEmulated label.main.expanded:after,
+#gei .MultipleSelectEmulated label.main.collapsed:after,
+#gei .MultipleSelectEmulated label.main.expanded:after {
+  padding: 8px 10px;
+  display: block;
+  font-family: "eige-font";
+  background: #333;
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+#gei .SingleSelectEmulated label.main.collapsed:after,
+#gei .MultipleSelectEmulated label.main.collapsed:after {
+  content: "\e628";
+}
+
+#gei .SingleSelectEmulated label.main.expanded:after,
+#gei .MultipleSelectEmulated label.main.expanded:after {
+  content: "\e629";
+}
+
+#gei .SingleSelectEmulated div.collapsible,
+#gei .MultipleSelectEmulated div.collapsible {
+  background: #565656;
+  width: 18em;
+}
+
+#gei .SingleSelectEmulated div.collapsible div.options label,
+#gei .MultipleSelectEmulated div.collapsible div.options label {
+  padding: 16px 0 16px 40px;
+  width: 100%;
+  color: white;
+}
+
+#gei .SingleSelectEmulated div.collapsible div.options label:hover,
+#gei .MultipleSelectEmulated div.collapsible div.options label:hover {
+  background-color: #430054 !important;
+}
+
+#gei .SingleSelectEmulated div.collapsible div.options input,
+#gei .MultipleSelectEmulated div.collapsible div.options input {
+  display: none;
+}
+
+#gei .SingleSelectEmulated div.collapsible div.options input:checked + label,
+#gei .MultipleSelectEmulated div.collapsible div.options input:checked + label {
+  background: #7b348c url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAX9JREFUeNpi+P//PwMNsS4QbwBiLnQ5WlqqAsRP/0PARiBmoYfFkkB8+z8qWALEjLS0mB+IL/3HDibSymJQXB7/jx/UgNSCvU4lwAbEG4DYkwi1WUxUspQZiOcRaSkIWOAKMk0Sg3jaf+IBOIVjMyQWiH8DsR+RljaTYOkBWJ5GNwRk2R+ooh9A7ETA0jwSLL0ATfEYqRpkyVc0xR+A2AyHpdFA/I9IS0F5WhRbAWIEtQQbeAXE6lhC5jeRlj4GYgVsRaYK1HBCmmWgmuyxhAwu8BpaXjNgs/gYkYbcAGIXPCGDDkCOM8eVPkCEFhE+JhX8BGJnfAkTxgC57BOVLAXlihBC2RA9Vf+k0FJQKk8nJv+jCwQi5WNyQAWxpR02wRQS8icy6CKlmMUlUUGipfOQK3lKLAbhdhIKfWZS6258kiAfzCZg6V4gZiOn0UBIAcgn63BYehK50Ke2xQxQH+3FUoqJUtJMIlYhLxAfxVJu09xiWENuMxCrUaNhCBBgAOAVfjALa5TLAAAAAElFTkSuQmCC) no-repeat 15px 50%;
+  background-size: 15px 13px;
+}
+
+#gei .SingleSelectEmulated div.collapsible.cols-2,
+#gei .MultipleSelectEmulated div.collapsible.cols-2 {
+  width: 25em;
+}
+
+#gei .SingleSelectEmulated div.collapsible.cols-2 div.options,
+#gei .MultipleSelectEmulated div.collapsible.cols-2 div.options {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  -ms-column-count: 2;
+  column-count: 2;
+  -webkit-column-gap: 0;
+  -moz-column-gap: 0;
+  -ms-column-gap: 0;
+  column-gap: 0;
+}
+
+#gei .SingleSelectEmulated div.collapsible.cols-3,
+#gei .MultipleSelectEmulated div.collapsible.cols-3 {
+  width: 35em;
+}
+
+#gei .SingleSelectEmulated div.collapsible.cols-3 div.options,
+#gei .MultipleSelectEmulated div.collapsible.cols-3 div.options {
+  -webkit-column-count: 3;
+  -moz-column-count: 3;
+  -ms-column-count: 3;
+  column-count: 3;
+  -webkit-column-gap: 0;
+  -moz-column-gap: 0;
+  -ms-column-gap: 0;
+  column-gap: 0;
+}
+
+#gei .SingleSelectEmulated div.collapsible button,
+#gei .MultipleSelectEmulated div.collapsible button {
+  transition: none;
+  width: 100%;
+  display: block;
+  background-color: #333333;
+  color: white;
+}
+
+#gei .SingleSelectEmulated div.collapsible button:hover,
+#gei .MultipleSelectEmulated div.collapsible button:hover {
+  background-color: #430054;
+}
+
+
+#gei header.main nav a.toggler {
+  width: 16px;
+  height: 20px;
+  font-size: 0;
+  color: transparent !important;
+  position: absolute;
+  right: 8px;
+  top: 25px;
+}
+
+#gei header.main nav a.toggler:after {
+  box-shadow: 0 0 0 1px #fff, 0 7px 0 1px #fff, 0 14px 0 1px #fff;
+  content: "";
+  display: block;
+}
+
+#gei header.main nav a.toggler.expanded:after {
+  box-shadow: 0 0 0 1px #1c006d, 0 7px 0 1px #1c006d, 0 14px 0 1px #1c006d !important;
+}
+
+#gei header.main nav a.toggler:hover {
+  background: transparent !important;
+}
+@media not screen and (max-width: 680px) {
+
+  #gei header.main nav {
+    float: right;
+    padding: 20px 10px 15px 0px;
+  }
+
+  #gei header.main nav a.toggler {
+    display: none;
+  }
+
+  #gei header.main nav > ul {
+    margin-left: 0;
+  }
+
+  #gei header.main nav > ul > li:first-child a {
+    padding-left: 0;
+  }
+
+  #gei header.main nav > ul > li {
+    float: left;
+    list-style-type: none;
+    position: relative;
+  }
+
+  #gei header.main nav > ul > li a {
+    padding: 0.3em 1em;
+    color: #fff;
+    opacity: 0.7;
+  }
+
+  #gei header.main nav > ul > li a:hover {
+    background: none;
+    opacity: 1;
+  }
+
+  #gei header.main nav > ul > li.selected a {
+    opacity: 1 !important;
+    font-weight: 400 !important;
+  }
+
+  #gei header.main nav > ul > li ul {
+    position: absolute;
+    top: 2.8em;
+    left: -1em;
+    background: #fff;
+    width: 20em;
+    z-index: 1000;
+    list-style-type: none;
+    border: none;
+    padding: 15px;
+    border-top: 4px solid #fff;
+    -webkit-box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.35);
+    -moz-box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.35);
+    -ms-box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.35);
+    box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.35);
+  }
+
+  #gei header.main nav > ul > li ul li a {
+    opacity: 1;
+    color: #000 !important;
+    display: block;
+  }
+
+  #gei header.main nav > ul > li ul li a:hover, #gei header.main nav > ul > li ul li a:focus {
+    opacity: 1;
+    color: #472798 !important;
+  }
+
+  #gei header.main nav > ul > li ul:before {
+    border-bottom: 11px solid #fff;
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+    content: "";
+    height: 0;
+    position: absolute;
+    top: -11px;
+    width: 0;
+  }
+
+  #gei header.main nav > ul > li.countries ul {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    -ms-column-count: 2;
+    column-count: 2;
+    -webkit-column-gap: 7%;
+    -moz-column-gap: 7%;
+    -ms-column-gap: 7%;
+    column-gap: 7%;
+    display: block;
+  }
+
+  #gei header.main nav > ul > li.domains li.domain_type_satellite {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 3px solid #f2f2f2;
+  }
+
+  #gei header.main nav > ul > li.domains li.domain_type_satellite + li.domain_type_satellite {
+    margin-top: 0;
+    border: none;
+    padding-top: 0;
+  }
+}
+@media screen and (max-width: 768px) {
+
+  #gei header.main nav > ul > li > a {
+    padding: 0.3em 0.5em;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  #gei header.main nav a.toggler {
+    display: block;
+  }
+
+  #gei header.main nav ul.main.collapsed {
+    display: none !important;
+  }
+
+  #gei header.main nav ul.main {
+    clear: both;
+    background: transparent;
+    margin: -30px 0 0 -15px;
+    padding: 0;
+    width: calc(100% + 30px);
+  }
+
+  #gei header.main nav ul.main li {
+    list-style-type: none;
+  }
+
+  #gei header.main nav ul.main li a {
+    display: block;
+    font-size: 14px;
+    color: #fff;
+    background: transparent;
+    padding: 10px 45px;
+    opacity: 0.7;
+  }
+
+  #gei header.main nav ul.main li a:hover, #gei header.main nav ul.main li a:focus {
+    background: #9855a3;
+  }
+
+  #gei header.main nav ul.main li.selected a {
+    font-weight: 400 !important;
+    opacity: 1 !important;
+  }
+
+  #gei header.main nav ul.main li.collapsed li {
+    position: relative;
+  }
+
+  #gei header.main nav ul.main li.domains.collapsed, #gei header.main nav ul.main li.countries.collapsed {
+    position: relative;
+  }
+
+  #gei header.main nav ul.main li.domains.collapsed ul, #gei header.main nav ul.main li.countries.collapsed ul {
+    background: #7b3c86 !important;
+    font-weight: 300;
+  }
+
+  #gei header.main nav ul.main li.domains.collapsed:after, #gei header.main nav ul.main li.countries.collapsed:after {
+    border: none;
+    content: "\e610";
+    font-family: "eige-font";
+    font-size: 30px;
+    right: 20px;
+    line-height: 0.4;
+    color: #fff;
+    position: absolute;
+    top: 10px;
+  }
+}
+
+
+#gei-view {
+  clear: both;
+  margin-bottom: 0px;
+}
+
+
+#gei header.view {
+  position: relative;
+  background: #8B489B;
+  display: block;
+  width: 100%;
+  height: 150px;
+}
+
+#gei header.view div.wrapper {
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: 0 30px;
+}
+@media screen and (max-width: 680px) {
+
+  #gei header.view div.wrapper {
+    padding: 0 10px;
+  }
+}
+
+#gei header.view h3 {
+  font-size: 3.375rem;
+  display: block;
+  float: left;
+  color: #fff;
+  font-weight: 100;
+}
+@media screen and (max-width: 768px) {
+
+  #gei header.view h3 {
+    font-size: 1.75rem;
+    font-weight: 300;
+    margin-top: 50px;
+  }
+}
+
+#gei header.view h3 em {
+  font-size: 14px;
+  display: block;
+  clear: both;
+}
+
+#gei header.view h3 span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ****************************** largeCyclicGraph ****************************** */
+
+div.largeCyclicGraph {
+  background: #f1f5f8;
+  max-width: 980px;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  position: relative;
+}
+@media screen and (max-width: 1366px), screen and (max-height: 768px) {
+
+  div.largeCyclicGraph {
+    max-width: 760px;
+  }
+}
+
+
+#gei.index div.largeCyclicGraph svg g:hover text {
+  fill: #823F8D;
+}
+
+
+div.largeCyclicGraph svg {
+  display: block !important;
+}
+
+
+div.largeCyclicGraph svg circle.header {
+  fill: #eee;
+}
+
+
+div.largeCyclicGraph svg circle.body {
+  fill: #fff;
+}
+
+
+div.largeCyclicGraph svg circle.center {
+  fill: #3a3a3a;
+}
+
+
+div.largeCyclicGraph svg a:hover circle.center {
+  fill: #555;
+}
+
+
+div.largeCyclicGraph svg circle.scale {
+  stroke: #f1f1f1;
+  stroke-width: 0.5;
+  fill: none;
+}
+
+
+div.largeCyclicGraph svg g.slice path.slice {
+  fill: rgba(60, 60, 60, 0.05);
+}
+
+
+div.largeCyclicGraph svg g.slice path.slice.zebra {
+  fill: rgba(0, 0, 0, 0.05);
+}
+
+
+div.largeCyclicGraph svg g.slice.union path.slice {
+  fill: rgba(100, 100, 100, 0.3);
+}
+
+
+div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #763A82;
+  opacity: 0.3;
+}
+
+
+#gei.domain .domain_work div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #4285F3;
+}
+
+#gei.domain .domain_money div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #E39206;
+}
+
+#gei.domain .domain_knowledge div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #7eaa00;
+}
+
+#gei.domain .domain_time div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #F0592A;
+}
+
+#gei.domain .domain_power div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #aa0029;
+}
+
+#gei.domain .domain_health div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #AA007E;
+}
+
+#gei.domain .domain_intersecting-inequalities div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #95634D;
+}
+
+#gei.domain .domain_violence div.largeCyclicGraph svg g.slice:hover path.slice {
+  fill: #95634D;
+}
+
+
+div.largeCyclicGraph svg g.slice circle {
+  stroke: white;
+  stroke-width: 0.5px;
+}
+
+
+div.largeCyclicGraph svg g.slice text.value {
+  fill: #444;
+}
+
+
+div.largeCyclicGraph svg g.slice.selected text.value {
+  fill: white !important;
+}
+
+
+div.largeCyclicGraph svg text {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+@media screen and (max-width: 1024px) {
+
+  div.largeCyclicGraph svg text {
+    font-size: 12px;
+  }
+}
+
+
+div.largeCyclicGraph svg text.selected {
+  fill: #eee;
+  font-weight: 100;
+  font-family: "Roboto", Helvetica, Roboto, Arial, sans-serif;
+}
+
+/* ****************************** smallCyclicGraph ****************************** */
+
+div.smallCyclicGraph a {
+  display: block;
+  font-weight: 300;
+  height: auto;
+  padding: 0px 17%;
+  text-align: center;
+  margin: 0 !important;
+  border: 0 !important;
+}
+@media screen and (max-width: 1024px) {
+
+  div.smallCyclicGraph a {
+    padding: 5px 5%;
+  }
+}
+
+div.smallCyclicGraph a:hover, div.smallCyclicGraph a:focus {
+  background: #f8f8f8 !important;
+}
+
+div.smallCyclicGraph a h4 {
+  height: 1.1em;
+  font-size: 20px;
+  line-height: 1rem;
+  font-weight: 300;
+  clear: both;
+}
+@media screen and (max-width: 1280px) {
+
+  div.smallCyclicGraph a h4 {
+    font-size: 18px;
+  }
+}
+
+
+#gei.index section.data div.smallCyclicGraph,
+#gei.map section.data div.smallCyclicGraph {
+  width: 48%;
+  float: left;
+}
+
+
+#gei.index section.data div.smallCyclicGraph h4,
+#gei.map section.data div.smallCyclicGraph h4 {
+  font-size: 17px;
+}
+@media screen and (max-width: 1280px) {
+
+  #gei.index section.data div.smallCyclicGraph h4,
+  #gei.map section.data div.smallCyclicGraph h4 {
+    font-size: 15px;
+    line-height: 16px;
+  }
+}
+@media screen and (max-width: 1024px) {
+
+  #gei.index section.data div.smallCyclicGraph h4,
+  #gei.map section.data div.smallCyclicGraph h4 {
+    font-size: 14px;
+  }
+}
+
+
+div.smallCyclicGraph a h4.diff_more:after {
+  content: "\e60f";
+  font-family: "eige-font";
+  margin-left: 5px;
+  color: #6ABD50;
+  font-weight: 700;
+}
+
+
+div.smallCyclicGraph a h4.diff_less:after {
+  content: "\e638";
+  margin-left: 5px;
+  color: #E74B4C;
+  font-weight: 700;
+  font-family: "eige-font";
+}
+
+
+div.smallCyclicGraph a h4.diff_same:after {
+  content: "\2194";
+  margin-left: 5px;
+  color: #aaa;
+  font-weight: bold;
+}
+
+
+div.smallCyclicGraph a h4.diff_not_available:after {
+  content: "\2013";
+  margin-left: 5px;
+  color: #aaa;
+}
+
+
+div.smallCyclicGraph p {
+  color: gray;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+
+div.smallCyclicGraph svg text.mainValue {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-size: 12px;
+  fill: white;
+  font-weight: 700;
+}
+
+
+div.smallCyclicGraph svg text.mainValueCaption {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-size: 11px;
+  fill: white;
+}
+
+
+div.smallCyclicGraph.domain_intersecting-inequalities svg text.mainValue {
+  fill: #555;
+}
+
+
+div.smallCyclicGraph svg circle.hollowBackground {
+  fill: white;
+}
+
+
+div.smallCyclicGraph svg path.secondaryValueBar {
+  stroke: #dddddd;
+}
+
+/* ****************************** horizontalBarGraph ****************************** */
+
+div.horizontalBarGraph {
+  text-align: left;
+}
+
+
+div.horizontalBarGraph svg {
+  display: block;
+  width: 100%;
+}
+
+
+div.horizontalBarGraph h4 {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+div.horizontalBarGraph h4 a {
+  padding: 10px;
+  margin: 10px 0;
+  display: block;
+  float: left;
+}
+
+
+div.horizontalBarGraph svg rect.mainValue {
+  fill: #763A82;
+}
+
+
+div.horizontalBarGraph svg text.mainValue {
+  dominant-baseline: middle;
+  font-size: 10px;
+}
+@media screen and (max-width: 1024px) {
+
+  div.horizontalBarGraph svg text.mainValue {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  div.horizontalBarGraph svg text.mainValue {
+    font-size: 9px;
+  }
+}
+
+
+div.horizontalBarGraph svg text.mainValue.in {
+  text-anchor: end;
+  fill: #fff;
+}
+
+
+div.horizontalBarGraph svg text.mainValue.out {
+  text-anchor: start;
+  fill: #444;
+}
+
+
+div.horizontalBarGraph svg text.mainCaption {
+  fill: #444;
+  text-anchor: end;
+  dominant-baseline: middle;
+  font-size: 10px;
+}
+@media screen and (max-width: 1024px) {
+
+  div.horizontalBarGraph svg text.mainCaption {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  div.horizontalBarGraph svg text.mainCaption {
+    font-size: 9px;
+  }
+}
+
+
+div.horizontalBarGraph svg text.secondaryCaption {
+  fill: #444;
+  text-anchor: end;
+  dominant-baseline: middle;
+  font-size: 10px;
+}
+@media screen and (max-width: 1024px) {
+
+  div.horizontalBarGraph svg text.secondaryCaption {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  div.horizontalBarGraph svg text.secondaryCaption {
+    font-size: 9px;
+  }
+}
+
+
+div.horizontalBarGraph svg rect.secondaryValue {
+  fill: #dddddd;
+}
+
+
+div.horizontalBarGraph svg text.secondaryValue {
+  dominant-baseline: middle;
+  font-size: 10px;
+}
+@media screen and (max-width: 1024px) {
+
+  div.horizontalBarGraph svg text.secondaryValue {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  div.horizontalBarGraph svg text.secondaryValue {
+    font-size: 9px;
+  }
+}
+
+
+div.horizontalBarGraph svg text.secondaryValue.in {
+  text-anchor: end;
+  fill: #888;
+}
+
+
+div.horizontalBarGraph svg text.secondaryValue.out {
+  text-anchor: start;
+  fill: #444;
+}
+
+
+div.horizontalBarGraph svg text.bottomAxis {
+  fill: #555;
+  dominant-baseline: middle;
+  font-size: 10px;
+}
+
+
+div.horizontalBarGraph svg text.bottomAxis.start {
+  text-anchor: start;
+}
+
+
+div.horizontalBarGraph svg text.bottomAxis.end {
+  text-anchor: end;
+}
+
+
+div.horizontalBarGraph svg rect.endMarker {
+  fill: #dddddd;
+}
+
+/* ****************************** multiRowHorizontalBarGraph ****************************** */
+
+div.multiRowHorizontalBarGraph h4 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+div.multiRowHorizontalBarGraph svg {
+  display: block;
+  width: 100%;
+}
+
+div.multiRowHorizontalBarGraph svg text.caption {
+  text-anchor: end;
+  dominant-baseline: middle;
+  font-size: 10px;
+  fill: #444;
+}
+
+div.multiRowHorizontalBarGraph svg text.value {
+  dominant-baseline: middle;
+  fill: #444;
+  font-size: 10px;
+}
+
+div.multiRowHorizontalBarGraph svg text.value.in {
+  text-anchor: end;
+}
+
+div.multiRowHorizontalBarGraph svg text.value.out {
+  text-anchor: start;
+}
+
+div.multiRowHorizontalBarGraph svg line.value {
+  stroke-width: 12px;
+}
+
+div.multiRowHorizontalBarGraph svg g.row.secondary line.value {
+  stroke: #dddddd;
+}
+
+div.multiRowHorizontalBarGraph svg g.row.main text.value.in,
+div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly text.value.in {
+  fill: white;
+}
+
+
+div.multiRowHorizontalBarGraphLegend {
+  border-top: 1px solid #ddd;
+  margin-left: -28px;
+  margin-top: 15px;
+  padding-bottom: 20px;
+  padding-left: 32px;
+  padding-top: 15px;
+  width: calc(100% + 57px);
+}
+
+div.multiRowHorizontalBarGraphLegend h5 {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+div.multiRowHorizontalBarGraphLegend p {
+  line-height: 1em;
+  margin: 1em;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+div.multiRowHorizontalBarGraphLegend p span {
+  width: 3em;
+  display: inline-block;
+  margin-right: 0.5em;
+  background: #dddddd;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  font-weight: 400;
+}
+
+div.multiRowHorizontalBarGraphLegend p.source {
+  font-weight: normal;
+  font-style: italic;
+}
+
+
+.domain_work div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_work div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #72a4f6;
+}
+
+.domain_work div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_work div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #1266f0;
+}
+
+
+.domain_work div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #72a4f6;
+}
+
+.domain_work div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #1266f0;
+}
+
+
+.domain_money div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_money div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #f9ab23;
+}
+
+.domain_money div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_money div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #b17205;
+}
+
+
+.domain_money div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #f9ab23;
+}
+
+.domain_money div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #b17205;
+}
+
+
+.domain_knowledge div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_knowledge div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #a4dd00;
+}
+
+.domain_knowledge div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_knowledge div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #587700;
+}
+
+
+.domain_knowledge div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #a4dd00;
+}
+
+.domain_knowledge div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #587700;
+}
+
+
+.domain_time div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_time div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #f37e5a;
+}
+
+.domain_time div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_time div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #d83f0f;
+}
+
+
+.domain_time div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #f37e5a;
+}
+
+.domain_time div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #d83f0f;
+}
+
+
+.domain_power div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_power div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #dd0035;
+}
+
+.domain_power div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_power div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #77001d;
+}
+
+
+.domain_power div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #dd0035;
+}
+
+.domain_power div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #77001d;
+}
+
+
+.domain_health div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_health div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #dd00a4;
+}
+
+.domain_health div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_health div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #770058;
+}
+
+
+.domain_health div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #dd00a4;
+}
+
+.domain_health div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #770058;
+}
+
+
+.domain_intersecting-inequalities div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_intersecting-inequalities div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #b07c65;
+}
+
+.domain_intersecting-inequalities div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_intersecting-inequalities div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #734d3c;
+}
+
+
+.domain_intersecting-inequalities div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #b07c65;
+}
+
+.domain_intersecting-inequalities div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #734d3c;
+}
+
+
+.domain_violence div.multiRowHorizontalBarGraph svg g.row.main.suffix_w line.value,
+.domain_violence div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_w line.value {
+  stroke: #b07c65;
+}
+
+.domain_violence div.multiRowHorizontalBarGraph svg g.row.main.suffix_m line.value,
+.domain_violence div.multiRowHorizontalBarGraph svg g.row.secondary.secondaryOnly.suffix_m line.value {
+  stroke: #734d3c;
+}
+
+
+.domain_violence div.multiRowHorizontalBarGraphLegend p.suffix_w span {
+  background: #b07c65;
+}
+
+.domain_violence div.multiRowHorizontalBarGraphLegend p.suffix_m span {
+  background: #734d3c;
+}
+
+/* ****************************** yearNavigatorGraph ****************************** */
+
+div.yearNavigatorGraph {
+  width: 400px;
+  padding: 0 5px;
+  display: block;
+  float: right;
+}
+
+
+div.yearNavigatorGraph svg {
+  display: block !important;
+  margin-top: 18px;
+}
+
+
+div.yearNavigatorGraph svg text {
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+
+div.yearNavigatorGraph svg text.country {
+  font-size: 15px;
+  fill: #fff;
+}
+
+
+div.yearNavigatorGraph svg text.year {
+  font-size: 14px;
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+
+div.yearNavigatorGraph svg g.button.selected text.year {
+  fill: #fff;
+}
+
+
+div.yearNavigatorGraph svg rect.button {
+  opacity: 0;
+}
+
+
+div.yearNavigatorGraph svg rect.tab {
+  fill: transparent;
+}
+
+
+div.yearNavigatorGraph svg g.button:hover rect.tab {
+  fill: rgba(0, 0, 0, 0.2);
+}
+
+
+div.yearNavigatorGraph svg g.button.selected rect.tab {
+  fill: rgba(0, 0, 0, 0.3);
+}
+
+
+div.yearNavigatorGraph svg text.value {
+  fill: white;
+}
+
+
+div.yearNavigatorGraph svg path.value {
+  fill: none;
+}
+
+
+div.yearNavigatorGraph svg line.connector {
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 2px;
+}
+
+
+div.yearNavigatorGraph {
+  background: transparent;
+}
+
+
+div.yearNavigatorGraph circle.dot {
+  background: #763A82;
+}
+
+/* ****************************** yearCountryNavigator ****************************** */
+
+div.yearCountryNavigator {
+  position: relative;
+}
+
+div.yearCountryNavigator div.graph {
+  width: 6em;
+  position: absolute;
+  right: 0em;
+  bottom: 2.6em;
+}
+
+div.yearCountryNavigator div.controls {
+  clear: both;
+}
+
+div.yearCountryNavigator div.controls select {
+  width: 95%;
+}
+
+
+div.yearCountryNavigator div.controls {
+  width: 100% !important;
+  height: 44px;
+  overflow: hidden;
+  background: none;
+  border: none;
+}
+
+div.yearCountryNavigator div.controls select {
+  border: medium none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  height: 46px;
+  margin-bottom: 15px;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  z-index: 1;
+  background: url("../content/arrow.png") rgba(255, 255, 255, 0.1) no-repeat right 10px !important;
+}
+
+div.yearCountryNavigator div.controls select:focus {
+  border: none;
+}
+
+div.yearCountryNavigator div.controls select option {
+  background: #fff;
+  color: #333;
+}
+
+/* ****************************** multipleSelectDefault ****************************** */
+
+#gei div.multipleSelectDefault label {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+/* ****************************** lineTrendGraph ****************************** */
+
+div.lineTrendGraph {
+  position: relative;
+  background: #F1F5F8;
+  overflow: hidden;
+}
+
+div.lineTrendGraph h3 {
+  height: 1em;
+  margin: 15px;
+}
+
+div.lineTrendGraph h4.country {
+  font-size: 1em;
+}
+
+div.lineTrendGraph a.info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: black !important;
+  padding-right: 40px;
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+div.lineTrendGraph a.info:hover {
+  background: none !important;
+}
+
+div.lineTrendGraph a.info:before {
+  content: "\e622";
+  font-family: "eige-font";
+  font-size: 16px;
+  display: block;
+  padding-right: 15px;
+  background: none;
+}
+
+div.lineTrendGraph svg {
+  margin-left: 10px;
+}
+
+div.lineTrendGraph svg g.countryButton line {
+  stroke-width: 3px;
+}
+
+div.lineTrendGraph svg g.countryButton rect {
+  fill: transparent;
+}
+
+div.lineTrendGraph svg g.countryButton text {
+  font-size: 6px;
+  text-anchor: start;
+  dominant-baseline: middle;
+}
+
+div.lineTrendGraph svg g.countryButton:hover {
+  opacity: 0.8;
+}
+
+div.lineTrendGraph svg g.axisX text {
+  font-size: 6px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+div.lineTrendGraph svg g.axisY text {
+  font-size: 6px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+div.lineTrendGraph svg g.countryData line.connector {
+  stroke-width: 1px;
+}
+
+div.lineTrendGraph svg g.countryData text.caption {
+  font-size: 8px;
+  text-anchor: start;
+  dominant-baseline: middle;
+}
+
+div.lineTrendGraph svg g.country.current {
+  opacity: 0.6;
+}
+
+
+#gei.domain .domain_work div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #4285F3;
+}
+
+#gei.domain .domain_work div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #4285F3;
+}
+
+#gei.domain .domain_work div.lineTrendGraph svg g.countryData text.caption {
+  fill: #4285F3;
+}
+
+#gei.domain .domain_work div.lineTrendGraph svg g.countryButton line {
+  stroke: #4285F3;
+}
+
+#gei.domain .domain_work div.lineTrendGraph h4.country,
+#gei.domain .domain_work a.info:hover:before,
+#gei.domain .domain_work section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_work .extra h4 {
+  color: #4285F3;
+}
+
+#gei.domain .domain_work div.largeCyclicGraph svg g:hover text {
+  fill: #4285F3;
+}
+
+#gei.domain .domain_money div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #E39206;
+}
+
+#gei.domain .domain_money div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #E39206;
+}
+
+#gei.domain .domain_money div.lineTrendGraph svg g.countryData text.caption {
+  fill: #E39206;
+}
+
+#gei.domain .domain_money div.lineTrendGraph svg g.countryButton line {
+  stroke: #E39206;
+}
+
+#gei.domain .domain_money div.lineTrendGraph h4.country,
+#gei.domain .domain_money a.info:hover:before,
+#gei.domain .domain_money section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_money .extra h4 {
+  color: #E39206;
+}
+
+#gei.domain .domain_money div.largeCyclicGraph svg g:hover text {
+  fill: #E39206;
+}
+
+#gei.domain .domain_knowledge div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #7eaa00;
+}
+
+#gei.domain .domain_knowledge div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #7eaa00;
+}
+
+#gei.domain .domain_knowledge div.lineTrendGraph svg g.countryData text.caption {
+  fill: #7eaa00;
+}
+
+#gei.domain .domain_knowledge div.lineTrendGraph svg g.countryButton line {
+  stroke: #7eaa00;
+}
+
+#gei.domain .domain_knowledge div.lineTrendGraph h4.country,
+#gei.domain .domain_knowledge a.info:hover:before,
+#gei.domain .domain_knowledge section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_knowledge .extra h4 {
+  color: #7eaa00;
+}
+
+#gei.domain .domain_knowledge div.largeCyclicGraph svg g:hover text {
+  fill: #7eaa00;
+}
+
+#gei.domain .domain_time div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #F0592A;
+}
+
+#gei.domain .domain_time div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #F0592A;
+}
+
+#gei.domain .domain_time div.lineTrendGraph svg g.countryData text.caption {
+  fill: #F0592A;
+}
+
+#gei.domain .domain_time div.lineTrendGraph svg g.countryButton line {
+  stroke: #F0592A;
+}
+
+#gei.domain .domain_time div.lineTrendGraph h4.country,
+#gei.domain .domain_time a.info:hover:before,
+#gei.domain .domain_time section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_time .extra h4 {
+  color: #F0592A;
+}
+
+#gei.domain .domain_time div.largeCyclicGraph svg g:hover text {
+  fill: #F0592A;
+}
+
+#gei.domain .domain_power div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #aa0029;
+}
+
+#gei.domain .domain_power div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #aa0029;
+}
+
+#gei.domain .domain_power div.lineTrendGraph svg g.countryData text.caption {
+  fill: #aa0029;
+}
+
+#gei.domain .domain_power div.lineTrendGraph svg g.countryButton line {
+  stroke: #aa0029;
+}
+
+#gei.domain .domain_power div.lineTrendGraph h4.country,
+#gei.domain .domain_power a.info:hover:before,
+#gei.domain .domain_power section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_power .extra h4 {
+  color: #aa0029;
+}
+
+#gei.domain .domain_power div.largeCyclicGraph svg g:hover text {
+  fill: #aa0029;
+}
+
+#gei.domain .domain_health div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #AA007E;
+}
+
+#gei.domain .domain_health div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #AA007E;
+}
+
+#gei.domain .domain_health div.lineTrendGraph svg g.countryData text.caption {
+  fill: #AA007E;
+}
+
+#gei.domain .domain_health div.lineTrendGraph svg g.countryButton line {
+  stroke: #AA007E;
+}
+
+#gei.domain .domain_health div.lineTrendGraph h4.country,
+#gei.domain .domain_health a.info:hover:before,
+#gei.domain .domain_health section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_health .extra h4 {
+  color: #AA007E;
+}
+
+#gei.domain .domain_health div.largeCyclicGraph svg g:hover text {
+  fill: #AA007E;
+}
+
+#gei.domain .domain_intersecting-inequalities div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #95634D;
+}
+
+#gei.domain .domain_intersecting-inequalities div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #95634D;
+}
+
+#gei.domain .domain_intersecting-inequalities div.lineTrendGraph svg g.countryData text.caption {
+  fill: #95634D;
+}
+
+#gei.domain .domain_intersecting-inequalities div.lineTrendGraph svg g.countryButton line {
+  stroke: #95634D;
+}
+
+#gei.domain .domain_intersecting-inequalities div.lineTrendGraph h4.country,
+#gei.domain .domain_intersecting-inequalities a.info:hover:before,
+#gei.domain .domain_intersecting-inequalities section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_intersecting-inequalities .extra h4 {
+  color: #95634D;
+}
+
+#gei.domain .domain_intersecting-inequalities div.largeCyclicGraph svg g:hover text {
+  fill: #95634D;
+}
+
+#gei.domain .domain_violence div.lineTrendGraph svg g.countryData line.connector {
+  stroke: #95634D;
+}
+
+#gei.domain .domain_violence div.lineTrendGraph svg g.countryData circle.dot {
+  fill: #95634D;
+}
+
+#gei.domain .domain_violence div.lineTrendGraph svg g.countryData text.caption {
+  fill: #95634D;
+}
+
+#gei.domain .domain_violence div.lineTrendGraph svg g.countryButton line {
+  stroke: #95634D;
+}
+
+#gei.domain .domain_violence div.lineTrendGraph h4.country,
+#gei.domain .domain_violence a.info:hover:before,
+#gei.domain .domain_violence section.data div.horizontalBarGraph h4 a:hover,
+#gei.domain .domain_violence .extra h4 {
+  color: #95634D;
+}
+
+#gei.domain .domain_violence div.largeCyclicGraph svg g:hover text {
+  fill: #95634D;
+}
+
+/* ****************************** countriesBarGraph ****************************** */
+
+div.countriesBarGraph {
+  position: relative;
+  background: #F1F5F8;
+  overflow: hidden;
+}
+
+div.countriesBarGraph h3 {
+  height: 1em;
+  margin: 15px;
+}
+
+div.countriesBarGraph a.info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: black !important;
+  padding-right: 40px;
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+div.countriesBarGraph a.info:hover {
+  background: none !important;
+}
+
+div.countriesBarGraph a.info:before {
+  content: "\e622";
+  font-family: "eige-font";
+  font-size: 16px;
+  display: block;
+  padding-right: 15px;
+  background: none;
+}
+
+div.countriesBarGraph svg {
+  padding-left: 5px;
+}
+
+div.countriesBarGraph svg g.country rect.button {
+  fill: transparent;
+}
+
+div.countriesBarGraph svg g.country text.caption {
+  font-size: 6px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+div.countriesBarGraph svg g.country text.value {
+  font-size: 7px;
+  text-anchor: start;
+  dominant-baseline: middle;
+  opacity: 0;
+  transition: opacity 0.05s linear;
+}
+
+div.countriesBarGraph svg g.country:hover {
+  opacity: 0.95;
+}
+
+div.countriesBarGraph svg g.country:hover text.value {
+  opacity: 1;
+  transition: opacity 0s linear;
+}
+
+div.countriesBarGraph svg g.axisY text {
+  font-size: 6px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+div.countriesBarGraph svg line.average {
+  stroke: #444;
+  stroke-width: 0.5;
+  stroke-dasharray: 2, 2;
+}
+
+/* ****************************** countryTrendsGraph ****************************** */
+
+div.countryTrendsGraph {
+  position: relative;
+  margin-top: 15px;
+}
+
+div.countryTrendsGraph h3 {
+  margin-top: 15px !important;
+}
+
+div.countryTrendsGraph div.filters {
+  background: #fff;
+  padding: 1em 2%;
+}
+
+div.countryTrendsGraph div.filters ul {
+  margin-left: 0;
+}
+
+div.countryTrendsGraph div.filters ul li {
+  list-style: none;
+  display: block;
+}
+
+div.countryTrendsGraph div.filters ul li a, div.countryTrendsGraph div.filters ul li.disabled {
+  display: block;
+  white-space: nowrap;
+  margin-left: 0;
+  font-size: 14px;
+  padding: 5px 10px 5px 5px;
+  border-bottom: none !important;
+  font-weight: 400;
+}
+
+div.countryTrendsGraph div.filters ul li a:before, div.countryTrendsGraph div.filters ul li.disabled:before {
+  border: 1px solid #8E8E8E;
+  border-radius: 50%;
+  content: "";
+  display: inline-block;
+  height: 15px;
+  margin: -1px 7px 0 0;
+  opacity: 1;
+  vertical-align: middle;
+  width: 15px;
+}
+@media screen and (max-width: 641px) {
+
+  div.countryTrendsGraph div.filters ul li {
+    display: inline-block;
+  }
+
+  div.countryTrendsGraph div.filters ul li a, div.countryTrendsGraph div.filters ul li.disabled {
+    display: inline;
+    line-height: 3em;
+  }
+}
+
+div.countryTrendsGraph div.filters ul li.disabled {
+  cursor: default;
+  color: #888;
+}
+
+div.countryTrendsGraph div.filters ul li.disabled:before {
+  border: 1px dotted #bbb;
+}
+
+div.countryTrendsGraph div.filters ul li.selected a:before {
+  border: none;
+}
+
+div.countryTrendsGraph div.filters ul li.average {
+  border-bottom: 1px solid #dddddd;
+  padding-bottom: 15px;
+}
+@media screen and (max-width: 641px) {
+
+  div.countryTrendsGraph div.filters ul li.average {
+    border-right: 2px solid #dddddd;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+div.countryTrendsGraph div.filters ul li.all {
+  padding-top: 15px;
+}
+@media screen and (max-width: 641px) {
+
+  div.countryTrendsGraph div.filters ul li.all {
+    padding-top: 0;
+  }
+}
+
+div.countryTrendsGraph div.filters ul li.index.selected a:before, div.countryTrendsGraph div.filters ul li.index:not(.selected) a:hover:before {
+  background: #823F8D;
+}
+
+div.countryTrendsGraph div.filters ul li.average.selected a:before, div.countryTrendsGraph div.filters ul li.average:not(.selected) a:hover:before {
+  background: #dddddd;
+}
+
+div.countryTrendsGraph div.filters ul li.all.selected a:before, div.countryTrendsGraph div.filters ul li.all:not(.selected) a:hover:before {
+  background: #333333;
+}
+
+div.countryTrendsGraph div.filters ul li.selected a:hover:before {
+  opacity: 0.75;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.work a:before, div.countryTrendsGraph div.filters ul li:not(.selected).work a:hover:before {
+  background: #4285F3;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.money a:before, div.countryTrendsGraph div.filters ul li:not(.selected).money a:hover:before {
+  background: #E39206;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.knowledge a:before, div.countryTrendsGraph div.filters ul li:not(.selected).knowledge a:hover:before {
+  background: #7eaa00;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.time a:before, div.countryTrendsGraph div.filters ul li:not(.selected).time a:hover:before {
+  background: #F0592A;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.power a:before, div.countryTrendsGraph div.filters ul li:not(.selected).power a:hover:before {
+  background: #aa0029;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.health a:before, div.countryTrendsGraph div.filters ul li:not(.selected).health a:hover:before {
+  background: #AA007E;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.intersecting-inequalities a:before, div.countryTrendsGraph div.filters ul li:not(.selected).intersecting-inequalities a:hover:before {
+  background: #95634D;
+}
+
+div.countryTrendsGraph div.filters ul li.selected.violence a:before, div.countryTrendsGraph div.filters ul li:not(.selected).violence a:hover:before {
+  background: #95634D;
+}
+
+div.countryTrendsGraph svg {
+  background: transparent;
+}
+
+div.countryTrendsGraph svg text {
+  font-size: 14px;
+  color: #823F8D;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+@media screen and (max-width: 1024px) {
+
+  div.countryTrendsGraph svg text {
+    font-size: 17px;
+  }
+}
+@media screen and (max-width: 641px) {
+
+  div.countryTrendsGraph svg text {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 480px) {
+
+  div.countryTrendsGraph svg text {
+    font-size: 25px;
+  }
+}
+
+div.countryTrendsGraph svg g.axisY text {
+  text-anchor: end;
+  font-size: 14px;
+  color: #823F8D;
+}
+@media screen and (max-width: 1024px) {
+
+  div.countryTrendsGraph svg g.axisY text {
+    font-size: 17px;
+  }
+}
+@media screen and (max-width: 641px) {
+
+  div.countryTrendsGraph svg g.axisY text {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 480px) {
+
+  div.countryTrendsGraph svg g.axisY text {
+    font-size: 25px;
+  }
+}
+
+div.countryTrendsGraph svg g.axisY line {
+  stroke: #bbc;
+  stroke-width: 0.5;
+  stroke-dasharray: 1, 3;
+}
+
+div.countryTrendsGraph svg g.trend line {
+  stroke-width: 2.25;
+  stroke-dasharray: 1, 5;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+
+div.countryTrendsGraph svg g.trend.index {
+  stroke: #823F8D;
+  fill: #823F8D;
+}
+
+div.countryTrendsGraph svg g.trend.average {
+  stroke: #CECECE;
+  fill: #CECECE;
+}
+
+div.countryTrendsGraph svg g.trend.work circle {
+  fill: #4285F3;
+}
+
+div.countryTrendsGraph svg g.trend.work line {
+  stroke: #4285F3;
+}
+
+div.countryTrendsGraph svg g.trend.money circle {
+  fill: #E39206;
+}
+
+div.countryTrendsGraph svg g.trend.money line {
+  stroke: #E39206;
+}
+
+div.countryTrendsGraph svg g.trend.knowledge circle {
+  fill: #7eaa00;
+}
+
+div.countryTrendsGraph svg g.trend.knowledge line {
+  stroke: #7eaa00;
+}
+
+div.countryTrendsGraph svg g.trend.time circle {
+  fill: #F0592A;
+}
+
+div.countryTrendsGraph svg g.trend.time line {
+  stroke: #F0592A;
+}
+
+div.countryTrendsGraph svg g.trend.power circle {
+  fill: #aa0029;
+}
+
+div.countryTrendsGraph svg g.trend.power line {
+  stroke: #aa0029;
+}
+
+div.countryTrendsGraph svg g.trend.health circle {
+  fill: #AA007E;
+}
+
+div.countryTrendsGraph svg g.trend.health line {
+  stroke: #AA007E;
+}
+
+div.countryTrendsGraph svg g.trend.intersecting-inequalities circle {
+  fill: #95634D;
+}
+
+div.countryTrendsGraph svg g.trend.intersecting-inequalities line {
+  stroke: #95634D;
+}
+
+div.countryTrendsGraph svg g.trend.violence circle {
+  fill: #95634D;
+}
+
+div.countryTrendsGraph svg g.trend.violence line {
+  stroke: #95634D;
+}
+
+
+#gei.domain .no-data {
+  background: #fff;
+  padding: 30px;
+  margin-top: 0px;
+}
+
+#gei.domain .no-data ul {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  -ms-column-count: 2;
+  column-count: 2;
+  -webkit-column-gao: 10%;
+  -moz-column-gao: 10%;
+  -ms-column-gao: 10%;
+  column-gao: 10%;
+  display: block;
+}
+
+#gei.domain .no-data ul li {
+  list-style: none;
+}
+
+#gei.domain .no-data ul li a {
+  border-bottom: none;
+}
+
+#gei.domain .no-data ul li a:hover {
+  color: #823F8D;
+}
+
+
+#gei.country div.multiHorizontalBarGraph a.selector {
+  display: block;
+  float: left;
+  height: 40px;
+  position: relative;
+  display: block;
+  font-size: 1.3rem;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 10px 45px 10px 10px !important;
+  background: transparent;
+  color: #333;
+  text-align: left;
+}
+
+#gei.country div.multiHorizontalBarGraph a.selector.collapsed:after {
+  position: absolute;
+  right: 0px;
+  top: 7px;
+  padding: 8px 10px;
+  display: block;
+  font-family: "eige-font";
+  content: "\e628";
+  color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  background: #333;
+}
+
+#gei.country div.multiHorizontalBarGraph a.selector.expanded:after {
+  position: absolute;
+  right: 0px;
+  top: 7px;
+  padding: 8px 10px;
+  display: block;
+  font-family: "eige-font";
+  content: "\e629";
+  color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  background: #333;
+}
+
+#gei.country div.multiHorizontalBarGraph a.selector.expanded {
+  background: #565656 !important;
+  color: #fff !important;
+  padding: 10px 45px 10px 10px !important;
+}
+
+
+#gei.country div.multiHorizontalBarGraph {
+  position: relative;
+}
+
+
+#gei.country div.multiHorizontalBarGraph ul {
+  background: #565656;
+  border: medium none;
+  color: #fff !important;
+  width: 150px !important;
+  padding-top: 30px;
+  z-index: 5000;
+  margin-left: 0;
+  position: absolute;
+  top: 103px;
+}
+
+#gei.country div.multiHorizontalBarGraph ul:before {
+  background: transparent;
+}
+
+#gei.country div.multiHorizontalBarGraph ul li {
+  list-style: none;
+}
+
+#gei.country div.multiHorizontalBarGraph ul li a {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  padding: 20px;
+  transition: background-color 150ms ease-in 0s;
+  width: 100%;
+  display: block;
+}
+
+#gei.country div.multiHorizontalBarGraph ul li a:hover, #gei.country div.multiHorizontalBarGraph ul li a:focus {
+  background: #823F8D;
+}
+
+/* ****************************** country page customizations ****************************** */
+
+#gei.country div.domains {
+  clear: both;
+  margin-top: 15px;
+}
+
+#gei.country h3 {
+  font-size: 34px;
+}
+
+#gei.country div.filters h3 {
+  font-size: 25px;
+}
+
+#gei.country header.view ul.options {
+  list-style-type: none;
+}
+
+#gei.country header.view ul.options li a {
+  margin-top: 50px;
+  color: #fff;
+  font-size: 14px;
+  border-bottom: none;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  margin-left: 10px;
+  float: right;
+}
+
+#gei.country header.view ul.options li a:hover, #gei.country header.view ul.options li a:focus {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#gei.country header.view ul.options li a:before {
+  font-family: 'eige-font';
+  font-size: 17px;
+  color: #fff;
+  padding-right: 8px;
+}
+
+#gei.country header.view ul.options li.report a:before {
+  content: "\e602";
+}
+
+#gei.country header.view ul.options li.compare a:before {
+  content: "\e667";
+}
+@media screen and (max-width: 600px) {
+
+  #gei.country header.view ul.options {
+    position: absolute;
+    width: 100%;
+    margin: 10px;
+    bottom: 0;
+    right: 0;
+  }
+
+  #gei.country header.view ul.options li a {
+    margin-top: 10px;
+    padding: 5px 10px;
+  }
+}
+
+#gei.country #gei-sections li a {
+  padding: 20px 25px !important;
+}
+@media only screen and (max-width: 768px) {
+
+  #gei.country #gei-sections li a {
+    padding: 20px 10px !important;
+  }
+}
+@media only screen and (max-width: 660px) {
+
+  #gei.country #gei-sections li a span.trivial {
+    display: none;
+  }
+}
+@media only screen and (max-width: 420px) {
+
+  #gei.country #gei-sections li a {
+    padding: 20px 4px !important;
+    border-right: 1px solid #eeeeee;
+  }
+}
+
+#gei.country .tab_policy h3 {
+  clear: both;
+  float: none !important;
+  padding-top: 20px;
+  font-size: 25px;
+}
+
+#gei.country .tab_context_data table {
+  border: none;
+}
+
+#gei.country .tab_context_data table th,
+#gei.country .tab_context_data table td {
+  padding: 20px 2px;
+  border: none;
+  font-size: 15px;
+  font-weight: 300;
+  background: #fafafa;
+}
+
+#gei.country .tab_context_data table th {
+  font-weight: 700;
+}
+
+#gei.country .tab_context_data table tr td:first-child,
+#gei.country .tab_context_data table tr th:first-child {
+  width: 50%;
+}
+
+#gei.country .tab_context_data table tr:first-child th {
+  background: #fff !important;
+  border-top: #e8ebed solid 1px;
+}
+
+#gei.country .tab_context_data table tr:nth-of-type(2n) th,
+#gei.country .tab_context_data table tr:nth-of-type(2n) td {
+  background: #f2f3f5;
+}
+@media only screen and (max-width: 960px) {
+
+  #gei.country .tab_context_data table td, #gei.country .tab_context_data table th {
+    padding: 10px 0;
+  }
+}
+
+#gei.country .bar div.horizontalBarGraph svg {
+  display: block;
+  width: 80%;
+}
+@media only screen and (max-width: 1024px) {
+
+  #gei.country .bar div.horizontalBarGraph svg {
+    clear: both;
+    display: block;
+    margin-left: -10px;
+    margin-top: 100px;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 641px) {
+
+  #gei.country .bar div.horizontalBarGraph svg {
+    clear: both;
+    display: block;
+    margin-left: -10px;
+    margin-top: 80px;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 641px) {
+
+  #gei.country .bar div.horizontalBarGraph svg text {
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 480px) {
+
+  #gei.country .bar div.horizontalBarGraph svg text {
+    font-size: 16px;
+  }
+}
+
+/* ****************************** domain page customizations ****************************** */
+@media not screen and (max-width: 680px) {
+
+  #gei.domain header .yearCountryNavigator {
+    display: none;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  #gei.domain header .yearNavigatorGraph,
+  #gei.domain section.graph {
+    display: none;
+  }
+
+  #gei.domain section.data {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+#gei.domain header.view h3 {
+  line-height: 40px;
+  margin-top: 50px;
+}
+
+#gei.domain header.view h3:before {
+  font-family: 'eige-font';
+  font-size: 70%;
+  background: rgba(0, 0, 0, 0.1) none repeat scroll 0 0;
+  color: #fff;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+#gei.domain .domain_work header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_money header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_knowledge header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_time header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_power header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_health header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_intersecting-inequalities header.view h3:before {
+  content: "";
+}
+
+#gei.domain .domain_violence header.view h3:before {
+  content: "";
+}
+
+#gei.domain .subdomain header.view h3 {
+  margin-top: 10px;
+}
+
+#gei.domain .subdomain header.view h3:before {
+  display: none;
+}
+
+#gei.domain nav.domain-navigation ul li {
+  list-style: none;
+  display: inline-block;
+}
+
+#gei.domain nav.domain-navigation ul li a {
+  font-size: 14px;
+  font-weight: 400;
+  display: block;
+  margin: 0 10px;
+  padding: 10px;
+}
+@media screen and (max-width: 680px) {
+
+  #gei.domain nav.domain-navigation ul li a {
+    margin: 0;
+  }
+}
+
+#gei.domain nav.domain-navigation ul li a:before {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin: -1px 4px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid #333;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain nav.domain-navigation ul li a:hover, #gei.domain nav.domain-navigation ul li a:focus {
+  background: transparent !important;
+}
+
+#gei.domain nav.domain-navigation ul.domain {
+  margin: 10px 15px 0 15px;
+  display: block;
+  float: left;
+  margin-left: 20px;
+  width: auto;
+}
+
+#gei.domain nav.domain-navigation ul.subdomains {
+  margin: 10px 15px 15px 15px;
+  background: #fff;
+  display: block;
+  margin-right: 7px;
+  float: left;
+}
+
+#gei.domain .data .multiRowHorizontalBarGraph {
+  margin-top: 20px;
+}
+
+#gei.domain .domain_work li a:hover:before {
+  background: #4285F3;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_work li.selected a:before, #gei.domain .domain_work li.selected a:hover:before {
+  background: #4285F3;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_money li a:hover:before {
+  background: #E39206;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_money li.selected a:before, #gei.domain .domain_money li.selected a:hover:before {
+  background: #E39206;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_knowledge li a:hover:before {
+  background: #7eaa00;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_knowledge li.selected a:before, #gei.domain .domain_knowledge li.selected a:hover:before {
+  background: #7eaa00;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_time li a:hover:before {
+  background: #F0592A;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_time li.selected a:before, #gei.domain .domain_time li.selected a:hover:before {
+  background: #F0592A;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_power li a:hover:before {
+  background: #aa0029;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_power li.selected a:before, #gei.domain .domain_power li.selected a:hover:before {
+  background: #aa0029;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_health li a:hover:before {
+  background: #AA007E;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_health li.selected a:before, #gei.domain .domain_health li.selected a:hover:before {
+  background: #AA007E;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_intersecting-inequalities li a:hover:before {
+  background: #95634D;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_intersecting-inequalities li.selected a:before, #gei.domain .domain_intersecting-inequalities li.selected a:hover:before {
+  background: #95634D;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .domain_violence li a:hover:before {
+  background: #95634D;
+  border: none;
+  content: "";
+  opacity: 0.5;
+}
+
+#gei.domain .domain_violence li.selected a:before, #gei.domain .domain_violence li.selected a:hover:before {
+  background: #95634D;
+  border: none;
+  content: "";
+  opacity: 1;
+}
+
+#gei.domain .subdomain .horizontalBarGraph {
+  border-top: medium none;
+  margin-top: -15px;
+  padding: 15px;
+}
+
+#gei.domain .subdomain .horizontalBarGraph div.multiRowHorizontalBarGraphLegend p span {
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+}
+@media screen and (max-width: 680px) {
+
+  #gei.domain section.extra .row {
+    padding-top: 0;
+  }
+}
+
+#gei.domain section.extra .lineTrendGraph,
+#gei.domain section.extra .countriesBarGraph {
+  display: block;
+  margin-bottom: 10px;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei.domain section.extra .lineTrendGraph,
+  #gei.domain section.extra .countriesBarGraph {
+    display: block;
+    float: left;
+    width: 45%;
+    margin-right: 10px;
+  }
+}
+@media screen and (max-width: 641px) {
+
+  #gei.domain section.extra .lineTrendGraph,
+  #gei.domain section.extra .countriesBarGraph {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+#gei.domain section.extra .lineTrendGraph div.info,
+#gei.domain section.extra .countriesBarGraph div.info {
+  border: 1px solid black;
+  opacity: 1;
+  position: absolute;
+  top: 3em;
+  right: 0;
+  z-index: 10;
+  background: #222;
+  border-radius: 3px;
+  color: #fff;
+  max-width: 300px;
+  width: calc(100% - 20px);
+  padding: 20px;
+}
+
+#gei.domain section.extra .lineTrendGraph div.info:after,
+#gei.domain section.extra .countriesBarGraph div.info:after {
+  border-bottom: 11px solid #222;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  content: "";
+  height: 0;
+  position: absolute;
+  top: -11px;
+  width: 0;
+  right: 20px;
+}
+
+#gei.domain section.extra .lineTrendGraph div.info p,
+#gei.domain section.extra .countriesBarGraph div.info p {
+  color: #aaa !important;
+  font-size: 14px !important;
+  line-height: 22px;
+}
+
+#gei.domain section.extra .lineTrendGraph h3,
+#gei.domain section.extra .countriesBarGraph h3 {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+#gei.domain section.extra h4.country {
+  font-size: 13px;
+  font-weight: 300;
+  padding-left: 15px;
+}
+
+
+#gei.domain .data div.smallCyclicGraph {
+  float: none;
+  max-width: 160px;
+  clear: both;
+  display: table;
+  margin: 0 auto;
+  width: 100%;
+  margin-bottom: 15px !important;
+  margin-top: 15px;
+}
+
+#gei.domain .data div.smallCyclicGraph h4 {
+  text-align: center;
+}
+
+
+#gei.domain .horizontalBarGraph {
+  background: #F8FAFB;
+  margin-left: -28px;
+  width: calc(100% + 57px);
+  border-top: 1px solid #ddd;
+}
+
+#gei.domain .horizontalBarGraph a {
+  padding: 20px 15px;
+  display: block;
+  margin: 0;
+  border: 0;
+}
+
+#gei.domain .horizontalBarGraph a:hover {
+  background: #fff;
+}
+@media screen and (max-width: 680px) {
+
+  #gei.domain .horizontalBarGraph text {
+    font-size: 8px;
+  }
+}
+@media screen and (max-width: 480px) {
+
+  #gei.domain .horizontalBarGraph text {
+    font-size: 10px;
+  }
+}
+
+
+#gei.domain .domain_work header.view {
+  background: #4285F3;
+}
+
+#gei.domain .domain_money header.view {
+  background: #E39206;
+}
+
+#gei.domain .domain_knowledge header.view {
+  background: #7eaa00;
+}
+
+#gei.domain .domain_time header.view {
+  background: #F0592A;
+}
+
+#gei.domain .domain_power header.view {
+  background: #aa0029;
+}
+
+#gei.domain .domain_health header.view {
+  background: #AA007E;
+}
+
+#gei.domain .domain_intersecting-inequalities header.view {
+  background: #95634D;
+}
+
+#gei.domain .domain_violence header.view {
+  background: #95634D;
+}
+
+
+#gei.domain .domain_money header.view {
+  background: #e5a700 !important;
+}
+
+
+#gei.domain .domain_work section.data h3 a:hover,
+#gei.domain .domain_work section.data h3 a:focus {
+  color: #4285F3;
+}
+
+#gei.domain .domain_money section.data h3 a:hover,
+#gei.domain .domain_money section.data h3 a:focus {
+  color: #E39206;
+}
+
+#gei.domain .domain_knowledge section.data h3 a:hover,
+#gei.domain .domain_knowledge section.data h3 a:focus {
+  color: #7eaa00;
+}
+
+#gei.domain .domain_time section.data h3 a:hover,
+#gei.domain .domain_time section.data h3 a:focus {
+  color: #F0592A;
+}
+
+#gei.domain .domain_power section.data h3 a:hover,
+#gei.domain .domain_power section.data h3 a:focus {
+  color: #aa0029;
+}
+
+#gei.domain .domain_health section.data h3 a:hover,
+#gei.domain .domain_health section.data h3 a:focus {
+  color: #AA007E;
+}
+
+#gei.domain .domain_intersecting-inequalities section.data h3 a:hover,
+#gei.domain .domain_intersecting-inequalities section.data h3 a:focus {
+  color: #95634D;
+}
+
+#gei.domain .domain_violence section.data h3 a:hover,
+#gei.domain .domain_violence section.data h3 a:focus {
+  color: #95634D;
+}
+
+/* ****************************** countryDomainDataPanel ****************************** */
+
+#gei .countryDomainDataPanel header h4 {
+  margin-bottom: 0;
+}
+
+#gei .countryDomainDataPanel header h4 a {
+  display: block;
+  padding-bottom: 16px;
+  padding-left: 15px;
+  padding-top: 19px;
+  margin: 1em 0 0 0;
+  font-size: 23px;
+  font-weight: 300;
+  color: #fff;
+}
+@media screen and (max-width: 680px) {
+
+  #gei .countryDomainDataPanel header h4 a {
+    font-size: 16px;
+  }
+}
+
+#gei .countryDomainDataPanel header h4 a:before {
+  background: #333 none repeat scroll 0 0;
+  color: #fff;
+  content: "\e60f";
+  font-family: "eige-font";
+  font-size: inherit;
+  font-weight: normal;
+  margin-left: -15px;
+  margin-right: 15px;
+  padding: 23px;
+}
+@media screen and (max-width: 680px) {
+
+  #gei .countryDomainDataPanel header h4 a:before {
+    padding: 21px;
+  }
+}
+
+#gei .countryDomainDataPanel header h4.diff_more a:after {
+  content: "\e60f";
+  font-family: "eige-font";
+  margin-left: 5px;
+  color: #6ABD50;
+  font-weight: 700;
+}
+
+#gei .countryDomainDataPanel header h4.diff_less a:after {
+  content: "\e638";
+  margin-left: 5px;
+  color: #E74B4C;
+  font-weight: 700;
+  font-family: "eige-font";
+}
+
+#gei .countryDomainDataPanel header h4.diff_same a:after {
+  content: "\2194";
+  margin-left: 5px;
+  color: #aaa;
+  font-weight: bold;
+}
+
+#gei .countryDomainDataPanel header h4.diff_not_available a:after {
+  content: "\2013";
+  margin-left: 5px;
+  color: #aaa;
+}
+
+#gei .countryDomainDataPanel.collapsed header h4 a {
+  color: #333;
+  background: #fff;
+}
+
+#gei .countryDomainDataPanel.collapsed header h4 a:before {
+  color: #fff;
+  content: "\e638";
+  font-family: "eige-font";
+}
+
+#gei .countryDomainDataPanel div.data {
+  position: relative;
+  background: white;
+}
+
+#gei .countryDomainDataPanel div.data .columns {
+  border-left: 1px solid #ececec;
+}
+
+#gei .countryDomainDataPanel div.data .columns.variables, #gei .countryDomainDataPanel div.data .columns.subdomain, #gei .countryDomainDataPanel div.data .columns.domain {
+  border-left: none;
+}
+
+#gei .countryDomainDataPanel div.data div.domain div.smallCyclicGraph {
+  margin: 3em auto 0 auto;
+  max-width: 90%;
+}
+@media only screen and (max-width: 641px) {
+
+  #gei .countryDomainDataPanel div.data div.domain div.smallCyclicGraph {
+    max-width: 40%;
+    padding: 0;
+  }
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.row {
+  border-bottom: 1px solid #ececec;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.row:last-child {
+  border-bottom: 0;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.row div.variables div.multiRowHorizontalBarGraph {
+  width: 50%;
+  float: left;
+}
+@media screen and (max-width: 1025px) {
+
+  #gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.row div.variables div.multiRowHorizontalBarGraph {
+    width: 100%;
+  }
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.variables div.multiRowHorizontalBarGraph {
+  width: 33%;
+  float: left;
+}
+@media screen and (max-width: 1025px) {
+
+  #gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.variables div.multiRowHorizontalBarGraph {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 641px) {
+
+  #gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.variables div.multiRowHorizontalBarGraph {
+    width: 100%;
+  }
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.variables {
+  margin-top: -1.5em !important;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.variables div.multiRowHorizontalBarGraph {
+  margin-top: 1.5em;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomainsAndVariables div.variables p.no-data {
+  margin-top: 1.5em;
+  padding: 4em;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomain,
+#gei .countryDomainDataPanel div.data div.variables {
+  padding: 1em 0.5em 1em 0.5em;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomain h4,
+#gei .countryDomainDataPanel div.data div.variables h4 {
+  color: #444;
+}
+
+#gei .countryDomainDataPanel div.data div.subdomain h4 {
+  font-weight: bold;
+}
+@media only screen and (max-width: 641px) {
+
+  #gei .countryDomainDataPanel div.data div.subdomain h4 {
+    font-size: 135%;
+  }
+}
+
+#gei .countryDomainDataPanel div.data ul.years {
+  list-style-type: none;
+  margin: 0;
+}
+
+#gei .countryDomainDataPanel div.data ul.years li {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#gei .countryDomainDataPanel div.data ul.years li a {
+  text-align: center;
+  display: block;
+  line-height: 3em;
+  border-right: 0.3em solid transparent;
+}
+@media only screen and (max-width: 641px) {
+
+  #gei .countryDomainDataPanel div.data ul.years {
+    width: 100%;
+    display: table;
+  }
+
+  #gei .countryDomainDataPanel div.data ul.years li {
+    margin: 0;
+    display: table-cell;
+  }
+
+  #gei .countryDomainDataPanel div.data ul.years li a {
+    border-right: 0;
+    border-bottom: 0.3em solid transparent;
+  }
+}
+@media only screen and (max-width: 768px) {
+
+  #gei .countryDomainDataPanel div.data text {
+    font-size: 13px;
+  }
+}
+@media only screen and (max-width: 641px) {
+
+  #gei .countryDomainDataPanel div.data text {
+    font-size: 8px;
+  }
+}
+@media only screen and (max-width: 480px) {
+
+  #gei .countryDomainDataPanel div.data text {
+    font-size: 10px;
+  }
+}
+
+#gei .countryDomainDataPanel.domain_work.expanded header h4 a {
+  background: #4285F3;
+}
+
+#gei .countryDomainDataPanel.domain_work.collapsed header h4 a {
+  border-right: 0.3em solid #4285F3;
+}
+
+#gei .countryDomainDataPanel.domain_work div.data ul.years li.selected a {
+  color: #4285F3;
+  border-color: #4285F3;
+}
+
+#gei .countryDomainDataPanel.domain_money.expanded header h4 a {
+  background: #E39206;
+}
+
+#gei .countryDomainDataPanel.domain_money.collapsed header h4 a {
+  border-right: 0.3em solid #E39206;
+}
+
+#gei .countryDomainDataPanel.domain_money div.data ul.years li.selected a {
+  color: #E39206;
+  border-color: #E39206;
+}
+
+#gei .countryDomainDataPanel.domain_knowledge.expanded header h4 a {
+  background: #7eaa00;
+}
+
+#gei .countryDomainDataPanel.domain_knowledge.collapsed header h4 a {
+  border-right: 0.3em solid #7eaa00;
+}
+
+#gei .countryDomainDataPanel.domain_knowledge div.data ul.years li.selected a {
+  color: #7eaa00;
+  border-color: #7eaa00;
+}
+
+#gei .countryDomainDataPanel.domain_time.expanded header h4 a {
+  background: #F0592A;
+}
+
+#gei .countryDomainDataPanel.domain_time.collapsed header h4 a {
+  border-right: 0.3em solid #F0592A;
+}
+
+#gei .countryDomainDataPanel.domain_time div.data ul.years li.selected a {
+  color: #F0592A;
+  border-color: #F0592A;
+}
+
+#gei .countryDomainDataPanel.domain_power.expanded header h4 a {
+  background: #aa0029;
+}
+
+#gei .countryDomainDataPanel.domain_power.collapsed header h4 a {
+  border-right: 0.3em solid #aa0029;
+}
+
+#gei .countryDomainDataPanel.domain_power div.data ul.years li.selected a {
+  color: #aa0029;
+  border-color: #aa0029;
+}
+
+#gei .countryDomainDataPanel.domain_health.expanded header h4 a {
+  background: #AA007E;
+}
+
+#gei .countryDomainDataPanel.domain_health.collapsed header h4 a {
+  border-right: 0.3em solid #AA007E;
+}
+
+#gei .countryDomainDataPanel.domain_health div.data ul.years li.selected a {
+  color: #AA007E;
+  border-color: #AA007E;
+}
+
+#gei .countryDomainDataPanel.domain_intersecting-inequalities.expanded header h4 a {
+  background: #95634D;
+}
+
+#gei .countryDomainDataPanel.domain_intersecting-inequalities.collapsed header h4 a {
+  border-right: 0.3em solid #95634D;
+}
+
+#gei .countryDomainDataPanel.domain_intersecting-inequalities div.data ul.years li.selected a {
+  color: #95634D;
+  border-color: #95634D;
+}
+
+#gei .countryDomainDataPanel.domain_violence.expanded header h4 a {
+  background: #95634D;
+}
+
+#gei .countryDomainDataPanel.domain_violence.collapsed header h4 a {
+  border-right: 0.3em solid #95634D;
+}
+
+#gei .countryDomainDataPanel.domain_violence div.data ul.years li.selected a {
+  color: #95634D;
+  border-color: #95634D;
+}
+
+#gei .countryDomainDataPanel.expanded header h4.diff_more a:after, #gei .countryDomainDataPanel.expanded header h4.diff_less a:after, #gei .countryDomainDataPanel.expanded header h4.diff_same a:after, #gei .countryDomainDataPanel.expanded header h4._not_available a:after {
+  color: #fff !important;
+}
+
+/* ****************************** countries comparison page customizations ****************************** */
+
+#gei.countries-comparison header.view {
+  height: 200px;
+}
+
+#gei.countries-comparison header.view .controls {
+  clear: both;
+}
+
+#gei.countries-comparison header.view .controls .columns:nth-child(1) {
+  padding-right: 7px !important;
+}
+
+#gei.countries-comparison header.view .controls .columns:nth-child(2) {
+  padding-left: 7px !important;
+}
+
+#gei.countries-comparison .main-wrapper {
+  padding: 15px;
+  background: #fff;
+  margin-top: 20px;
+}
+
+#gei.countries-comparison div.navigation ul.years {
+  list-style-type: none;
+  margin: 0;
+}
+
+#gei.countries-comparison div.navigation ul.years li {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#gei.countries-comparison div.navigation ul.years li a {
+  text-align: center;
+  display: block;
+  line-height: 4em;
+  border-right: 0.3em solid transparent;
+  color: #aaa;
+}
+
+#gei.countries-comparison div.navigation ul.years li.selected a {
+  color: #763A82;
+  border-color: #763A82;
+}
+
+#gei.countries-comparison div.data {
+  border-left: 1px solid #bbbbbb;
+  margin-top: -15px;
+  padding-top: 15px;
+  position: relative;
+}
+@media screen and (max-width: 641px) {
+
+  #gei.countries-comparison .main-wrapper {
+    padding: 0;
+  }
+
+  #gei.countries-comparison div.navigation ul.years {
+    display: table;
+    width: 100%;
+  }
+
+  #gei.countries-comparison div.navigation ul.years li {
+    margin: 0;
+    display: table-cell;
+  }
+
+  #gei.countries-comparison div.navigation ul.years li a {
+    border-right: 0;
+    border-bottom: 0.3em solid transparent;
+  }
+}
+
+/* ****************************** countriesComparisonPanel ****************************** */
+
+#gei div.countriesComparisonPanel {
+  position: relative;
+  margin: 2em 1em 0 1em;
+}
+
+#gei div.countriesComparisonPanel:first-child {
+  margin-top: 1em;
+}
+
+#gei div.countriesComparisonPanel header h4 a {
+  display: block;
+  font-size: 24px;
+  padding: 10px 0 8px 0;
+}
+
+#gei div.countriesComparisonPanel.collapsed > header h4 a:before, #gei div.countriesComparisonPanel.expanded > header h4 a:before {
+  padding: 14px;
+  font-family: "eige-font";
+  color: #fff;
+  font-weight: normal;
+  background: #333;
+  margin-right: 1em;
+}
+
+#gei div.countriesComparisonPanel.collapsed > header h4 a:before {
+  content: "\e60f";
+}
+
+#gei div.countriesComparisonPanel.expanded > header h4 a:before {
+  content: "\e638";
+}
+
+#gei div.countriesComparisonPanel div.graph svg text {
+  font-size: 20px;
+}
+@media screen and (max-width: 641px) {
+
+  #gei div.countriesComparisonPanel div.graph svg text {
+    font-size: 30px;
+  }
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.axisX text {
+  font-size: 12px;
+  fill: #999999;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei div.countriesComparisonPanel div.graph svg g.axisX text {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 641px) {
+
+  #gei div.countriesComparisonPanel div.graph svg g.axisX text {
+    font-size: 30px;
+  }
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.axisX text.min {
+  text-anchor: middle;
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.axisX text.max {
+  text-anchor: end;
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.axisY line {
+  stroke: #cccccc;
+  stroke-width: 4px;
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.country text {
+  dominant-baseline: central;
+  font-size: 12px;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei div.countriesComparisonPanel div.graph svg g.country text {
+    font-size: 17px;
+  }
+}
+@media screen and (max-width: 641px) {
+
+  #gei div.countriesComparisonPanel div.graph svg g.country text {
+    font-size: 25px;
+  }
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.country text.value.external {
+  fill: #555555;
+  text-anchor: start;
+}
+
+#gei div.countriesComparisonPanel div.graph svg g.country text.value.internal {
+  fill: #ffffff;
+  text-anchor: end;
+}
+
+#gei div.countriesComparisonPanel div.graph div.countriesComparisonPanel header h4 a {
+  font-size: 20px;
+}
+
+/* ****************************** mapGraph ****************************** */
+
+#gei div.mapGraph {
+  position: relative;
+}
+
+#gei div.mapGraph svg .country {
+  fill: #ddd;
+  stroke-width: 0.5px;
+}
+
+#gei div.mapGraph svg .country:not(.country-CY) {
+  stroke: #fff;
+}
+
+#gei div.mapGraph svg .country.withData {
+  transition: all .1s linear;
+}
+
+#gei div.mapGraph svg .country.withData:hover {
+  opacity: 0.7;
+  transition: all .0s linear;
+  stroke-width: 0.5px;
+}
+
+#gei div.mapGraph svg .country.selected {
+  fill: #333333 !important;
+}
+
+#gei div.mapGraph svg .country text {
+  fill: #fff;
+  stroke: none;
+  font-size: 12px;
+  text-anchor: middle;
+}
+
+#gei div.mapGraph svg .country.country-CY text,
+#gei div.mapGraph svg .country.country-MT text {
+  fill: #000;
+}
+
+#gei div.mapGraph svg rect.axis {
+  stroke: rgba(250, 250, 250, 0.5);
+  stroke-width: 0.5px;
+}
+
+#gei div.mapGraph svg text.axis {
+  font-size: 14px;
+}
+
+/* ****************************** map page customizations ****************************** */
+@media screen and (max-width: 641px) {
+
+  #gei.map section.graph {
+    padding: 5% 0;
+    width: 100%;
+  }
+
+
+  #gei.map section.data {
+    display: none;
+  }
+}
+
+#gei.map header.view {
+  height: 180px;
+}
+
+#gei.map header.view .controls {
+  clear: both;
+}
+
+#gei.map header.view .controls .columns:nth-child(1) {
+  padding-right: 7px !important;
+}
+
+#gei.map header.view .controls .columns:nth-child(2) {
+  padding-left: 7px !important;
+}
+
+/* ****************************** spinner from http://www.css-spinners.com/ ****************************** */
+@-moz-keyframes spinner {
+  0% {
+    -moz-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinner {
+  0% {
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+/* :not(:required) hides this rule from IE9 and below */
+
+.spinner:not(:required) {
+  -webkit-animation: spinner 1500ms infinite linear;
+  -moz-animation: spinner 1500ms infinite linear;
+  -ms-animation: spinner 1500ms infinite linear;
+  animation: spinner 1500ms infinite linear;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -ms-border-radius: 0.5em;
+  border-radius: 0.5em;
+  -webkit-box-shadow: rgba(0, 0, 51, 0.3) 1.5em 0 0 0, rgba(0, 0, 51, 0.3) 1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) 0 1.5em 0 0, rgba(0, 0, 51, 0.3) -1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) -1.5em 0 0 0, rgba(0, 0, 51, 0.3) -1.1em -1.1em 0 0, rgba(0, 0, 51, 0.3) 0 -1.5em 0 0, rgba(0, 0, 51, 0.3) 1.1em -1.1em 0 0;
+  -moz-box-shadow: rgba(0, 0, 51, 0.3) 1.5em 0 0 0, rgba(0, 0, 51, 0.3) 1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) 0 1.5em 0 0, rgba(0, 0, 51, 0.3) -1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) -1.5em 0 0 0, rgba(0, 0, 51, 0.3) -1.1em -1.1em 0 0, rgba(0, 0, 51, 0.3) 0 -1.5em 0 0, rgba(0, 0, 51, 0.3) 1.1em -1.1em 0 0;
+  -ms-box-shadow: rgba(0, 0, 51, 0.3) 1.5em 0 0 0, rgba(0, 0, 51, 0.3) 1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) 0 1.5em 0 0, rgba(0, 0, 51, 0.3) -1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) -1.5em 0 0 0, rgba(0, 0, 51, 0.3) -1.1em -1.1em 0 0, rgba(0, 0, 51, 0.3) 0 -1.5em 0 0, rgba(0, 0, 51, 0.3) 1.1em -1.1em 0 0;
+  box-shadow: rgba(0, 0, 51, 0.3) 1.5em 0 0 0, rgba(0, 0, 51, 0.3) 1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) 0 1.5em 0 0, rgba(0, 0, 51, 0.3) -1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) -1.5em 0 0 0, rgba(0, 0, 51, 0.3) -1.1em -1.1em 0 0, rgba(0, 0, 51, 0.3) 0 -1.5em 0 0, rgba(0, 0, 51, 0.3) 1.1em -1.1em 0 0;
+  display: block !important;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  text-indent: 100%;
+  margin: 1.5em 50%;
+  font-size: 12px;
+  margin-top: 3em;
+}
+
+/* ******************************  ****************************** */
+
+#gei .main-wrapper {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+
+#gei section.graph {
+  width: 70%;
+  float: left;
+  padding: 2% 2%;
+  clear: both;
+}
+
+
+#gei section.data {
+  position: relative;
+  float: right;
+  width: 30%;
+  background: #fff;
+  padding: 30px;
+  margin-top: 30px;
+}
+
+#gei section.data h3 {
+  border-bottom: 1px solid #ddd;
+  display: block;
+  margin-left: -31px;
+  margin-top: -10px;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-top: 5px;
+  width: calc(100% + 60px);
+}
+
+#gei section.data h3 span {
+  float: right;
+  font-size: 14px;
+  margin-right: 35px;
+  padding-top: 10px;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei section.data h3 span {
+    padding-top: 0px;
+  }
+}
+
+#gei section.data h3 a {
+  display: block;
+  position: relative;
+  border: 0;
+  margin: 0;
+}
+
+#gei section.data h3 a:hover,
+#gei section.data h3 a:focus {
+  color: #823F8D;
+}
+
+#gei section.data h3 a span:after {
+  font-family: "eige-font";
+  content: "\e610";
+  color: #333;
+  font-size: 1.5625rem;
+  right: -30px;
+  top: 0px;
+  position: absolute;
+  color: #fff;
+  background: #333;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei section.data h3 a span:after {
+    top: -10px;
+  }
+}
+@media screen and (max-width: 1024px) {
+
+  #gei section.data h3 {
+    font-size: 14px;
+  }
+}
+
+#gei section.data h3 a span {
+  margin-left: 0;
+}
+
+#gei section.data h3 a span:after {
+  right: 0px;
+}
+
+
+#gei.domain section.data {
+  padding-bottom: 0;
+}
+
+
+#gei section.extra {
+  clear: both;
+  display: block;
+  background: #fff;
+  color: #333;
+}
+
+#gei section.extra .row {
+  max-width: 80rem;
+  margin: 0 auto !important;
+  clear: both;
+  display: block !important;
+  padding: 60px 30px;
+}
+
+#gei section.extra .columns {
+  padding: 15px;
+}
+
+#gei section.extra h4 {
+  font-size: 34px;
+  color: #333;
+  font-weight: 300;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei section.extra h4 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+
+#gei section.extra p {
+  color: #333;
+}
+
+
+#gei.index section.extra img {
+  max-width: 500px;
+  width: 100%;
+  opacity: 1;
+  transition: transform 0.35s ease 0s;
+  opacity: 0.8;
+}
+
+#gei.index section.extra img:hover {
+  opacity: 1;
+}
+
+#gei.index section.extra .button a {
+  color: #fff;
+}
+
+#gei.index section.extra .file-download {
+  line-height: 1;
+  margin: 0 !important;
+  overflow: hidden;
+  padding: 30px 20px 30px 60px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: block;
+  float: left;
+  color: #fff;
+  width: auto !important;
+  margin-right: 15px !important;
+  margin-right: 0;
+  border: 0;
+}
+
+#gei.index section.extra a {
+  color: #333;
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 1px;
+  margin-right: 0;
+  border: 0;
+}
+
+#gei.index section.extra a:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#gei.index section.extra a.read-more {
+  font-size: 14px !important;
+  font-style: italic;
+  border: none;
+  box-shadow: none;
+  padding: 20px 40px 20px 35px;
+}
+
+#gei.index section.extra a.read-more:after {
+  font-family: "eige-font";
+  content: "\e610";
+  color: #333;
+  font-size: 1.5625rem;
+  position: absolute;
+  right: 12px;
+  top: 17px;
+  color: #fff;
+}
+
+#gei.index section.extra a div.file-meta {
+  color: #fff;
+  margin-top: 10px;
+}
+
+#gei.index section.extra .downloads {
+  clear: both;
+}
+
+/* ******************************  index page customizations ****************************** */
+@media not screen and (max-width: 680px) {
+
+  #gei.index header .yearCountryNavigator {
+    display: none;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  #gei.index header .yearNavigatorGraph,
+  #gei.index section.graph {
+    display: none;
+  }
+
+  #gei.index section.data {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  #gei.index section.data div.horizontalBarGraph {
+    display: none;
+  }
+
+  #gei.index section.data div.smallCyclicGraph {
+    width: 33%;
+  }
+
+  #gei.index section.extra a.file-download {
+    font-size: 17px;
+  }
+}
+
+#gei.index #gei-view {
+  margin-bottom: -50px !important;
+}
+
+
+#gei.index section.extra {
+  background: #823F8D;
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #823f8d), color-stop(100%, #4c2f61));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* IE10+ */
+  background: linear-gradient(to right, #823f8d 0%, #4c2f61 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#823f8d', endColorstr='#4c2f61',GradientType=1 );
+  /* IE6-9 */
+  color: #fff;
+}
+
+#gei.index section.extra h4 {
+  color: #fff;
+}
+
+#gei.index section.extra p {
+  color: #fff;
+  font-weight: 27px;
+  font-weight: 300;
+}
+
+#gei.index section.extra a {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 1px;
+}
+
+#gei.index section.extra a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+#gei section.extra .large-8 h5 {
+  font-size: 25px;
+  font-weight: 300;
+}
+
+
+#gei-view .extra ul li {
+  list-style: outside none none;
+  margin-left: 0px;
+  padding-left: 0px;
+  position: relative;
+}
+
+#gei-view .extra ul li:before {
+  background: #5725ab none repeat scroll 0 0;
+  content: "";
+  display: block;
+  height: 5px;
+  left: -18px;
+  list-style: outside none none;
+  position: absolute;
+  top: 12px;
+  width: 12px;
+}
+
+
+#gei.country .tab_context_data table {
+  margin-top: 30px;
+}
+
+#gei.country .tab_context_data table tr td {
+  border: none;
+}
+
+#gei.country .tab_context_data table tr td p {
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+/* ****************************** about page****************************** */
+
+#gei.about .main-wrapper, #gei.country .main-wrapper {
+  max-width: none;
+}
+
+
+#gei.about #content-wrapper, #gei.country #content-wrapper {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+
+#gei.about #content-wrapper {
+  padding: 30px;
+}
+@media screen and (max-width: 680px) {
+
+  #gei.about #content-wrapper {
+    padding: 15px;
+  }
+}
+
+#gei.about #content-wrapper p, #gei.about #content-wrapper li {
+  font-size: 18px;
+  letter-spacing: 0.3px;
+  line-height: 1.5;
+}
+
+
+#gei.about header.view {
+  background: #823F8D;
+  /* Old browsers */
+  background: -moz-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #823f8d), color-stop(100%, #4c2f61));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, #823f8d 0%, #4c2f61 100%);
+  /* IE10+ */
+  background: linear-gradient(to right, #823f8d 0%, #4c2f61 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#823f8d', endColorstr='#4c2f61',GradientType=1 );
+  /* IE6-9 */
+  color: #fff;
+  display: block;
+  height: 500px;
+  width: 100%;
+  overflow: hidden !important;
+  position: relative;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei.about header.view {
+    height: 285px;
+  }
+}
+
+#gei.about header.view .wrapper {
+  position: relative;
+}
+
+#gei.about header.view h3 {
+  clear: both;
+}
+
+#gei.about header.view h4 {
+  width: 60%;
+  color: #fff;
+  float: left;
+  display: block;
+  clear: both;
+  font-weight: 300;
+  font-size: 25px;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+  margin-top: 0;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei.about header.view h4 {
+    font-size: 17px;
+    width: 65%;
+  }
+}
+@media screen and (max-width: 580px) {
+
+  #gei.about header.view h4 {
+    font-size: 14px;
+    width: 65%;
+  }
+}
+
+#gei.about header.view img {
+  position: absolute;
+  right: 0;
+  min-width: 1820px;
+}
+@media screen and (max-width: 1024px) {
+
+  #gei.about header.view img {
+    min-width: 1024px;
+  }
+}
+@media screen and (max-width: 680px) {
+
+  #gei.about header.view img {
+    right: -100px;
+  }
+}
+
+
+#gei-sections {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+#gei-sections ul.tabs.button-group {
+  color: #74777b;
+  left: 0;
+  line-height: 1;
+  list-style: outside none none;
+  margin-bottom: 0;
+  margin-left: -60px;
+  margin-right: 0;
+  margin-top: 0 !important;
+  max-width: none;
+  padding: 0 0 0 60px;
+  transition: color 0.3s ease 0s, transform 0.3s ease 0s;
+  padding-left: 0px;
+  margin: 0 auto;
+  max-width: 80rem;
+}
+
+#gei-sections ul.tabs.button-group li {
+  margin: 0;
+}
+
+#gei-sections ul.tabs.button-group li.selected a.button.small.secondary {
+  box-shadow: 0 -5px rgba(0, 0, 0, 0.2) inset;
+}
+
+#gei-sections ul.tabs.button-group li a.button.small.secondary {
+  background: transparent;
+  color: #333 !important;
+  display: block;
+  font-size: 15px;
+  font-weight: 300;
+  margin-bottom: 0;
+  margin-right: 0;
+  padding: 20px 30px;
+  border: none;
+}
+
+#gei-sections ul.tabs.button-group li a.button.small.secondary:last-child:before {
+  background: transparent;
+  bottom: 0;
+  content: "";
+  height: 5px;
+  left: 0;
+  position: absolute;
+  transition: transform 0.3s ease 0s;
+  width: 100%;
+}
+
+#gei-sections ul.tabs.button-group li a.button.small.secondary:hover {
+  background: none repeat scroll 0 0 #fafafa !important;
+  box-shadow: 0 -5px rgba(0, 0, 0, 0.2) inset;
+}
+
+/* *****stats***** */
+
+.stats-list {
+  list-style: outside none none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.stats-list li {
+  float: left;
+  width: 50%;
+  margin-bottom: 20px;
+  padding: 0 7%;
+}
+
+.stats-list li .stat-value {
+  color: #000;
+  font-style: normal;
+  font-weight: 100;
+  line-height: 1;
+  font-size: 64px;
+}
+
+.stats-list li .stat-value:after {
+  border-bottom: 1px solid #555;
+  content: " ";
+  display: block;
+  height: 1px;
+  margin: 18px auto;
+  width: 30px;
+}
+
+.stats-list li .stat-label {
+  color: #3F3F3F;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.stats-list li .stat-label span {
+  text-transform: uppercase;
+  color: #939393;
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 12px;
+  display: block;
+  clear: both;
+  line-height: 1.2em;
+  min-height: 60px;
+}
+
+
+.content-wrapper p {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  line-height: 1.7;
+}
+
+
+div.row.boxes-area {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 30px;
+}
+
+div.row.boxes-area #about-background {
+  float: left;
+  left: 0;
+  background: #3C3F44;
+  color: #fff;
+  padding: 30px;
+  width: 48%;
+}
+@media screen and (max-width: 1024px) {
+
+  div.row.boxes-area #about-background {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 548px) {
+
+  div.row.boxes-area #about-background {
+    padding: 15px !important;
+  }
+}
+
+div.row.boxes-area #about-background p, div.row.boxes-area #about-background li {
+  color: #fff;
+}
+
+div.row.boxes-area #about-background h3 {
+  color: #fff;
+  background: #333;
+  margin-left: -55px;
+  margin-top: -50px;
+  padding: 20px;
+  width: 100%;
+}
+@media screen and (max-width: 1024px) {
+
+  div.row.boxes-area #about-background h3 {
+    font-size: 17px;
+  }
+}
+
+div.row.boxes-area #about-background a.more {
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 14px;
+}
+
+div.row.boxes-area #about-background a.more:hover, div.row.boxes-area #about-background a.more:focus {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+div.row.boxes-area .box-wrapper {
+  position: relative;
+  float: right;
+  right: 0;
+  margin-top: 10%;
+  color: #fff;
+  width: 48%;
+}
+@media screen and (max-width: 1024px) {
+
+  div.row.boxes-area .box-wrapper {
+    width: 100%;
+  }
+}
+
+div.row.boxes-area .box-wrapper img {
+  z-index: 0;
+}
+
+div.row.boxes-area #why-a-gender-equality-index {
+  background: #7400A5;
+  position: relative;
+  padding: 30px;
+  bottom: 0;
+  top: 30%;
+  z-index: 1;
+  min-height: 300px;
+}
+
+div.row.boxes-area #why-a-gender-equality-index p, div.row.boxes-area #why-a-gender-equality-index li {
+  color: #E5D1F9;
+  line-height: 1.5em;
+  margin-top: 10px;
+}
+
+div.row.boxes-area #why-a-gender-equality-index h3 {
+  color: #fff;
+  background: #9900CC;
+  margin-left: -55px;
+  margin-top: -50px;
+  padding: 20px;
+  z-index: 2;
+  display: block;
+}
+@media screen and (max-width: 1024px) {
+
+  div.row.boxes-area #why-a-gender-equality-index h3 {
+    font-size: 17px;
+  }
+}
+
+div.row.boxes-area #why-a-gender-equality-index a.more {
+  text-transform: uppercase;
+  color: #E5D1F9;
+  font-size: 14px;
+}
+
+div.row.boxes-area #why-a-gender-equality-index a.more:hover, div.row.boxes-area #why-a-gender-equality-index a.more:focus {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+
+.domains-area {
+  min-height: 600px;
+  background: #EDEBED;
+  display: block;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.domains-area .image-area {
+  background: #EDEBED;
+}
+
+.domains-area .image-area img {
+  display: table;
+  margin: 60px auto;
+}
+
+.domains-area .columns.content-area {
+  background: #fff;
+  padding: 30px !important;
+  display: block;
+  height: 100%;
+  min-height: 600px;
+}
+@media screen and (max-width: 548px) {
+
+  .domains-area .columns.content-area {
+    padding: 15px !important;
+  }
+}
+@media screen and (max-width: 400px) {
+
+  .domains-area .columns.content-area {
+    padding: 15px !important;
+  }
+}
+
+.domains-area .text {
+  padding: 50px;
+  display: block;
+}
+
+.domains-area a.more {
+  text-transform: uppercase;
+  color: #333;
+  font-size: 14px;
+}
+
+.domains-area a.more:hover, .domains-area a.more:focus {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* ****************************** policies page****************************** */
+
+#gei.policies .view h3 {
+  clear: both;
+  float: none !important;
+  padding-top: 20px;
+  font-size: 25px;
+}
+
+#gei.policies header.view {
+  height: 260px;
+}
+@media screen and (max-width: 414px) {
+
+  #gei.policies header.view {
+    height: 360px !important;
+  }
+}
+
+#gei.policies #gei-view {
+  margin-bottom: 0;
+}
+
+#gei.policies header form {
+  display: block;
+  clear: both;
+  float: left;
+  margin: 15px 0;
+  width: 100%;
+}
+
+#gei.policies input.form-text {
+  height: 70px !important;
+  background: #7b348c;
+  border: 1px solid #7b348c;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 0px inset !important;
+  font-size: 17px;
+  font-weight: 300;
+  padding-left: 3%;
+  padding-right: 3%;
+  color: #333;
+  display: block;
+}
+@media screen and (max-width: 667px) {
+
+  #gei.policies input.form-text {
+    height: rem(45) !important;
+    font-size: 13px;
+  }
+}
+
+#gei.policies input.form-text:focus {
+  background: #fff !important;
+  color: #333 !important;
+}
+
+#gei.policies .views-widget {
+  margin-top: 20px;
+}
+
+
+.view-content .view-grouping {
+  width: 40%;
+  float: left;
+}
+
+.view-content .view-grouping h3 {
+  display: none;
+}
+@media screen and (max-width: 414px) {
+
+  .view-content .view-grouping {
+    margin-top: 40px;
+  }
+}
+
+
+#gei .views-row.expandable {
+  cursor: pointer;
+}
+
+
+#gei.policies header.view form .wrapper {
+  display: block;
+  float: right;
+  padding-top: 0;
+  margin: -15px 0 0 0;
+  padding: 0;
+  width: 60%;
+  margin-right: -15px;
+}
+@media screen and (max-width: 1180px) {
+
+  #gei.policies header.view form .wrapper {
+    width: 42% !important;
+    margin-right: -10px;
+  }
+}
+@media screen and (max-width: 768px) {
+
+  #gei.policies header.view form .wrapper {
+    width: 50% !important;
+    margin-top: -155px;
+    margin-right: -10px;
+  }
+}
+@media screen and (max-width: 414px) {
+
+  #gei.policies header.view form .wrapper {
+    width: 100% !important;
+    margin-top: 0px;
+  }
+}
+
+#gei.policies header.view form .wrapper .views-exposed-widget {
+  margin: 0;
+  padding: 0;
+  float: none;
+}
+
+#gei.policies header.view form .wrapper .views-exposed-widget > label {
+  display: none;
+}
+
+#gei.policies header.view form .wrapper .form-type-textfield {
+  width: 75%;
+  display: block;
+  float: left;
+  position: relative;
+}
+@media screen and (max-width: 768px) {
+
+  #gei.policies header.view form .wrapper .form-type-textfield {
+    width: 70%;
+  }
+}
+
+#gei.policies header.view form .wrapper .form-type-textfield:before {
+  content: "\e619";
+  font-family: "eige-font";
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  font-size: 27px;
+  color: #430054;
+}
+
+#gei.policies header.view form .wrapper .form-type-textfield input {
+  color: #fff;
+  padding-left: 35px;
+}
+
+#gei.policies header.view form .views-exposed-widget.views-submit-button button.form-submit {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 300;
+  height: 4.375rem !important;
+  letter-spacing: 0.3px;
+  padding-bottom: 1.5rem;
+  padding-top: 1.4375rem;
+  margin-top: 0;
+  width: 25%;
+  color: #fff;
+  background: #333;
+  box-shadow: none;
+}
+
+#gei.policies header.view form .views-exposed-widget.views-submit-button button.form-submit:hover, #gei.policies header.view form .views-exposed-widget.views-submit-button button.form-submit:focus {
+  background: #454545 !important;
+}
+@media screen and (max-width: 1180px) {
+
+  #gei.policies header.view form .views-exposed-widget.views-submit-button button.form-submit {
+    font-size: 0.9rem;
+    width: 25%;
+    padding-left: 6%;
+  }
+}
+@media screen and (max-width: 768px) {
+
+  #gei.policies header.view form .views-exposed-widget.views-submit-button button.form-submit {
+    width: 15% !important;
+    font-size: 0px;
+  }
+}
+@media screen and (max-width: 768px) {
+
+  #gei.policies header.view form .views-exposed-widget.views-submit-button button.form-submit:before {
+    content: "\e619";
+    color: #fff;
+    font-family: "eige-font";
+    font-size: 28px;
+  }
+}
+
+#gei.policies header.view form .views-exposed-widget > label {
+  display: block;
+  float: left;
+  height: 40px;
+  position: relative;
+  display: block;
+  font-size: 1.3rem;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 10px 45px 10px 10px !important;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  font-weight: 400;
+}
+
+#gei.policies header.view form .views-exposed-widget > label.collapsed:after {
+  position: absolute;
+  right: 0px;
+  top: 7px;
+  padding: 8px 10px;
+  display: block;
+  font-family: "eige-font";
+  content: "\e628";
+  color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  background: #333;
+}
+
+#gei.policies header.view form .views-exposed-widget > label.expanded:after {
+  position: absolute;
+  right: 0px;
+  top: 7px;
+  padding: 8px 10px;
+  display: block;
+  font-family: "eige-font";
+  content: "\e629";
+  color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  background: #333;
+}
+
+#gei.policies header.view form .views-exposed-widget > label.expanded {
+  background: #565656 !important;
+  color: #fff !important;
+  padding: 10px 45px 10px 10px !important;
+}
+
+#gei.policies header.view form .form-checkboxes {
+  margin-top: 20px;
+}
+
+#gei.policies header.view form .form-checkboxes label:hover, #gei.policies header.view form .form-checkboxes label:focus {
+  background: #430054 !important;
+}
+
+#gei.policies header.view form ::-webkit-input-placeholder {
+  color: #430054;
+}
+
+#gei.policies header.view form :-moz-placeholder {
+  /* Firefox 18- */
+  color: #430054;
+}
+
+#gei.policies header.view form ::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #430054;
+}
+
+#gei.policies header.view form :-ms-input-placeholder {
+  color: #430054;
+}
+
+
+#gei .view-policy-initiatives .view-grouping {
+  background: #fff !important;
+}
+
+
+#gei.policies .domain_work .view-grouping-header {
+  background: #4285F3;
+}
+
+#gei.policies .domain_work .view-grouping-header:after {
+  border-left-color: #4285F3;
+}
+
+#gei.policies .domain_money .view-grouping-header {
+  background: #E39206;
+}
+
+#gei.policies .domain_money .view-grouping-header:after {
+  border-left-color: #E39206;
+}
+
+#gei.policies .domain_knowledge .view-grouping-header {
+  background: #7eaa00;
+}
+
+#gei.policies .domain_knowledge .view-grouping-header:after {
+  border-left-color: #7eaa00;
+}
+
+#gei.policies .domain_time .view-grouping-header {
+  background: #F0592A;
+}
+
+#gei.policies .domain_time .view-grouping-header:after {
+  border-left-color: #F0592A;
+}
+
+#gei.policies .domain_power .view-grouping-header {
+  background: #aa0029;
+}
+
+#gei.policies .domain_power .view-grouping-header:after {
+  border-left-color: #aa0029;
+}
+
+#gei.policies .domain_health .view-grouping-header {
+  background: #AA007E;
+}
+
+#gei.policies .domain_health .view-grouping-header:after {
+  border-left-color: #AA007E;
+}
+
+#gei.policies .domain_intersecting-inequalities .view-grouping-header {
+  background: #95634D;
+}
+
+#gei.policies .domain_intersecting-inequalities .view-grouping-header:after {
+  border-left-color: #95634D;
+}
+
+#gei.policies .domain_violence .view-grouping-header {
+  background: #95634D;
+}
+
+#gei.policies .domain_violence .view-grouping-header:after {
+  border-left-color: #95634D;
+}
+
+
+.node-gender-equality-policy .group-content {
+  background: #fff;
+}
+
+
+#gei.policies .view-policy-initiatives-search .node-teaser .group-content:after, #gei.country .view-policy-initiatives-search .node-teaser .group-content:after {
+  content: "";
+  background: none;
+}
+
+
+.view-results-count {
+  display: block;
+  clear: both;
+}
+
+
+.form-type-bef-checkbox input[type=checkbox]:checked + label,
+.form-type-bef-checkbox input[type=radio]:checked + label {
+  border-bottom: none;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAX9JREFUeNpi+P//PwMNsS4QbwBiLnQ5WlqqAsRP/0PARiBmoYfFkkB8+z8qWALEjLS0mB+IL/3HDibSymJQXB7/jx/UgNSCvU4lwAbEG4DYkwi1WUxUspQZiOcRaSkIWOAKMk0Sg3jaf+IBOIVjMyQWiH8DsR+RljaTYOkBWJ5GNwRk2R+ooh9A7ETA0jwSLL0ATfEYqRpkyVc0xR+A2AyHpdFA/I9IS0F5WhRbAWIEtQQbeAXE6lhC5jeRlj4GYgVsRaYK1HBCmmWgmuyxhAwu8BpaXjNgs/gYkYbcAGIXPCGDDkCOM8eVPkCEFhE+JhX8BGJnfAkTxgC57BOVLAXlihBC2RA9Vf+k0FJQKk8nJv+jCwQi5WNyQAWxpR02wRQS8icy6CKlmMUlUUGipfOQK3lKLAbhdhIKfWZS6258kiAfzCZg6V4gZiOn0UBIAcgn63BYehK50Ke2xQxQH+3FUoqJUtJMIlYhLxAfxVJu09xiWENuMxCrUaNhCBBgAOAVfjALa5TLAAAAAElFTkSuQmCC);
+  background-repeat: no-repeat;
+  background-position: 7% center;
+  background-size: 15px 13px;
+}
+
+.section-gender-statistics #gei .form-type-bef-checkbox input[type=checkbox]:checked + label, .section-gender-statistics #gei
+.form-type-bef-checkbox input[type=radio]:checked + label {
+  background-color: #7b348c;
+}
+
+/*# sourceMappingURL=gei-style.css.map */

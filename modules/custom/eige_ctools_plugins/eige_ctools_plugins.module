@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * This is a clone of a sandbox project (https://www.drupal.org/sandbox/balint.kleri/1442298) that has been also submitted 
+ * as a patch for ctools module (https://www.drupal.org/node/2208433, https://www.drupal.org/files/issues/2208433-6.patch) 
+ * Minor modifications have been applied to the respective code in order to fit EIGE's needs
+ * (fallback behavior on query context value has been removed and 'entity_from_query_string.inc' plugin was omitted as redundant
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function eige_ctools_plugins_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && !empty($plugin)) {
+    return "plugins/$plugin";
+  }
+}
+

@@ -1,0 +1,5 @@
+name = EIGE CKEditor
+description = Provides custom configurations for CKEditor for EIGE website back-end (EIGEDR-117).
+core = 7.x
+package = EIGE custom modules
+dependencies[] = ckeditor

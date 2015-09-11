@@ -1,0 +1,6 @@
+name = EIGE Simple HTML DOM Parser
+description = EIGE parser for extracting content from HTML DOM objects - simply integrates http://simplehtmldom.sourceforge.net with Drupal
+package = EIGE custom modules
+core = 7.x
+
+files[] = eige_simple_html_dom_parser.module

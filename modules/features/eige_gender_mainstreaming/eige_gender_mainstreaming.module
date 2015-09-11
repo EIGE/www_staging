@@ -1,0 +1,89 @@
+<?php
+/**
+ * @file
+ * Code for the Gender Mainstreaming feature.
+ */
+include_once 'eige_gender_mainstreaming.features.inc';
+
+
+function eige_gender_mainstreaming_preprocess_node(&$vars) {
+  $view = $vars['elements']['#view_mode'];
+  $node = $vars['node'];
+  if (($node->type == 'sectoral_area') && ($view == 'full')) {
+    _preprocess_timeline($vars);  
+    _preprocess_policy_cycle($vars);
+  }
+  //show country graphics in country teasers using appropriate css classes
+  if (($node->type == 'country_overview') && ($view == 'teaser')) {
+    // EIGEDR-488 crappy code to resolve bug
+    // TODO AKZ implement properly
+    $css_class = _title_to_css_class($vars['field_country'][0]['safe_value']);
+    $markup = '<div class="' . $css_class . '"></div>';
+    if (!isset($vars['content']['body'][0]['#markup'])) {
+      $markup = '<div class="body">' . $markup . '</div>';
+    }
+    $vars['content']['body'][0]['#markup'] = $markup;
+  } 
+}
+
+/**
+ * Implements hook_form_alter(&$form, &$form_state, $form_id).
+ */
+function eige_gender_mainstreaming_form_alter(&$form, &$form_state, $form_id) {
+  // filter Topic filters by given Topic Category
+  if ($form['#id'] == 'views-exposed-form-gender-mainstreaming-good-practices-panel-pane-gm-good-practices' 
+    || $form['#id'] == 'views-exposed-form-gender-mainstreaming-good-practices-page-1'
+    || $form['#id'] == 'views-exposed-form-gender-mainstreaming-methods-tools-page-1'
+    || $form['#id'] == 'views-exposed-form-gender-mainstreaming-resources-page-1') {
+    _retain_topic_category_filter_options($form, 'topic', 'Gender Mainstreaming');
+  }  
+  // EIGEDR-269 remove Policy / Legislation option from Types filter of GM Country Methods/Tools and Resources views
+  if ($form['#id'] == 'views-exposed-form-gender-mainstreaming-methods-tools-panel-pane-1'  
+    || $form['#id'] == 'views-exposed-form-gender-mainstreaming-resources-panel-pane-gm-resources') {
+    _remove_type_filter_options($form, 'type', 'Policy / Legislation');
+  }
+}
+
+function _remove_type_filter_options(&$form, $filter_name, $option_to_remove) {
+  if (isset($form[$filter_name])) {
+    $types = $form[$filter_name]['#options'];
+    foreach ($types as $t_id => $t_name) {
+      if ($t_name == $option_to_remove) {
+        unset($form[$filter_name]['#options'][$t_id]);
+      }
+    }
+  }
+}
+
+function eige_gender_mainstreaming_views_access_callbacks() {
+   return array(
+    'eige_gender_mainstreaming_environment_access' => t('Environment-based access (staging vs production)'),
+  );
+}
+
+/**
+ * Implements hook_views_access_callbacks defined by module https://www.drupal.org/project/views_access_callback
+ * See EIGEDR-489 for detailed documentation
+ */
+function eige_gender_mainstreaming_environment_access() {
+  $host = $_SERVER['HTTP_HOST'];
+  if (in_array($host, array('www-preprod.eige.europa.eu', 'eige.europa.eu', 'www.eige.europa.eu'))) {
+    return false;
+  }
+  return true;
+}
+
+// EIGEDR-583 redirect Country profile displays to the respective panel
+function eige_gender_mainstreaming_node_view($node, $view_mode, $langcode) {
+  if ($node->type == 'country_overview' && $view_mode == 'full') {
+    // In order to resolve the country (that participates in the redirect url) I could
+    // simply get the value from the node's respective field. But then, I would have to hardcode the 
+    // sanitization code myself (e.g. Czech Republic => czech-republic). This means that should pathauto settings
+    // change in the future (highly unlikely), the sanitization code will need the necessary update as well.
+    // I find less risky to retrieve the sanitized country element from the url, thus the following implementation
+    $path_elements = explode("/", drupal_get_path_alias()); // e.g. gender-mainstreaming/country-overview/bulgaria/gender-mainstreaming-approach-bulgaria
+    if (isset($path_elements[2]) && strlen($path_elements[2])) {
+      drupal_goto('gender-mainstreaming/countries/' . $path_elements[2], array(), 301);
+    }
+  }
+}

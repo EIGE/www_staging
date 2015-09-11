@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Resource pool feature.
+ */
+
+include_once 'eige_resource_pool.features.inc';

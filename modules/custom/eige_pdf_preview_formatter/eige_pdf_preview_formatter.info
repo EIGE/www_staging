@@ -1,0 +1,5 @@
+name = "EIGE PDF preview formatter"
+description = Provides PDF preview field formatter for field collection field 'field_downloads'.
+package=EIGE custom modules
+core = "7.x"
+dependencies[] = pdfpreview

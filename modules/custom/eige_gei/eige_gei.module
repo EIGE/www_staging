@@ -1,0 +1,364 @@
+<?php
+
+define("EIGE_GEI_PATH", "gender-statistics/gender-equality-index");
+
+global $eige_gei_countries;
+$eige_gei_countries = array(
+  'BE'=>'belgium',
+  'BG'=>'bulgaria',
+  'CZ'=>'czech-republic',
+  'DK'=>'denmark',
+  'DE'=>'germany',
+  'EE'=>'estonia',
+  'IE'=>'ireland',
+  'EL'=>'greece',
+  'ES'=>'spain',
+  'FR'=>'france',
+  'HR'=>'croatia',
+  'IT'=>'italy',
+  'CY'=>'cyprus',
+  'LV'=>'latvia',
+  'LT'=>'lithuania',
+  'LU'=>'luxembourg',
+  'HU'=>'hungary',
+  'MT'=>'malta',
+  'NL'=>'netherlands',
+  'AT'=>'austria',
+  'PL'=>'poland',
+  'PT'=>'portugal',
+  'RO'=>'romania',
+  'SI'=>'slovenia',
+  'SK'=>'slovakia',
+  'FI'=>'finland',
+  'SE'=>'sweden',
+  'UK'=>'united-kingdom'
+);
+$eige_gei_countries = array_flip($eige_gei_countries);
+
+function eige_gei_node_view($node, $view_mode, $langcode) {
+  global $eige_gei_countries;
+  if (!user_is_logged_in() && $view_mode=='full' && drupal_get_path_alias('node/' . $node->nid)==EIGE_GEI_PATH.'/about-content') {
+    drupal_goto(EIGE_GEI_PATH.'/about', array(), 301);
+  }
+  $country_regex = '#^' . preg_quote(EIGE_GEI_PATH) . '/country/([a-z\-]+)-content$#'; // # delimiter: http://pl.php.net/manual/en/regexp.reference.delimiters.php
+  if (!user_is_logged_in() && $view_mode=='full' && preg_match($country_regex, drupal_get_path_alias('node/' . $node->nid), $matches)) {
+    $target_backbone_country = $eige_gei_countries[$matches[1]];
+    if ($target_backbone_country) {
+      drupal_goto(EIGE_GEI_PATH.'/2012/country/' . $target_backbone_country, array(), 301); // 2012 hardcoded
+    }
+  }
+}
+
+function eige_gei_menu() {
+  $items[EIGE_GEI_PATH] = array(
+    'page callback' => '_eige_gei_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items[EIGE_GEI_PATH . '/json'] = array(
+    'access callback'   => true, // available to all
+    'page callback'     => '_eige_gei_json',
+    'delivery callback' => 'drupal_json_output' 
+  );
+  return $items;
+}
+
+function eige_gei_setup_client_side_cache($cacheSeconds) {
+  // chrome works ok with just this
+  header('Cache-Control: PUBLIC, max-age=' . $cacheSeconds . ', must-revalidate');
+  // dunno why this is needed
+  header('Expires: ' . gmdate("D, d M Y H:i:s T", time() + $cacheSeconds)); // const string RFC1123 = "D, d M Y H:i:s O" ;
+}
+
+// NGEI-18 - proper SEO page title
+function eige_gei_preprocess_html(&$vars) {
+  if (!_eige_gei_is_gei_page()) {
+    return;
+  }
+  $gei_page_meta = _eige_gei_get_page_meta();
+  $vars['head_title'] = $gei_page_meta['title'];
+}
+
+// NGEI-18 - proper SEO page meta
+function eige_gei_html_head_alter(&$head_elements) {
+  if (!_eige_gei_is_gei_page()) {
+    return;
+  }
+  $gei_page_meta = _eige_gei_get_page_meta();
+  foreach ($head_elements as $meta_key => $meta_config) {
+    if (strpos($meta_key, "metatag_og:image") === 0) {
+      $head_elements[$meta_key]['#value'] = url(drupal_get_path('module', 'eige_gei') . '/app/content/eige-domains.png', array("absolute" => TRUE));
+    }
+    if (strpos($meta_key, "metatag_og:title") === 0) {
+      $head_elements[$meta_key]['#value'] = $gei_page_meta['title'];
+    }
+    if (strpos($meta_key, "metatag_description") === 0) {
+      $head_elements[$meta_key]['#value'] = $gei_page_meta['description'];
+    }
+    if (strpos($meta_key, "metatag_og:description_0") === 0) {
+      $head_elements[$meta_key]['#value'] = $gei_page_meta['description'];
+    }
+  }
+}
+
+function _eige_gei_is_gei_page() {
+  return strpos(drupal_get_path_alias(), EIGE_GEI_PATH) === 0;
+}
+
+// NGEI-18 - title and description SEO meta for GEI pages depending on the routing case
+// see app/routers/Router.js for a more clear view of the routing patterns
+function _eige_gei_get_page_meta() {
+  global $conf;
+  $COUNTRY_REGEX_PATTERN = '#([A-Z]+)#';
+  $meta = array();
+  // default description
+  $meta['description'] = t("Welcome to EIGE's Gender Equality Index data visualisation system. "
+      . "The Gender Equality Index assesses the impact of gender equality policies in the EU.");
+  $title_elements = array();
+  $title_elements[] = $conf["site_name"];
+  $title_elements[] = t("Gender Equality Index");
+  
+  $routing_path = trim(str_replace('gender-statistics/gender-equality-index', '', drupal_get_path_alias()));
+  
+  if (strlen($routing_path)) {
+    // remove the leading slash character (if any)
+    if (strpos($routing_path, "/") === 0) {
+      $routing_path = substr($routing_path, 1);
+    }
+    if ($routing_path == "about") {
+      // gender-statistics/gender-equality-index/about
+      $title_elements[] = t("About");
+      $meta['description'] = t("The Gender Equality Index is an indicator that "
+          . "measures gender gaps in the domains of work, money, knowledge, time, power, health, violence and intersecting inequalities.");
+    } elseif ($routing_path == "policies") {
+      // gender-statistics/gender-equality-index/policies
+      $title_elements[] = t("Policies");
+      $meta['description'] = t("EU Member States policy initiatives for each Gender Equality Index domain.");
+    } elseif ($routing_path == "countries-comparison") {
+      // gender-statistics/gender-equality-index/countries-comparison
+      $title_elements[] = t("Countries Comparison");
+      $meta['description'] = t("EIGE's Gender Equality Index Member State comparative statistics tool.");
+    } else {
+      // since the routing path did not match any of the pages above, then it normally starts with a year value
+      $url_parts = explode("/", $routing_path);
+      $selected_year = array_shift($url_parts);
+      if (preg_match('#([1-2][0-9][0-9][0-9])#', $selected_year)) {
+        $title_elements[] = $selected_year;
+      }
+      if (count($url_parts)) {
+        $routing_element = array_shift($url_parts); 
+       
+        if (preg_match($COUNTRY_REGEX_PATTERN, $routing_element)) {
+          // gender-statistics/gender-equality-index/2012/BG
+          $country = _eige_gei_get_country_name($routing_element);
+          if (!empty($country)) {
+            $title_elements[] = $country;
+          }
+        } elseif ($routing_element == "country") {
+          // gender-statistics/gender-equality-index/2012/country/EL
+          $country_key = array_shift($url_parts); // normally, there should be a country key
+          if (!empty($country_key) && preg_match($COUNTRY_REGEX_PATTERN, $country_key)) {
+            $country = _eige_gei_get_country_name($country_key);
+            if (!empty($country)) {
+              $title_elements[] = $country;
+              $meta['description'] = t("EIGE's Gender Equality Index data and trends visualisation for") . " $country";
+            }
+          }
+        } elseif ($routing_element == "map") {
+          // gender-statistics/gender-equality-index/2012/map
+          // gender-statistics/gender-equality-index/2012/map/FI
+          $title_elements[] = t("Map");
+          $meta['description'] = t("EIGE's Gender Equality Index data map visualisation");
+          $map_params = implode("/", $url_parts);
+          if (preg_match("#([A-Z]+)\/domain\/([a-z0-9\-]+)#", $map_params, $matches)) {
+            $country = _eige_gei_get_country_name($matches[1]);
+            $domain = ucwords(str_replace("-", " ", $matches[2]));
+            if (!empty($country)) {
+              $title_elements[] = $country;
+              $meta['description'] .= " " . t("for domain") . " $domain " . t("in") . " $country";
+            }
+            $title_elements[] = $domain;
+          } elseif (preg_match("#domain\/([a-z0-9\-]+)#", $map_params, $matches)) {
+            $domain = ucwords(str_replace("-", " ", $matches[1]));
+            $title_elements[] = $domain;
+            $meta['description'] .= " " . t("for domain") . " $domain";
+          } elseif (preg_match($COUNTRY_REGEX_PATTERN, $map_params, $matches)) {
+            $country = _eige_gei_get_country_name($matches[1]);
+            if (!empty($country)) {
+              $title_elements[] = $country;
+              $meta['description'] .= " " . t("for") . " $country";
+            }
+          }
+        } elseif ($routing_element == "domain") {
+          // gender-statistics/gender-equality-index/2012/domain/work
+          // gender-statistics/gender-equality-index/2012/domain/power/IE
+          // gender-statistics/gender-equality-index/2012/domain/work/2
+          // gender-statistics/gender-equality-index/2012/domain/power/2/UK
+          $domain_key = array_shift($url_parts); // normally, there should be a domain key
+          if (!empty($domain_key) && preg_match('#([a-z\-]+)#', $domain_key)) {
+            $domain = ucwords(str_replace("-", " ", $domain_key));
+            $title_elements[] = $domain;
+            $meta['description'] = t("EIGE's Gender Equality Index data visualisation for domain") . " $domain";
+            if (count($url_parts)) {
+            // attempt to match a country selection, either directly in a domain or in a subdomain selection
+              $element = array_shift($url_parts);
+              if (!preg_match($COUNTRY_REGEX_PATTERN, $element) && count($url_parts)) {
+                $element = array_shift($url_parts);
+              }
+              if (preg_match($COUNTRY_REGEX_PATTERN, $element)) {
+                $country = _eige_gei_get_country_name($element);
+              }
+            }
+            if (!empty($country)) {
+              $title_elements[] = $country;
+              $meta['description'] .= " " . t("in") . " $country";
+            }
+          }
+        }
+        
+      } // else, case of GEI home page with year selected and default country (gender-statistics/gender-equality-index/2010)
+    }
+  } // else, case of GEI home page with default year and country (gender-statistics/gender-equality-index)
+  
+  $meta['title'] = implode(" | ", array_reverse($title_elements));
+  return $meta;
+}
+
+function _eige_gei_get_country_name($key) {
+  global $eige_gei_countries;
+  $keyed_countries = array_flip($eige_gei_countries);
+  return isset($keyed_countries[$key]) ? 
+    (ucwords(str_replace("-", " ", $keyed_countries[$key]))) : null;
+}
+
+function _eige_gei_json($command) {
+  $id = func_get_args();
+  array_shift($id);
+  $id = implode('/', $id);
+  eige_gei_setup_client_side_cache(10);
+  return _eige_gei_json_content($command, $id);
+}
+
+function _eige_gei_json_content($command, $id) {
+  if ($command=='domain') {
+    $term = array_values(taxonomy_get_term_by_name($id, 'domain'));
+    if (!isset($term[0])) return;
+    return $term[0]->description;
+  }
+  if ($command=='block') {
+    $block_tokens = explode('|', $id);
+    $view_name = $block_tokens[0];
+    $display_name = $block_tokens[1];
+    return views_embed_view($view_name, $display_name);
+  }
+  if ($command=='blocks') {
+    $ids = explode('/', $id);
+    $blocks = array();
+    foreach($ids as $id) {
+      $block_tokens = explode('|', $id);
+      $view_name = $block_tokens[0];
+      $display_name = $block_tokens[1];
+      $blocks[] = views_embed_view($view_name, $display_name);
+    }
+    return $blocks;
+  }
+  if ($command=='page') {
+    return menu_get_object('node', 1, drupal_lookup_path('source', $id));
+  }
+}
+
+function _eige_gei_page() {
+  _eige_gei_load_resources();
+  
+  ob_start();
+  include ("app/index.html.inc");
+  $markup = ob_get_contents();
+  ob_end_clean();
+  
+  $page['backbone_app'] = array(
+    '#type' => 'markup',
+    '#markup' => $markup,
+  );
+  return $page;
+}
+
+function _eige_gei_get_root_path() {
+  $request_uri = $_SERVER['REQUEST_URI'];
+  $root_app_path = '/' . EIGE_GEI_PATH;
+  return substr($request_uri, 0, strpos($request_uri, $root_app_path) + strlen($root_app_path));
+}
+
+function _eige_gei_i18n_file_exists($language) {
+  return file_exists(realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'app.i18n.' . $language . '.js');
+}
+
+// http://stackoverflow.com/a/834355/72478
+function _eige_gei_string_ends_with($haystack, $needle) {
+  $length = strlen($needle);
+  if ($length == 0) {
+    return true;
+  }
+  return (substr($haystack, -$length) === $needle);
+}
+
+function _eige_gei_find_files($path, $ext) {
+  $path = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $path;
+  return array_values(array_filter(scandir($path), function($item) use ($ext) {
+    return _eige_gei_string_ends_with($item, $ext);
+  }));
+}
+
+function _eige_gei_load_resources() {
+  drupal_add_css(drupal_get_path('module', 'eige_gei') . '/app/css/style.css');
+  drupal_add_css(drupal_get_path('module', 'eige_gei') . '/app/css/style.ie9.css', array('browsers' => array('IE' => 'IE 9', '!IE' => FALSE)));
+  drupal_add_css(drupal_get_path('module', 'eige_gei') . '/app/css/style.ie10.css');
+
+  global $language;
+  // store old jQuery and $ globals
+  drupal_add_js('if (typeof window.jQuery !== "undefined") window.oldJquery = window.jQuery;', array('type'=>'inline', 'scope'=>'footer'));
+  drupal_add_js('if (typeof window.$      !== "undefined") window.old$      = window.$;     ', array('type'=>'inline', 'scope'=>'footer'));
+
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/jquery-2.1.4.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/underscore-1.8.3.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/backbone-1.2.1.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/polyglot-0.4.2.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/backbone.localStorage-min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/export/rgbcolor.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/export/StackBlur.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/export/canvg.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/lib/export/html2canvas.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/app.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/app.utils.js', array('scope'=>'footer'));
+  foreach(_eige_gei_find_files('app' . DIRECTORY_SEPARATOR . 'data', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/data/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_gei_find_files('app' . DIRECTORY_SEPARATOR . 'routers', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/routers/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_gei_find_files('app' . DIRECTORY_SEPARATOR . 'models', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/models/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_gei_find_files('app' . DIRECTORY_SEPARATOR . 'controllers', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/controllers/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_gei_find_files('app' . DIRECTORY_SEPARATOR . 'collections', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/collections/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_gei_find_files('app' . DIRECTORY_SEPARATOR . 'views', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_gei') . '/app/views/' . $file, array('scope'=>'footer'));
+  }
+  drupal_add_js(drupal_get_path('module', 'eige_gei') . 
+    (
+      _eige_gei_i18n_file_exists($language->language)?
+      '/app/app.i18n.' . $language->language . '.js':
+      '/app/app.i18n.en.js'
+    ), 
+    array('scope'=>'footer', 'preprocess'=>FALSE));
+  drupal_add_js('app.run("' . _eige_gei_get_root_path() . '", "/' . drupal_get_path('module', 'eige_gei') . '", "#gei");', array('type'=>'inline', 'scope'=>'footer'));
+
+  // restore jQuery and $ globals
+  drupal_add_js('window.jQuery = window.oldJquery; delete window.oldJquery;', array('type'=>'inline', 'scope'=>'footer'));
+  drupal_add_js('window.$      = window.old$;      delete window.old$;     ', array('type'=>'inline', 'scope'=>'footer'));
+
+}
+

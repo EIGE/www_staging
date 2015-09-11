@@ -1,0 +1,215 @@
+<?php
+/**
+ * @file
+ * Code for the Search feature.
+ */
+include_once 'eige_search.features.inc';
+
+global $content_type_names_mapping;
+$content_type_names_mapping = array(
+  'administrative_data_source' => t('Administrative data source on GBV'),
+  'country_overview' => t('Gender Mainstreaming Country'),
+  'gender_equality_policy' => t('Policy - Gender Equality Index'),
+  'gender_story' => t('Narrative'),
+  'statistical_product' => t('Statistical Product on GBV'),
+  'tool_method_category' => t('Gender Mainstreaming Tool'),
+  'resource_pool_item' => t('Resource Pool'),
+  'advanced_page' => t('Web Presentation'),
+);
+
+function eige_search_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  $page = page_manager_get_current_page();
+  
+  // make sure we are on RDC search pages
+  if (!empty($page) && in_array($page["name"], array("page-eige_research", "page-eige_website", "page-eige_primo"))) {
+    
+    // make sure, the menu items to be altered refer to RDC pages
+    if (strpos($root_path, "rdc/search") !== FALSE && isset($data["tabs"][0]["output"])) {
+      
+      $query_string_context_data = _get_query_string_context_data($page);
+      $query_param_name = isset($query_string_context_data['query_param_name']) ? $query_string_context_data['query_param_name'] : "";
+      $query_param_value = isset($query_string_context_data['query_param_value']) ? $query_string_context_data['query_param_value'] : "";
+      
+      foreach ($data["tabs"][0]["output"] as $key => $value) {
+        
+        // menu tabs should retain the search terms in between switches
+        if (strlen($query_param_name) && strlen($query_param_value)) {
+          $data["tabs"][0]["output"][$key]["#link"]['localized_options'] = array('query' => array($query_param_name => $query_param_value));
+        }
+        
+        // menu tabs should present the total results counter from each search
+        $view_context_data = _get_view_context_results_count($page);
+        $total_results = 0;
+        foreach ($view_context_data as $context_keyword => $value) {
+          $total_results += $value;
+        }
+        
+        // hide tabs if total number of results is zero
+        if ($total_results == 0) {
+          $data["tabs"][0]['count'] = 0;
+          $data["tabs"][0]['output'] = array();
+          return;
+        }
+        
+        // I want to correlate the menu tabs that correspond to ctools pages, with the ctools embedded views
+        // As far as I can see, there is no out-of-the box way to do this, hence I created a naming correlation/convention myself:
+        // for a page named 'foo' (page-foo), I named the view context keyword as foo_context maintaining consistency 
+        // in every instance of the context across all pages. So now, I have:
+        // eige_research (page-eige_research): eige_research_context
+        // eige_website (page-eige_website): eige_website_context
+        $page_arguments = unserialize($data["tabs"][0]["output"][$key]["#link"]['page_arguments']);
+        $page_name = array_shift($page_arguments);
+        $context_keyword = $page_name . '_context';
+        if (isset($view_context_data[$context_keyword])) {
+          $view_results_counter = $view_context_data[$context_keyword];
+          $current_tab_title = $data["tabs"][0]["output"][$key]["#link"]['title'];
+          $data["tabs"][0]["output"][$key]["#link"]['title'] = $current_tab_title . ' (' . $view_results_counter . ')';
+        }
+      }
+    }
+  }
+}
+
+function eige_search_preprocess_page(&$vars) {
+  $page = page_manager_get_current_page();
+  if (!empty($page) && in_array($page["name"], array("page-eige_research", "page-eige_website", "page-eige_primo"))) {
+    $query_context_data = _get_query_string_context_data($page);
+    // change the page title, only if there are data within the query context
+    if (count($query_context_data)) {
+      $page_title = '';
+      $results_counter = 0;
+      $counts = _get_view_context_results_count($page);
+      foreach ($counts as $key => $value) {
+        $results_counter += $value;
+      }
+      if ($results_counter > 0) {
+        $page_title .= $results_counter;
+        $page_title .= t(' results were found for ');
+      } else {
+        $page_title .= t('There are no results for ');
+      }
+      $page_title .= '"<span class="searchword">';
+      $query_context_data = _get_query_string_context_data($page);
+      $page_title .= check_plain($query_context_data['query_param_value']);
+      $page_title .= '</span>';
+      $page_title .= '"';
+      $vars['title'] = $page_title;
+    }
+  } 
+}
+
+function eige_search_form_search_box_alter(&$form, &$form_state) {
+  $form['#method'] = 'get';
+  // hardcoded destination url and param name, but I see no other option
+  $form['#action'] = '/rdc/search';
+  $search_input = $form['search_block_form'];
+  $search_input['#title'] = t('Search for resources, documents and more..');
+  $form['t'] = $search_input;
+  
+  unset($form['search_block_form']);
+  unset($form["form_build_id"]);
+  unset($form["form_token"]);
+  unset($form["form_id"]);
+  
+  // AKZ: I can't get this to work http://drupal.stackexchange.com/questions/1042/how-to-overwrite-the-search-box
+  // so I am unsetting everything redundant above
+  /*
+  if (in_array('search_box_form_submit', $form['#submit'])) {
+    $key = array_search('search_box_form_submit', $form['#submit']);
+    unset($form['#submit'][$key]);
+  }
+  array_unshift($form['#submit'], 'eige_search_search_box_submit');
+  */
+}
+
+
+/**
+ * Helper function to retrieve data (query param name + value) from 
+ * a ctools page manager page object if a query_string context is defined/enabled
+ * for this page.
+ * 
+ * Parameters
+ * $page: a page manager page object e.g. page_manager_get_current_page()
+ * 
+ * Return
+ * an array containing the following keys: 'query_param_name' and 'query_param_value'
+ * 
+ * For more info on the query_string context plugin see module eige_ctools_plugins
+ * 
+ */
+function _get_query_string_context_data($page) {
+  $result = array();
+  // An alternative of getting the active contexts via page manager would be to use functions
+  // 'context_enabled_contexts' or 'context_active_contexts'. Unfortunately both return an empty array
+  // According to documentation https://www.drupal.org/node/1216762 this is caused because functions are invoked in 
+  // an early stage of the page loading, and contexts are not yet loaded. For what is worth, I tried to invoke them 
+  // in page.tpl.php - which is the latest stage in the process - (not that I would be using them there; I was just curious)
+  // and still got no results. Anyway, since I can retrieve them via page manager, everything is ok
+  $contexts_config = $page['handler']->conf['contexts'];
+  $contexts = $page['handler']->conf['display']->context;
+  
+  $query_param_name = "";
+  foreach ($contexts_config as $key => $context_config) {
+    if ($context_config["name"] == "query_string" && isset($context_config["key"])) {
+      $query_param_name = $context_config["key"];
+    }
+  }
+  $query_param_value = "";
+  foreach ($contexts as $key => $context) {
+    if ($context->type == "query_string" && !empty($context->data)) {
+      $query_param_value = $context->data;
+    }
+  }
+  if (strlen($query_param_name) && strlen($query_param_value)) {
+    $result['query_param_name'] = $query_param_name;
+    $result['query_param_value'] = $query_param_value;
+  }
+  return $result;
+}
+
+/**
+ * Helper function to retrieve results count information from 
+ * a ctools page manager page object for which at least one view context 
+ * is defined/enabled for this page.
+ * 
+ * Parameters
+ * $page: a page manager page object e.g. page_manager_get_current_page()
+ * 
+ * Return
+ * an array containing the results count for each view context found, keyed by the context keyword
+ * 
+ */
+function _get_view_context_results_count($page) {
+  // In order to be able to calculate the results counter for each search_api view when viewing 
+  // an RDC search page/tab, I was oblidged to actually include all search_api views as contexts 
+  // even though I only display the results from a specific one each time. And to make sure that other contexts/views
+  // are executed in order for me to actually get the results count, I was oblidged to include at least one element
+  // of each in the page content. Since I don't want to include actual content from other views and hide it via css, 
+  // I decided the safest choice was to include the View footer element and make sure it is empty for all search_api views.
+  // This way I managed in each search_api page/panel container to actually execute all search views, retrieve their counts
+  // and only display the results of one each time.
+  $result = array();
+  $contexts = $page['handler']->conf['display']->context;
+  foreach ($contexts as $context_name => $context) {
+    if ($context->type == "view" && !empty($context->output)) { // context concerns a view that has been executed
+      $view = $context->output['view'];
+      $result[$context->keyword] = $view->total_rows;
+    }
+  }
+  return $result;
+}
+
+// this function implies that module 'facetapi_bonus' is enabled and for all 
+// facets for which a label alteration must take place, filter 'Rewrite facet items via callback function' is enabled
+// TODO AKZ can this be done in facet generation instead of a callback?
+// TODO AKZ is the extra module needed?
+function eige_search_facet_items_alter(&$build, &$settings) {
+  global $content_type_names_mapping;
+  if ($settings->facet == "type") {
+    foreach($build as $key => $item) {
+      if (isset($content_type_names_mapping[$key])) {
+        $build[$key]["#markup"] = $content_type_names_mapping[$key];
+      }
+    }
+  }
+}

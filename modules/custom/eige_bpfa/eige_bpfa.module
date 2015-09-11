@@ -1,0 +1,103 @@
+<?php
+
+define("EIGE_BPFA_PATH", "gender-statistics/women-and-men-in-the-eu-facts-and-figures");
+
+function eige_bpfa_menu() {
+  $items[EIGE_BPFA_PATH] = array(
+    'page callback' => '_eige_bpfa_page',
+    'access arguments' => array('access content'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  return $items;
+}
+
+function _eige_bpfa_page() {
+  _eige_bpfa_load_resources();
+  
+  ob_start();
+  include ("app/index.html.inc");
+  $markup = ob_get_contents();
+  ob_end_clean();
+  
+  $page['backbone_app'] = array(
+    '#type' => 'markup',
+    '#markup' => $markup,
+  );
+  return $page;
+}
+
+function _eige_bpfa_get_root_path() {
+  $request_uri = $_SERVER['REQUEST_URI'];
+  $root_app_path = '/' . EIGE_BPFA_PATH;
+  return substr($request_uri, 0, strpos($request_uri, $root_app_path) + strlen($root_app_path));
+}
+
+function _eige_bpfa_i18n_file_exists($language) {
+  return file_exists(realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'app.i18n.' . $language . '.js');
+}
+
+function _eige_bpfa_get_ajax_endpoint_root() {
+  return str_replace('\\', '/', substr(dirname(__FILE__), strlen(DRUPAL_ROOT))) . '/';
+}
+
+// http://stackoverflow.com/a/834355/72478
+function _eige_bpfa_string_ends_with($haystack, $needle) {
+  $length = strlen($needle);
+  if ($length == 0) {
+    return true;
+  }
+  return (substr($haystack, -$length) === $needle);
+}
+
+function _eige_bpfa_find_files($path, $ext) {
+  $path = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $path;
+  return array_values(array_filter(scandir($path), function($item) use ($ext) {
+    return _eige_bpfa_string_ends_with($item, $ext);
+  }));
+}
+
+function _eige_bpfa_load_resources() {
+  drupal_add_css(drupal_get_path('module', 'eige_bpfa') . '/app/css/style.css');
+
+  global $language;
+  // store old jQuery and $ globals
+  drupal_add_js('if (typeof window.jQuery !== "undefined") window.oldJquery = window.jQuery;', array('type'=>'inline', 'scope'=>'footer'));
+  drupal_add_js('if (typeof window.$      !== "undefined") window.old$      = window.$;     ', array('type'=>'inline', 'scope'=>'footer'));
+
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/jquery-2.1.4.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/jquery.stickytableheaders-0.1.17.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/underscore-1.8.3.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/backbone-1.2.1.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/polyglot-0.4.2.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/svg/jquery.svg.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/lib/svg/jquery.svganim.min.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/app.js', array('scope'=>'footer'));
+  foreach(_eige_bpfa_find_files('app' . DIRECTORY_SEPARATOR . 'routers', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/routers/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_bpfa_find_files('app' . DIRECTORY_SEPARATOR . 'models', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/models/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_bpfa_find_files('app' . DIRECTORY_SEPARATOR . 'collections', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/collections/' . $file, array('scope'=>'footer'));
+  }
+  foreach(_eige_bpfa_find_files('app' . DIRECTORY_SEPARATOR . 'views', '.js') as $file) {
+    drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/views/' . $file, array('scope'=>'footer'));
+  }
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/data/tree.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . '/app/data/map.js', array('scope'=>'footer'));
+  drupal_add_js(drupal_get_path('module', 'eige_bpfa') . 
+    (
+      _eige_bpfa_i18n_file_exists($language->language)?
+      '/app/app.i18n.' . $language->language . '.js':
+      '/app/app.i18n.en.js'
+    ), 
+    array('scope'=>'footer', 'preprocess'=>FALSE));
+  drupal_add_js('app.run("' . _eige_bpfa_get_root_path() . '", "' . _eige_bpfa_get_ajax_endpoint_root() . '");', array('type'=>'inline', 'scope'=>'footer'));
+
+  // restore jQuery and $ globals
+  drupal_add_js('window.jQuery = window.oldJquery; delete window.oldJquery;', array('type'=>'inline', 'scope'=>'footer'));
+  drupal_add_js('window.$      = window.old$;      delete window.old$;     ', array('type'=>'inline', 'scope'=>'footer'));
+
+}
+

@@ -1,0 +1,19 @@
+<?php
+/**
+ * @file
+ * Code for the Gender-based violence feature.
+ */
+
+include_once 'eige_gender_based_violence.features.inc';
+
+/**
+ * Implements hook_form_alter(&$form, &$form_state, $form_id).
+ */
+function eige_gender_based_violence_form_alter(&$form, &$form_state, $form_id) {
+  // filter Topic filters by given Topic Category
+  if ($form['#id'] == 'views-exposed-form-gender-based-violence-good-practices-page' 
+    || $form['#id'] == 'views-exposed-form-gender-based-violence-methods-tools-page' 
+    || $form['#id'] == 'views-exposed-form-gender-based-violence-resources-page') {
+    _retain_topic_category_filter_options($form, 'topic', 'Gender-based violence');
+  }
+}

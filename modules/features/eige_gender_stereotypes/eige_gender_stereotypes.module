@@ -1,0 +1,87 @@
+<?php
+/**
+ * @file
+ * Code for the EIGE Gender Stereotypes feature.
+ */
+
+include_once 'eige_gender_stereotypes.features.inc';
+
+function eige_gender_stereotypes_node_view_alter(&$build) {
+  if ((($build['#view_mode'] == 'full') || ($build['#view_mode'] == 'teaser') || ($build['#view_mode'] == 'related_content')) && ($build['#bundle'] == 'gender_story')) {
+    $css_classes = '';
+    $native_language_name = '';
+    if (isset($build['field_primary_topic_category'][0]['#markup'])) {
+      $primaryTopicClass = _title_to_css_class($build['field_primary_topic_category'][0]['#markup'], ' gender_story_topic_');
+      $css_classes .= $primaryTopicClass;
+    }
+    if (isset($build['field_age'][0]['#markup'])) {
+      $ageClass = _title_to_css_class(_age_to_class($build['field_age'][0]['#markup']), ' gender_story_topic_');
+      $css_classes .= $ageClass;
+    }
+    if (isset($build['field_sex'][0]['#markup'])) {
+      $sexClass = _title_to_css_class($build['field_sex'][0]['#markup'], ' gender_story_topic_');
+      $css_classes .= $sexClass;
+    }
+    $build['#groups']['group_avatar_wrapper']->format_settings['instance_settings']['classes'] = 'group-avatar-wrapper field-group-div' . $css_classes;
+    
+    if ($build['#view_mode'] =='full') {
+      $build['gender_story_fixed_title'][0]['#markup'] = strip_tags($build['gender_story_fixed_title'][0]['#markup']);
+      if (isset($build['field_native_language'][0])) {
+        $native_language_name = $build['field_native_language'][0]['#markup'];
+        unset($build['field_native_language']);
+        $languages = array('default_language_name' => language_default()->name, 'native_language_name' => $native_language_name);
+        drupal_add_js(array('gender_story_languages' => $languages), 'setting');
+      }
+    }
+    
+    if (isset($build['field_primary_topic_category'][0]) && ($build['#view_mode'] == 'teaser') || $build['#view_mode'] == 'related_content') {
+      unset($build['field_primary_topic_category']);
+    }
+  }
+}
+
+function eige_gender_stereotypes_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id != 'gender_story_node_form') {
+    $form['#after_build'][] = 'eige_gender_stereotypes_after_build';
+  }
+}
+
+function eige_gender_stereotypes_after_build($form, &$form_state) {
+  unset($form['print']);
+  return $form;
+}
+
+function eige_gender_stereotypes_preprocess_node(&$vars) {
+  $node = $vars['node'];
+  $view = $vars['elements']['#view_mode'];
+  if (($node->type=='gender_story') && ($view == 'full')) {
+    if (in_array('pdf_download', array_values($node->preprocess_fields))) {
+      $path = current_path();
+      $path_alias = drupal_lookup_path('alias', $path);
+      $vars['content']['pdf_download']['#weight'] = '40';
+      $vars['content']['pdf_download'][0] = 
+        array('#markup' =>'<div class="eige-story-pdf"><a href="/printpdf/'.$path_alias.'" title="'.t('Download this story as PDF file').'">'.t('Download as PDF').'</a></div>');
+    }
+  }
+}
+
+function _age_to_class($age) {
+  if($age <= 21){
+    return 'less-than-21';
+  }
+  elseif($age <= 30){
+    return 'less-than-30'; 
+  }
+  elseif($age <= 40){
+    return 'less-than-40';
+  }
+  elseif($age <= 50){
+    return 'less-than-50';
+  }
+  elseif($age <= 60){
+    return 'less-than-60';
+  }
+  else{
+    return 'more-than-61';
+  }
+}

@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * Implements hook_translated_menu_link_alter.
+ * Adds corresponding classes to menu link anchors ('<a>') based on english menu link titles
+ * This is invoked for all menu links rendered as menu elements (e.g. print $main_menu)
+ * AKZ: for some reason I cannot understand, why this is not invoked for custom menus e.g. if ($item['menu_name'] == 'menu-promo-topics-menu')
+ */
+function eige_menu_translated_menu_link_alter(&$item, $map) {
+	if ($item['menu_name'] == 'main-menu') {
+      $english_title = $item["link_title"];
+      $item['localized_options']['attributes']['class'] = array(_title_to_css_class($english_title, "eige_menu_link_"));
+	}
+}
+
+/**
+ * Implements hook_preprocess_menu_link. 
+ * Adds corresponding classes to menu link wrapper elements ('<li>') based on english menu link titles
+ * This is invoked for menu links rendered within menu blocks
+ */
+function eige_menu_preprocess_menu_link(&$vars) {
+  $element = $vars['element'];
+  if (isset($element['#original_link'])) {
+    $english_title = $element['#original_link']['link_title'];
+    $css_class = _title_to_css_class($english_title, "eige_menu_link_");
+    // in case of GM landing page (EIGEDR-333), menu links have already being assigned css classes via 'eige_menu_translated_menu_link_alter', 
+    // however those css classes have been added to their anchor elements; here we remove custom css classes from anchor elements and re-add them 
+    // to their wrapper elements (<li>) to ensure consistency with other menu blocks as well (e.g. home page promo links menu block)
+    if (isset($element['#localized_options']['attributes']['class'][0]) && $element['#localized_options']['attributes']['class'][0]==$css_class) {
+      unset($vars['element']['#localized_options']['attributes']['class'][0]);
+    }
+    $vars['element']['#attributes']['class'][] = $css_class;
+    if ($element['#original_link']['menu_name'] == 'menu-promo-topics-menu' || 
+        // if main-menu links are rendered as a block within a panel (= delta is something like 'ctools-_active-1')
+        ($element['#original_link']['menu_name'] == 'main-menu' && isset($element['#bid']) && strpos($element['#bid']['delta'], 'ctools')!==FALSE)) { 
+      $link_description = isset($element['#localized_options']['attributes']['title']) ? trim($element['#localized_options']['attributes']['title']) : '';
+      global $language; // current selected language
+      // TODO AKZ - in some cases, links do not appear localized but they normally should
+      $vars['element']['#below'] = array('#markup' => 
+        '<div class="eige_menu_link_description">' . $link_description . ' <span class="read-more">'.l(t("Read more"), $element['#href'], array("language"=>$language)).'</span></div>');
+    }
+  }
+}
+
+// EIGEDR-578 alter the description for the css class field for promo topics menu links only
+// in order to help EIGE CMs use the appropriate section class names
+function eige_menu_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['options']) && isset($form['options']['item_attributes'])) {
+    $form['options']['item_attributes']['#collapsed'] = false;
+    $default_menu = $form['parent']['#default_value'];
+    if (strpos($default_menu, 'menu-promo-topics-menu') !== false) {
+      $form['options']['item_attributes']['class']['#description'] = t('To ensure the proper UI, please use (copy and paste) one of the following predefined css classes:')
+          . '<ul><li>section-gender-mainstreaming</li><li>section-gender-based-violence</li><li>section-monitoring-the-bpfa</li><li>section-gender-statistics</li>'
+          . '<li>section-rdc</li><li>section-about-eige</li><li>section-news-and-events</li><li>section-more-areas</li></ul>';
+    }
+  }
+}

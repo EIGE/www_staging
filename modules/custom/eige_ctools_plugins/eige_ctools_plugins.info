@@ -1,0 +1,6 @@
+name = EIGE CTools plugins
+description = This module provide custom CTools access and context plugins for page manager. Code is copied from a sandbox project (https://www.drupal.org/sandbox/balint.kleri/1442298) with minor modifications to fit EIGE's needs
+core = 7.x
+package = EIGE custom modules
+
+dependencies[] = ctools
